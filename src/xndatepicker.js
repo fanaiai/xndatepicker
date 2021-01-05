@@ -1,8 +1,9 @@
 //! Ftree.js
 //! version : 1.0.0
 //! authors : 范媛媛
-//! create date:2018/05/14
-//! update date:2019/12/18
+//! create date:2021/01/01
+//! update date:2021/01/05
+// https://github.com/fanaiai/xndatepicker
 function dynamicLoadJs(urllist) {
     for (let i = 0; i < urllist.length; i++) {
 
