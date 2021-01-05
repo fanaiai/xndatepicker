@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title></title>
+    <link rel="stylesheet" type="text/css" href="xndatepicker.css">
+    <link rel="stylesheet" href="//at.alicdn.com/t/font_2213760_p9ivkz8ixod.css">
+    <style>
+        .dateinputer{
+            line-height:40px;
+            height:40px;
+            margin:30px auto;
+            border:1px solid #ccc;
+            cursor: pointer;
+            position:absolute;
+            top:10px;
+            right:20px;
+            padding:0 6px;
+            font-size:12px !important;
+        }
+    </style>
+</head>
+
+<body>
+    <div id='date' class="dateinputer">
+
+    </div>
+</body>
+<script type="text/javascript" src="/visualbipublic/vendor/jquery.min.js"></script>
+<script type="text/javascript" src="/visualbipublic/vendor/moment.js"></script>
+<script type="text/javascript" src="xndatepicker.js"></script>
+<script type="text/javascript">
+var ftree=new XNDatepicker($("#date"),{
+    // format:'YYYY-MM-DD',
+    type:'multiple',//year/month/date/multiple/ week/datetime/datetimerange/ daterange/monthrange/yearrange
+    multipleDates:[],//当为多选日期类型时的初始值
+    startTime:'',
+    // endTime:'2036-04-04',
+    minDate:'2019-04-04',
+    maxDate:'',
+    separator:' 到 ',
+    showType:'modal',
+    linkPanels:false,//面板联动
+    showClear:true,//是否显示清除按钮
+    autoConfirm:true,
+    showShortKeys:true,
+    autoFillDate:true,//自动变更element里面的值
+},function(data){
+    console.log(data)
+    // console.log(moment(data.startTime).format('YYYY-MM-DD HH:mm:ss'),moment(data.endTime).format('YYYY-MM-DD HH:mm:ss'))
+},)
+</script>
+
+</html>
