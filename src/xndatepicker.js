@@ -12,6 +12,7 @@ function dynamicLoadJs(urllist) {
         var link = document.createElement('script');
         link.src = url;
         var finelurl = '<script type="text/javascript" src=' + url + '><\/script>'
+        document.getElementsByTagName('head')[0].append(link)
         document.write(finelurl)
     }
 }
@@ -444,7 +445,7 @@ dynamicLoadJs(jslist);
                 }
                 $('.circle-date').removeClass('circle-date')
                 $('.right-date').removeClass('right-date')
-                var isBefore = moment(date1).isBefore(date2);
+                var isBefore = moment(date1,format).isBefore(moment(date2,format));
                 if(this.type.indexOf('year')>-1){
                     var inSame = (date1-date1%12)==(date2-date2%12);
                 }
@@ -476,7 +477,7 @@ dynamicLoadJs(jslist);
 
             this.$container.find(".cur-date").each((i, ele) => {
                 var datekey = $(ele).parents(".date-item").attr("data-id");
-                var day=moment($(ele).attr('data-date')).format('YYYY-MM-DD')
+                var day=moment($(ele).attr('data-date'),'YYYY-MM-DD').format('YYYY-MM-DD')
                 var time = ''
                 if (this.type.indexOf('time')) {
                     var time = ' ' + this.$container.find(".time" + (i + 1) + " .timecont>span").html();
@@ -972,7 +973,7 @@ dynamicLoadJs(jslist);
             var html = ''
             for (let i = 0; i < 12; i++) {
                 let disable = !(((this.option.minDate && moment(this.option.minDate).startOf('month').isSameOrBefore((curYear + '/' + (i + 1) + '/01')))||!this.option.minDate) && ((this.option.maxDate && moment(this.option.maxDate).startOf('month').isSameOrAfter((curYear + '/' + (i + 1) + '/01')))||!this.option.maxDate))
-                html += `<span class="month-item ${disable ? 'disable-month' : 'active-day'}" data-date="${moment(curYear + '/' + (i + 1)).format('YYYY-MM')}">` + this.option.locale.month[i] + "</span>";
+                html += `<span class="month-item ${disable ? 'disable-month' : 'active-day'}" data-date="${moment(curYear + '/' + (i + 1),'YYYY/MM').format('YYYY-MM')}">` + this.option.locale.month[i] + "</span>";
             }
             return html;
         },
@@ -1128,7 +1129,7 @@ dynamicLoadJs(jslist);
             for (let i = 0; i < m_days; i++) {
                 ldates.push({
                     iscur: true,
-                    disable: this.checkDisable(moment(ynow + '/' + mnow + '/' + (i + 1)),0,this.type,'date'),
+                    disable: this.checkDisable(moment(ynow + '/' + mnow + '/' + (i + 1),'YYYY/MM/DD'),0,this.type,'date'),
                     day: i + 1
                 })
             }
@@ -1195,12 +1196,12 @@ dynamicLoadJs(jslist);
                         if (!datelist[j].disable) {
                             li.classList.add("active-day");
                         }
-                        li.setAttribute("data-date", moment(year + '/' + datelist[j].day).format('YYYY-MM-DD'))
+                        li.setAttribute("data-date", moment(year + '/' + datelist[j].day,'YYYY/MM/DD').format('YYYY-MM-DD'))
                     } else {
                         if (datelist[j].isnext) {
-                            li.setAttribute("data-date", moment(year + '/' + datelist[j].day).add(1, 'months').format('YYYY-MM-DD'))
+                            li.setAttribute("data-date", moment(year + '/' + datelist[j].day,'YYYY/MM/DD').add(1, 'months').format('YYYY-MM-DD'))
                         } else {
-                            li.setAttribute("data-date", moment(year).subtract(1, 'months').date(datelist[j].day).format('YYYY-MM-DD'))
+                            li.setAttribute("data-date", moment(year,'YYYY/MM').subtract(1, 'months').date(datelist[j].day).format('YYYY-MM-DD'))
 
                         }
                     }
