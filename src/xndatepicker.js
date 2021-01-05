@@ -361,6 +361,13 @@ dynamicLoadJs(jslist);
             }
 
             var format = 'YYYY-MM';
+            var curFormat='YYYY-MM-DD'
+            if(this.type.indexOf('month') > -1){
+                curFormat='YYYY-MM'
+            }
+            if(this.type.indexOf('month') > -1){
+                curFormat='YYYY'
+            }
             if (this.type.indexOf('month') > -1 || this.type.indexOf('year') > -1) {
                 format = 'YYYY'
             }
@@ -445,13 +452,19 @@ dynamicLoadJs(jslist);
                 }
                 $('.circle-date').removeClass('circle-date')
                 $('.right-date').removeClass('right-date')
-                var isBefore = moment(date1,format).isBefore(moment(date2,format));
+                var isBefore = moment(date1,'YYYY-MM-DD').isBefore(moment(date2,'YYYY-MM-DD'));
                 if(this.type.indexOf('year')>-1){
                     var inSame = (date1-date1%12)==(date2-date2%12);
                 }
                 else{
                     var inSame = moment(date1).format(format) == moment(date2).format(format)
                 }
+                // if(this.type=='monthrange'){
+                //     console.log(date1,date2)
+                //     console.log(isBefore)
+                // }
+
+
                 if(date1!=date2){
                 if (inSame) {
                     if (isBefore) {
