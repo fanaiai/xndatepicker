@@ -116,13 +116,7 @@ dynamicLoadJs(jslist);
     var option = {
         showWeek: true,//是否显示周几
         placeholder:'请选择',
-        shortList: [
-            {"name": "最近一周", "value": {startTime: moment().subtract(7, 'days').startOf('day'), endTime: moment()}},
-            {"name": "最近三天", "value": {startTime: moment().subtract(3, 'days').startOf('day'), endTime: moment()}},
-            {"name": "最近一天", "value": {startTime: moment().subtract(1, 'days').startOf('day'), endTime: moment()}},
-            {"name": "最近一年", "value": {startTime: moment().subtract(1, 'years').startOf('day'), endTime: moment()}},
-            {"name": "最近一月", "value": {startTime: moment().subtract(1, 'months').startOf('day'), endTime: moment()}},
-        ],
+        shortList: [],
         locale:{
             month:[
                 '一月',
@@ -156,7 +150,7 @@ dynamicLoadJs(jslist);
             clear:'清空',
             confirm:'确定',
             yearHeadSuffix:'年'
-        },
+        },//显示信息
         confirmFirst:true,//第一次就搜索
         separator:' 到 ',//双日历模式下的链接符
         showType:'modal',//显示样式
@@ -167,7 +161,11 @@ dynamicLoadJs(jslist);
         autoFillDate:true,//自动变更element里面的值，如果自动变更，则按照插件样式显示
         firstDayOfWeek:7,//周起始日 1-7
         theme:'default',//主题
-        multipleDates:[],
+        multipleDates:[],//当为多选日期类型时的初始值
+        startTime:'',//初始开始时间
+        endTime:'',//初始结束时间
+        minDate:'',//最小时间
+        maxDate:'',//最大时间
     }
 
     function XNDatepicker(targetDom, options,onConfirm) {

@@ -104,6 +104,7 @@ table {
 	display: flex;
 	justify-content: flex-end;
 	line-height:31px;
+	font-size:12px;
 }
 .xndatepicker .xn-bottom>a{
 	padding:0 20px;

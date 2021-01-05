@@ -29,8 +29,6 @@ function dynamicLoadCss(urllist) {
 
 var s = document.currentScript.src;
 var csspath = s.substr(0, s.lastIndexOf('/') - 0);
-var csslist = [csspath + "/ftree.css"]
-dynamicLoadCss(csslist);
 (function (window, $) {
     var option = {
 

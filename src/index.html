@@ -3,34 +3,241 @@
 
 <head>
     <title></title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <link rel="stylesheet" type="text/css" href="xndatepicker.css">
     <link rel="stylesheet" href="//at.alicdn.com/t/font_2213760_p9ivkz8ixod.css">
     <style>
         .dateinputer{
             line-height:40px;
             height:40px;
-            margin:30px auto;
+            margin:10px 0;
             border:1px solid #ccc;
             cursor: pointer;
-            position:absolute;
-            top:10px;
-            right:20px;
+            position:relative;
+            /*top:10px;*/
+            /*left:20px;*/
             padding:0 6px;
             font-size:12px !important;
+        }
+        .flex-div{
+            display: flex;
+            justify-content: flex-start;
+            align-items: flex-start;
+            flex-flow: column;
+            margin-left:30px;
+            margin-top:20px;
         }
     </style>
 </head>
 
 <body>
+<div class="flex-div">
+    <span>date 单日选择器</span>
     <div id='date' class="dateinputer">
 
     </div>
+</div>
+<div class="flex-div">
+    <span>datetime 单日加时间选择器</span>
+    <div id='datetime' class="dateinputer">
+
+    </div>
+</div>
+<div class="flex-div">
+    <span>month 月选择器</span>
+    <div id='month' class="dateinputer">
+
+    </div>
+</div>
+<div class="flex-div">
+    <span>year 年选择器</span>
+    <div id='year' class="dateinputer">
+
+    </div>
+</div>
+<div class="flex-div">
+    <span>daterange 日期区间选择器</span>
+    <div id='daterange' class="dateinputer">
+
+    </div>
+</div>
+<div class="flex-div">
+    <span>monthrange 月区间选择器</span>
+    <div id='monthrange' class="dateinputer">
+
+    </div>
+</div>
+<div class="flex-div">
+    <span>yearrange 年区间选择器</span>
+    <div id='yearrange' class="dateinputer">
+
+    </div>
+</div>
+<div class="flex-div">
+    <span>week 周选择器</span>
+    <div id='week' class="dateinputer">
+
+    </div>
+</div>
+<div class="flex-div">
+    <span>multiple 多日期选择器</span>
+    <div id='multiple' class="dateinputer">
+
+    </div>
+</div>
+
 </body>
-<script type="text/javascript" src="/visualbipublic/vendor/jquery.min.js"></script>
-<script type="text/javascript" src="/visualbipublic/vendor/moment.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<!--<script src="https://cdn.bootcdn.net/ajax/libs/moment.js/2.29.1/moment.min.js"></script>-->
+<script src="moment.js"></script>
 <script type="text/javascript" src="xndatepicker.js"></script>
 <script type="text/javascript">
-var ftree=new XNDatepicker($("#date"),{
+
+    var date=new XNDatepicker($("#date"),{
+        // format:'YYYY-MM-DD',
+        type:'date',//year/month/date/multiple/ week/datetime/datetimerange/ daterange/monthrange/yearrange
+        multipleDates:[],//当为多选日期类型时的初始值
+        startTime:'',
+        // endTime:'2036-04-04',
+        // minDate:'2019-04-04',
+        maxDate:'',
+        separator:' 到 ',
+        showType:'modal',
+        linkPanels:false,//面板联动
+        showClear:true,//是否显示清除按钮
+        autoConfirm:true,
+        showShortKeys:true,
+        autoFillDate:true,//自动变更element里面的值
+    },function(data){
+        console.log(data)
+    },)
+    var datetime=new XNDatepicker($("#datetime"),{
+        // format:'YYYY-MM-DD',
+        type:'datetime',//year/month/date/multiple/ week/datetime/datetimerange/ daterange/monthrange/yearrange
+        multipleDates:[],//当为多选日期类型时的初始值
+        startTime:'',
+        // endTime:'2036-04-04',
+        // minDate:'2019-04-04',
+        maxDate:'',
+        separator:' 到 ',
+        showType:'modal',
+        linkPanels:false,//面板联动
+        showClear:true,//是否显示清除按钮
+        autoConfirm:true,
+        showShortKeys:true,
+        autoFillDate:true,//自动变更element里面的值
+    },function(data){
+        console.log(data)
+    },)
+    var month=new XNDatepicker($("#month"),{
+        // format:'YYYY-MM-DD',
+        type:'month',//year/month/date/multiple/ week/datetime/datetimerange/ daterange/monthrange/yearrange
+        multipleDates:[],//当为多选日期类型时的初始值
+        startTime:'',
+        // endTime:'2036-04-04',
+        // minDate:'2019-04-04',
+        maxDate:'',
+        separator:' 到 ',
+        showType:'modal',
+        linkPanels:false,//面板联动
+        showClear:true,//是否显示清除按钮
+        autoConfirm:true,
+        showShortKeys:true,
+        autoFillDate:true,//自动变更element里面的值
+    },function(data){
+        console.log(data)
+    },)
+    var year=new XNDatepicker($("#year"),{
+        // format:'YYYY-MM-DD',
+        type:'year',//year/month/date/multiple/ week/datetime/datetimerange/ daterange/monthrange/yearrange
+        multipleDates:[],//当为多选日期类型时的初始值
+        startTime:'',
+        // endTime:'2036-04-04',
+        // minDate:'2019-04-04',
+        maxDate:'',
+        separator:' 到 ',
+        showType:'modal',
+        linkPanels:false,//面板联动
+        showClear:true,//是否显示清除按钮
+        autoConfirm:true,
+        showShortKeys:true,
+        autoFillDate:true,//自动变更element里面的值
+    },function(data){
+        console.log(data)
+    },)
+    var daterange=new XNDatepicker($("#daterange"),{
+        // format:'YYYY-MM-DD',
+        type:'daterange',//year/month/date/multiple/ week/datetime/datetimerange/ daterange/monthrange/yearrange
+        multipleDates:[],//当为多选日期类型时的初始值
+        startTime:'',
+        // endTime:'2036-04-04',
+        // minDate:'2019-04-04',
+        maxDate:'',
+        separator:' 到 ',
+        showType:'modal',
+        linkPanels:false,//面板联动
+        showClear:true,//是否显示清除按钮
+        autoConfirm:true,
+        showShortKeys:true,
+        autoFillDate:true,//自动变更element里面的值
+    },function(data){
+        console.log(data)
+    },)
+    var monthrange=new XNDatepicker($("#monthrange"),{
+        // format:'YYYY-MM-DD',
+        type:'monthrange',//year/month/date/multiple/ week/datetime/datetimerange/ daterange/monthrange/yearrange
+        multipleDates:[],//当为多选日期类型时的初始值
+        startTime:'',
+        // endTime:'2036-04-04',
+        // minDate:'2019-04-04',
+        maxDate:'',
+        separator:' 到 ',
+        showType:'modal',
+        linkPanels:false,//面板联动
+        showClear:true,//是否显示清除按钮
+        autoConfirm:true,
+        showShortKeys:true,
+        autoFillDate:true,//自动变更element里面的值
+    },function(data){
+        console.log(data)
+    },)
+    var yearrange=new XNDatepicker($("#yearrange"),{
+        // format:'YYYY-MM-DD',
+        type:'yearrange',//year/month/date/multiple/ week/datetime/datetimerange/ daterange/monthrange/yearrange
+        multipleDates:[],//当为多选日期类型时的初始值
+        startTime:'',
+        // endTime:'2036-04-04',
+        // minDate:'2019-04-04',
+        maxDate:'',
+        separator:' 到 ',
+        showType:'modal',
+        linkPanels:false,//面板联动
+        showClear:true,//是否显示清除按钮
+        autoConfirm:true,
+        showShortKeys:true,
+        autoFillDate:true,//自动变更element里面的值
+    },function(data){
+        console.log(data)
+    },)
+    var week=new XNDatepicker($("#week"),{
+        // format:'YYYY-MM-DD',
+        type:'week',//year/month/date/multiple/ week/datetime/datetimerange/ daterange/monthrange/yearrange
+        multipleDates:[],//当为多选日期类型时的初始值
+        startTime:'',
+        // endTime:'2036-04-04',
+        // minDate:'2019-04-04',
+        maxDate:'',
+        separator:' 到 ',
+        showType:'modal',
+        linkPanels:false,//面板联动
+        showClear:true,//是否显示清除按钮
+        autoConfirm:true,
+        showShortKeys:true,
+        autoFillDate:true,//自动变更element里面的值
+    },function(data){
+        console.log(data)
+    },)
+var multiple=new XNDatepicker($("#multiple"),{
     // format:'YYYY-MM-DD',
     type:'multiple',//year/month/date/multiple/ week/datetime/datetimerange/ daterange/monthrange/yearrange
     multipleDates:[],//当为多选日期类型时的初始值
@@ -47,7 +254,6 @@ var ftree=new XNDatepicker($("#date"),{
     autoFillDate:true,//自动变更element里面的值
 },function(data){
     console.log(data)
-    // console.log(moment(data.startTime).format('YYYY-MM-DD HH:mm:ss'),moment(data.endTime).format('YYYY-MM-DD HH:mm:ss'))
 },)
 </script>
 
