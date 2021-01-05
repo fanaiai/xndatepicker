@@ -27,6 +27,7 @@
     var date=new XNDatepicker(
     $("#date"),//日历容器，可以是input，或其他标签
     {
+            type:'daterange',
             showWeek: true,//是否显示周几
                     placeholder:'请选择',
                     shortList: [],//快捷选项，不写使用默认快捷选项
