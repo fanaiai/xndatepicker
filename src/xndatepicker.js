@@ -282,15 +282,18 @@ dynamicLoadJs(jslist);
             this.on('confirm', this.onConfirm);
         },
         addTargetEvent() {
-            document.addEventListener('click', (e) => {
+            clickFunc=(e)=>{
                 if (e.target == this.$targetDom[0]) {
                     this.changeShowStatus();
                 } else if (!$(e.target).parents('.xndatepicker')[0] || ($(e.target).parents('.xndatepicker')[0].id != this.id)) {
 
                     this.changeShowStatus(true);
                 }
-            }, true)//捕获阶段
-
+            }
+            this.removeClickEvent=()=>{
+                document.removeEventListener('click', clickFunc, true)//捕获阶段
+            }
+            document.addEventListener('click', clickFunc, true)//捕获阶段
         },
         changeShowStatus(hide) {
             if (this.show || hide) {
@@ -574,7 +577,7 @@ dynamicLoadJs(jslist);
             // console.log(this["tempdate" + otherdatenum].format('YYYY-MM-DD'))
         },
         addEvent() {
-            document.addEventListener("mousemove", (e) => {
+            mouseMoveFunc=(e)=>{
                 var $t = $(e.target);
                 if($t.parents('.xndatepicker')[0] ==  this.$container[0]){
                     if ($t.hasClass("day-item") || $t.hasClass("month-item") || $t.hasClass("year-item")) {
@@ -584,7 +587,11 @@ dynamicLoadJs(jslist);
                 else{
                     // this.rendHoverStyle();
                 }
-            })
+            }
+            this.removeMoveEvent=()=>{
+                document.removeEventListener('mousemove', mouseMoveFunc)//捕获阶段
+            }
+            document.addEventListener("mousemove", mouseMoveFunc)
             this.$container[0].addEventListener("click", (e) => {
                 var $t = $(e.target);
                 var datenum = $t.parents(".dater1")[0] ? 1 : 2;
@@ -1299,7 +1306,13 @@ dynamicLoadJs(jslist);
                 date=moment().format('YYYY-MM');
             }
             this.$container.find('.'+type+'-item[data-date='+date+']').addClass('is-today');
-        }
+        },
+        destroy:function(){
+            this.$container.remove();
+            this.removeMoveEvent();
+            this.removeClickEvent();
+
+        },
     }
     window.XNDatepicker = XNDatepicker;
 })(window, jQuery)

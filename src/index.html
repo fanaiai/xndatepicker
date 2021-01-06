@@ -31,6 +31,7 @@
 <body>
 <div class="flex-div">
     <span>date 单日选择器</span>
+    <a id="destroy">销毁日历</a>
     <div id='date' class="dateinputer">
 
     </div>
@@ -108,6 +109,9 @@
     },function(data){
         console.log(data)
     },)
+    $("#destroy").click(()=>{
+        date.destroy();
+    })
     var datetime=new XNDatepicker($("#datetime"),{
         // format:'YYYY-MM-DD',
         type:'datetime',//year/month/date/multiple/ week/datetime/datetimerange/ daterange/monthrange/yearrange
