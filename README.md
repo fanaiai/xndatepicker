@@ -27,59 +27,59 @@
     var date=new XNDatepicker(
     $("#date"),//日历容器，可以是input，或其他标签
     {
-            type:'daterange',
+            type:'daterange',日历类型 date,datetime,daterange,datetimerange,month,monthrange,year,yearrange,week,multiple
             showWeek: true,//是否显示周几
-                    placeholder:'请选择',
-                    shortList: [],//快捷选项，不写使用默认快捷选项
-                    locale:{
-                        month:[
-                            '一月',
-                            '二月',
-                            '三月',
-                            '四月',
-                            '五月',
-                            '六月',
-                            '七月',
-                            '八月',
-                            '九月',
-                            '十月',
-                            '十一月',
-                            '十二月',
-                        ],
-                        monthHead:[
-                            '1月',
-                            '2月',
-                            '3月',
-                            '4月',
-                            '5月',
-                            '6月',
-                            '7月',
-                            '8月',
-                            '9月',
-                            '10月',
-                            '11月',
-                            '12月',
-                        ],
-                        week:['日','一','二','三','四','五','六'],
-                        clear:'清空',
-                        confirm:'确定',
-                        yearHeadSuffix:'年'
-                    },//显示信息
-                    confirmFirst:true,//第一次就搜索
-                    separator:' 到 ',//双日历模式下的链接符
-                    showType:'modal',//显示样式
-                    linkPanels:false,//双日历面板联动
-                    showClear:true,//是否显示清除按钮
-                    autoConfirm:true,//单日历模式，和周日历模式，是否自动确定
-                    showShortKeys:true,//是否显示快捷选项
-                    autoFillDate:true,//自动变更element里面的值，如果自动变更，则按照插件样式显示
-                    firstDayOfWeek:7,//周起始日 1-7
-                    theme:'default',//主题
-                    multipleDates:[],//当为多选日期类型时的初始值
-                    startTime:'',//初始开始时间
-                    endTime:'',//初始结束时间
-                    minDate:'',//最小时间
-                    maxDate:'',//最大时间
+            placeholder:'请选择',
+            shortList: [],//快捷选项，不写使用默认快捷选项
+            locale:{
+                month:[
+                    '一月',
+                    '二月',
+                    '三月',
+                    '四月',
+                    '五月',
+                    '六月',
+                    '七月',
+                    '八月',
+                    '九月',
+                    '十月',
+                    '十一月',
+                    '十二月',
+                ],
+                monthHead:[
+                    '1月',
+                    '2月',
+                    '3月',
+                    '4月',
+                    '5月',
+                    '6月',
+                    '7月',
+                    '8月',
+                    '9月',
+                    '10月',
+                    '11月',
+                    '12月',
+                ],
+                week:['日','一','二','三','四','五','六'],
+                clear:'清空',
+                confirm:'确定',
+                yearHeadSuffix:'年'
+            },//显示信息
+            confirmFirst:true,//第一次就搜索
+            separator:' 到 ',//双日历模式下的链接符
+            showType:'modal',//显示样式
+            linkPanels:false,//双日历面板联动
+            showClear:true,//是否显示清除按钮
+            autoConfirm:true,//单日历模式，和周日历模式，是否自动确定
+            showShortKeys:true,//是否显示快捷选项
+            autoFillDate:true,//自动变更element里面的值，如果自动变更，则按照插件样式显示
+            firstDayOfWeek:7,//周起始日 1-7
+            theme:'default',//主题
+            multipleDates:[],//当为多选日期类型时的初始值
+            startTime:'',//初始开始时间
+            endTime:'',//初始结束时间
+            minDate:'',//最小时间
+            maxDate:'',//最大时间
         },
         function(data){ //选择日期后的回调函数
             console.log(data)
