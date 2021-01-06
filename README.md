@@ -84,6 +84,8 @@
         function(data){ //选择日期后的回调函数
             console.log(data)
         },)
+## 方法
++ 销毁实例 fcolorpicker.destroy()
 ## 示例代码请参考 src/index.html
 ## 后续功能点
 + 移动端的支持
