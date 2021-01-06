@@ -3,32 +3,6 @@
 //! authors : 范媛媛
 //! create date:2021/01/01
 //! update date:2021/01/05
-function dynamicLoadJs(urllist) {
-    for (let i = 0; i < urllist.length; i++) {
-
-        let url = urllist[i];
-        var head = document.getElementsByTagName('head')[0];
-        var link = document.createElement('script');
-        link.src = url;
-        var finelurl = '<script type="text/javascript" src=' + url + '><\/script>'
-        document.write(finelurl)
-    }
-}
-
-function dynamicLoadCss(urllist) {
-    for (let i = 0; i < urllist.length; i++) {
-        let url = urllist[i];
-        var head = document.getElementsByTagName('head')[0];
-        var link = document.createElement('link');
-        link.type = 'text/css';
-        link.rel = 'stylesheet';
-        link.href = url;
-        head.appendChild(link);
-    }
-}
-
-var s = document.currentScript.src;
-var csspath = s.substr(0, s.lastIndexOf('/') - 0);
 (function (window, $) {
     var option = {
 
@@ -107,8 +81,10 @@ var csspath = s.substr(0, s.lastIndexOf('/') - 0);
             var wwidth=document.documentElement.clientWidth;
             var wheight=document.documentElement.clientHeight;
             var curcolordom=this.$targetDom[0]
-            var top=targetTop=curcolordom.getBoundingClientRect().top;
-            var left=targetLeft=curcolordom.getBoundingClientRect().left;
+            var targetTop=curcolordom.getBoundingClientRect().top;
+            var top=targetTop;
+            var targetLeft=curcolordom.getBoundingClientRect().left;
+            var left=targetLeft;
             var targetWidth=this.$targetDom.outerWidth();
             var targetHeight=this.$targetDom.outerHeight();
             var domwidth=this.$container.outerWidth();

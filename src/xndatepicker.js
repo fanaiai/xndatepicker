@@ -12,7 +12,7 @@ function dynamicLoadJs(urllist) {
         var link = document.createElement('script');
         link.src = url;
         var finelurl = '<script type="text/javascript" src=' + url + '><\/script>'
-        document.getElementsByTagName('head')[0].append(link)
+        document.getElementsByTagName('head')[0].appendChild(link)
         document.write(finelurl)
     }
 }
@@ -28,8 +28,10 @@ function dynamicLoadCss(urllist) {
         head.appendChild(link);
     }
 }
-
-var s = document.currentScript.src;
+var scripts = document.getElementsByTagName("script")
+var script = scripts[scripts.length - 1];
+var s = document.querySelector ? script.src : script.getAttribute("src", 4)//IE8直接.src
+// var s = document.currentScript.src;
 var csspath = s.substr(0, s.lastIndexOf('/') - 0);
 var csslist = ["//at.alicdn.com/t/font_2213760_as9380qm7dw.css",csspath+"/xndatepicker.css"]
 var jslist = [csspath + "/xntimepicker.js"]
@@ -282,7 +284,7 @@ dynamicLoadJs(jslist);
             this.on('confirm', this.onConfirm);
         },
         addTargetEvent() {
-            clickFunc=(e)=>{
+            var clickFunc=(e)=>{
                 if (e.target == this.$targetDom[0]) {
                     this.changeShowStatus();
                 } else if (!$(e.target).parents('.xndatepicker')[0] || ($(e.target).parents('.xndatepicker')[0].id != this.id)) {
@@ -322,8 +324,11 @@ dynamicLoadJs(jslist);
             var wwidth = document.documentElement.clientWidth;
             var wheight = document.documentElement.clientHeight;
             var curcolordom = this.$targetDom[0]
-            var top = targetTop = curcolordom.getBoundingClientRect().top;
-            var left = targetLeft = curcolordom.getBoundingClientRect().left;
+
+            var targetTop = curcolordom.getBoundingClientRect().top;
+            var top =targetTop;
+            var targetLeft = curcolordom.getBoundingClientRect().left;
+            var left =targetLeft;
 
             var targetWidth = this.$targetDom.outerWidth();
             var targetHeight = this.$targetDom.outerHeight();
@@ -498,11 +503,11 @@ dynamicLoadJs(jslist);
                 if (this.type.indexOf('time')) {
                     var time = ' ' + this.$container.find(".time" + (i + 1) + " .timecont>span").html();
                 }
-                date[i] = moment(day + time);
+                date[i] = moment(day + time,'YYYY-MM-DD HH:mm:ss');
                 this.$container.find(".time" + (i + 1) + ">input").val(day);
                 if(this.$container.find(".circle-date")[0] == ele){
                     var j=1;
-                    date[j] = moment(day + time);
+                    date[j] = moment(day + time,'YYYY-MM-DD HH:mm:ss');
                     this.$container.find(".time" + (j + 1) + ">input").val(day);
                 }
             })
@@ -577,7 +582,7 @@ dynamicLoadJs(jslist);
             // console.log(this["tempdate" + otherdatenum].format('YYYY-MM-DD'))
         },
         addEvent() {
-            mouseMoveFunc=(e)=>{
+            var mouseMoveFunc=(e)=>{
                 var $t = $(e.target);
                 if($t.parents('.xndatepicker')[0] ==  this.$container[0]){
                     if ($t.hasClass("day-item") || $t.hasClass("month-item") || $t.hasClass("year-item")) {
@@ -1228,7 +1233,7 @@ dynamicLoadJs(jslist);
                     if (datelist[j].disable) {
                         li.classList.add("disable-day");
                     }
-                    li.append(datelist[j].day)
+                    li.innerHTML=(datelist[j].day)
                     $c.append(li)
                     // ul.append(li)
                 }
@@ -1237,6 +1242,7 @@ dynamicLoadJs(jslist);
             this.setTodayDot('day')
         },
         is_leap(year) {
+            var res;
             return (year % 100 == 0 ? res = (year % 400 == 0 ? 1 : 0) : res = (year % 4 == 0 ? 1 : 0));
         },
         trigger(type, data) {
