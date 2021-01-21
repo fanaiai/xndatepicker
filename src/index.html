@@ -15,7 +15,14 @@
             /*top:10px;*/
             /*left:20px;*/
             padding:0 6px;
-            font-size:12px !important;
+            font-size: 12px !important;
+
+        }
+        #multiple{
+            max-width: 160px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
         }
         .flex-div{
             display: flex;
@@ -88,7 +95,7 @@
 </body>
 <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <!--<script src="moment.js"></script>-->
-<script src="https://cdn.bootcdn.net/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+<script type="text/javascript" src="dayjs.min.js"></script>
 <script type="text/javascript" src="xndatepicker.js"></script>
 <script type="text/javascript">
 
@@ -107,6 +114,7 @@
         autoConfirm:true,
         showShortKeys:true,
         autoFillDate:true,//自动变更element里面的值
+        disableDate:[],
     },function(data){
         console.log(data)
     })

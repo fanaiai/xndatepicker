@@ -30,9 +30,9 @@
             // this.rendHoverStyle();
         },
         updateCurrentTime(time){
-            var hour=moment(time).format('HH');
-            var minute=moment(time).format('mm');
-            var second=moment(time).format('ss');
+            var hour=dayjs(time).format('HH');
+            var minute=dayjs(time).format('mm');
+            var second=dayjs(time).format('ss');
             var time1=hour+':'+minute+':'+second;
             this.trigger("confirm",{str:time1,value:{hour:hour,minute:minute,second:second}})
         },
@@ -159,9 +159,9 @@
                     this.confirm();
                 }
                 if($t.hasClass("cur-time")){
-                    var hour=moment().format('HH');
-                    var minute=moment().format('mm');
-                    var second=moment().format('ss');
+                    var hour=dayjs().format('HH');
+                    var minute=dayjs().format('mm');
+                    var second=dayjs().format('ss');
                     var time=hour+':'+minute+':'+second;
                     this.trigger("confirm",{str:time,value:{hour:hour,minute:minute,second:second}})
                     this.changeShowStatus(true)
@@ -200,7 +200,7 @@
             var hour=(this.$container.find(".hours .on").attr("data-i") || '00');
             var minute=(this.$container.find(".minutes .on").attr("data-i") || '00');
             var second=(this.$container.find(".seconds .on").attr("data-i") || '00');
-            var time=moment('1900-08-08 ' + hour + ':' + minute + ':' + second).format(this.format||'HH:mm:ss');
+            var time=dayjs('1900-08-08 ' + hour + ':' + minute + ':' + second).format(this.format||'HH:mm:ss');
             this.trigger("confirm",{str:time,value:{hour:hour,minute:minute,second:second}})
             this.changeShowStatus(true)
         },
