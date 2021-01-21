@@ -1102,7 +1102,7 @@ dynamicLoadJs(jslist);
             this.changeShowStatus(true)
             this.setCurrentDay();
             this.geneShortList();
-            if (this.type.indexOf('range') < 0 && this.type.indexOf('time') < 0 && this.type!='multiple') {
+            if (this.type.indexOf('range') < 0 && this.type.indexOf('time') < 0 && this.type!='multiple' && this.option.autoConfirm ) {
                 this.$container.find('.confirm-date').remove();
             }
             else{
