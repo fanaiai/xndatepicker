@@ -931,18 +931,18 @@ import './xndatepicker.css';
             } else {
                 var startTime, endTime;
                 if (isFirst) {
-                    startTime = this.option.startTime ? dayjs(this.option.startTime).format(this.option.format) : this.option.placeholder;
-                    endTime = this.option.endTime ? dayjs(this.option.endTime).format(this.option.format) : this.option.placeholder;
+                    startTime = this.option.startTime ? dayjs(this.option.startTime).format(this.option.format) : '';
+                    endTime = this.option.endTime ? dayjs(this.option.endTime).format(this.option.format) : '';
                     if ((this.type.indexOf('range') > -1 && this.date2) || this.type.indexOf('week') > -1) {
                         if (this.option.confirmFirst) {
                             this.trigger("confirm", {startTime: startTime, endTime: endTime})
                         }
-                        var showstr = startTime + this.option.separator + endTime;
+                        var showstr = (startTime||this.option.placeholder) + this.option.separator + (endTime||this.option.placeholder);
                     } else if (this.type.indexOf('range') < 0) {
                         if (this.option.confirmFirst) {
                             this.trigger("confirm", {startTime: startTime})
                         }
-                        var showstr = startTime;
+                        var showstr = (startTime||this.option.placeholder);
                     }
                     canconfirm=true;
                 } else {
