@@ -3,6 +3,8 @@
 //! authors : 范媛媛
 //! create date:2021/01/01
 //! update date:2021/01/05
+import jQuery from './jquery.min.js';
+import dayjs from 'dayjs';
 (function (window, $) {
     var option = {
 

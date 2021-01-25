@@ -93,15 +93,10 @@
 </div>
 
 </body>
-<script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<!--<script src="moment.js"></script>-->
-<script type="text/javascript" src="dayjs.min.js"></script>
-<script src="https://unpkg.com/dayjs@1.8.21/plugin/isSameOrAfter.js"></script>
-<script src="https://unpkg.com/dayjs@1.8.21/plugin/isSameOrBefore.js"></script>
-<script type="text/javascript" src="xndatepicker.js"></script>
+<script type="text/javascript" src="./dist/xndatepicker.min.js"></script>
 <script type="text/javascript">
 
-    var date=new XNDatepicker($("#date"),{
+    var date=new XNDatepicker(document.querySelector("#date"),{
         // format:'YYYY-MM-DD',
         type:'daterange',//year/month/date/multiple/ week/datetime/datetimerange/ daterange/monthrange/yearrange
         multipleDates:[],//当为多选日期类型时的初始值
@@ -117,15 +112,15 @@
         showShortKeys:true,
         autoFillDate:true,//自动变更element里面的值
         disableDate:function(date){
-            return (dayjs(date).format('YYYY-MM-DD')=='2021-01-22'||dayjs(date).format('YYYY')=='2019')
+            return false;
         }
     },function(data){
         console.log(data)
     })
-    $("#destroy").click(function(){
+    document.querySelector("#destroy").click(function(){
         date.destroy();
     })
-//     var datetime=new XNDatepicker($("#datetime"),{
+//     var datetime=new XNDatepicker(document.querySelector("#datetime"),{
 //         // format:'YYYY-MM-DD',
 //         type:'datetime',//year/month/date/multiple/ week/datetime/datetimerange/ daterange/monthrange/yearrange
 //         multipleDates:[],//当为多选日期类型时的初始值
@@ -143,7 +138,7 @@
 //     },function(data){
 //         console.log(data)
 //     })
-//     var month=new XNDatepicker($("#month"),{
+//     var month=new XNDatepicker(document.querySelector("#month"),{
 //         // format:'YYYY-MM-DD',
 //         type:'month',//year/month/date/multiple/ week/datetime/datetimerange/ daterange/monthrange/yearrange
 //         multipleDates:[],//当为多选日期类型时的初始值
@@ -161,7 +156,7 @@
 //     },function(data){
 //         console.log(data)
 //     })
-//     var year=new XNDatepicker($("#year"),{
+//     var year=new XNDatepicker(document.querySelector("#year"),{
 //         // format:'YYYY-MM-DD',
 //         type:'year',//year/month/date/multiple/ week/datetime/datetimerange/ daterange/monthrange/yearrange
 //         multipleDates:[],//当为多选日期类型时的初始值
@@ -179,7 +174,7 @@
 //     },function(data){
 //         console.log(data)
 //     })
-//     var daterange=new XNDatepicker($("#daterange"),{
+//     var daterange=new XNDatepicker(document.querySelector("#daterange"),{
 //         // format:'YYYY-MM-DD',
 //         type:'daterange',//year/month/date/multiple/ week/datetime/datetimerange/ daterange/monthrange/yearrange
 //         multipleDates:[],//当为多选日期类型时的初始值
@@ -197,7 +192,7 @@
 //     },function(data){
 //         console.log(data)
 //     })
-//     var monthrange=new XNDatepicker($("#monthrange"),{
+//     var monthrange=new XNDatepicker(document.querySelector("#monthrange"),{
 //         // format:'YYYY-MM-DD',
 //         type:'monthrange',//year/month/date/multiple/ week/datetime/datetimerange/ daterange/monthrange/yearrange
 //         multipleDates:[],//当为多选日期类型时的初始值
@@ -215,7 +210,7 @@
 //     },function(data){
 //         console.log(data)
 //     })
-//     var yearrange=new XNDatepicker($("#yearrange"),{
+//     var yearrange=new XNDatepicker(document.querySelector("#yearrange"),{
 //         // format:'YYYY-MM-DD',
 //         type:'yearrange',//year/month/date/multiple/ week/datetime/datetimerange/ daterange/monthrange/yearrange
 //         multipleDates:[],//当为多选日期类型时的初始值
@@ -233,7 +228,7 @@
 //     },function(data){
 //         console.log(data)
 //     })
-//     var week=new XNDatepicker($("#week"),{
+//     var week=new XNDatepicker(document.querySelector("#week"),{
 //         // format:'YYYY-MM-DD',
 //         type:'week',//year/month/date/multiple/ week/datetime/datetimerange/ daterange/monthrange/yearrange
 //         multipleDates:[],//当为多选日期类型时的初始值
@@ -251,7 +246,7 @@
 //     },function(data){
 //         console.log(data)
 //     })
-// var multiple=new XNDatepicker($("#multiple"),{
+// var multiple=new XNDatepicker(document.querySelector("#multiple"),{
 //     // format:'YYYY-MM-DD',
 //     type:'multiple',//year/month/date/multiple/ week/datetime/datetimerange/ daterange/monthrange/yearrange
 //     multipleDates:[],//当为多选日期类型时的初始值

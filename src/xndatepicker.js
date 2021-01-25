@@ -34,13 +34,22 @@ var script = scripts[scripts.length - 1];
 var s = document.querySelector ? script.src : script.getAttribute("src", 4)//IE8直接.src
 // var s = document.currentScript.src;
 var csspath = s.substr(0, s.lastIndexOf('/') - 0);
-var csslist = ["//at.alicdn.com/t/font_2213760_as9380qm7dw.css", csspath + "/xndatepicker.css"]
-var jslist = [csspath + "/xntimepicker.js", csspath + "/dayjs.min.js", "https://unpkg.com/dayjs@1.8.21/plugin/isSameOrAfter.js", "https://unpkg.com/dayjs@1.8.21/plugin/isSameOrBefore.js"]
+var csslist = ["//at.alicdn.com/t/font_2213760_as9380qm7dw.css"]
+var jslist = [csspath + "/xntimepicker.js"]
 dynamicLoadCss(csslist);
-dynamicLoadJs(jslist);
+// dynamicLoadJs(jslist);
+import jQuery from './jquery.min.js';
+import './xntimepicker.js';
+import dayjs from 'dayjs';
+import isSameOrBefore from 'dayjs/plugin/isSameOrBefore';
+import isSameOrAfter from 'dayjs/plugin/isSameOrAfter'
+// import 'https://unpkg.com/dayjs@1.8.21/plugin/isSameOrBefore.js';
+dayjs.extend(isSameOrBefore)
+dayjs.extend(isSameOrAfter)
+import './xndatepicker.css';
+// import '//at.alicdn.com/t/font_2213760_as9380qm7dw.css';
+// import dayjs from 'dayjs'
 (function (window, $) {
-    dayjs.extend(window.dayjs_plugin_isSameOrAfter)
-    dayjs.extend(window.dayjs_plugin_isSameOrBefore)
     var format = {
         'week': 'YYYY-MM-DD',
         'date': 'YYYY-MM-DD',
@@ -198,7 +207,7 @@ dynamicLoadJs(jslist);
 
         this.option.minDate && (this.option.minDate = dayjs(this.option.minDate));
         this.option.maxDate && (this.option.maxDate = dayjs(this.option.maxDate));
-        this.disableDate = this.option.disableDate;
+        this.disableDate = this.option.disableDate||function(date){return false};
         // for(let i=0;i<this.option.disableDate.length;i++){
         //     this.disableDate[this.option.disableDate[i]]=1;
         // }
