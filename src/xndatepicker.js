@@ -1,22 +1,11 @@
-//! Ftree.js
-//! version : 1.0.0
+//! xndatepicker.js
+//! 仙女座日期选择器
+//! version : 1.1.0
 //! authors : 范媛媛
 //! create date:2021/01/01
-//! update date:2021/01/05
+//! update date:2021/01/05 V1.0.0
+//! update date:2021/01/25 V1.1.0
 // https://github.com/fanaiai/xndatepicker
-function dynamicLoadJs(urllist) {
-    for (let i = 0; i < urllist.length; i++) {
-
-        let url = urllist[i];
-        var head = document.getElementsByTagName('head')[0];
-        var link = document.createElement('script');
-        link.src = url;
-        var finelurl = '<script type="text/javascript" src=' + url + '><\/script>'
-        document.getElementsByTagName('head')[0].appendChild(link)
-        document.write(finelurl)
-    }
-}
-
 function dynamicLoadCss(urllist) {
     for (let i = 0; i < urllist.length; i++) {
         let url = urllist[i];
@@ -32,23 +21,17 @@ function dynamicLoadCss(urllist) {
 var scripts = document.getElementsByTagName("script")
 var script = scripts[scripts.length - 1];
 var s = document.querySelector ? script.src : script.getAttribute("src", 4)//IE8直接.src
-// var s = document.currentScript.src;
 var csspath = s.substr(0, s.lastIndexOf('/') - 0);
 var csslist = ["//at.alicdn.com/t/font_2213760_as9380qm7dw.css"]
-var jslist = [csspath + "/xntimepicker.js"]
 dynamicLoadCss(csslist);
-// dynamicLoadJs(jslist);
 import jQuery from './jquery.min.js';
 import './xntimepicker.js';
 import dayjs from 'dayjs';
 import isSameOrBefore from 'dayjs/plugin/isSameOrBefore';
 import isSameOrAfter from 'dayjs/plugin/isSameOrAfter'
-// import 'https://unpkg.com/dayjs@1.8.21/plugin/isSameOrBefore.js';
 dayjs.extend(isSameOrBefore)
 dayjs.extend(isSameOrAfter)
 import './xndatepicker.css';
-// import '//at.alicdn.com/t/font_2213760_as9380qm7dw.css';
-// import dayjs from 'dayjs'
 (function (window, $) {
     var format = {
         'week': 'YYYY-MM-DD',
