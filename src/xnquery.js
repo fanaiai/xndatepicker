@@ -1,13 +1,14 @@
 (function (window) {
     function init(el){
         if(typeof el =='string'){
-            console.log(1)
         this.el=document.querySelectorAll(el);
         }
-        if(typeof el=='object'){
+        if(el instanceof NodeList){
             this.el=el;
         }
-        console.log(el)
+        if(el instanceof Node){
+            this.el=this.reverseArryToNodeList([el])
+        }
     }
     function XNQuery(el){
         return new init(el);
@@ -68,19 +69,54 @@
             // 返回已经被修改的对象
             return target;
         },
-        parents(selector = '*') {
-            if(!this.el || !this.el.item(0)){
-                return [];
+        parents( parentSelector /* optional */) {
+            let el=this.el.item(0)
+            if (parentSelector === undefined) {
+                parentSelector = this.reverseArryToNodeList([document]);
             }
-            const matchesSelector = this.el.item(0).matches || this.el.item(0).webkitMatchesSelector || this.el.item(0).mozMatchesSelector || this.el.item(0).msMatchesSelector
-            const parentsMatch = []
-            while ((el = this.el.item(0).parentElement) !== null) {
-                if (matchesSelector.call(el, selector)) {
-                    parentsMatch.push(el)
+            else{
+                parentSelector=document.querySelectorAll(parentSelector)
+            }
+            var parents = [];
+            parentSelector.forEach((e)=>{
+                var p=el.parentNode;
+                while (p == e && p!=null) {
+                    var o = p;
+                    parents.push(o);
+                    p = o.parentNode;
                 }
-            }
-            return new XNQuery(this.reverseArryToNodeList(parentsMatch))
+            })
+            return XNQuery(this.reverseArryToNodeList(parents))
+            // var p = el.parentNode;
+            // console.log(parentSelector,p)
+            // while (p !== parentSelector && p!=null) {
+            //     var o = p;
+            //     console.log(o)
+            //     parents.push(o);
+            //     p = o.parentNode;
+            // }
+            // parents.push(parentSelector); // Push that parentSelector you wanted to stop at
+            // console.log(parents);
+            // // return parents;
+            // return XNQuery(this.reverseArryToNodeList(parents))
         },
+        // parents(selector = '*') {
+        //     if(!this.el || !this.el.item(0)){
+        //         return this.reverseArryToNodeList([]);
+        //     }
+        //     const matchesSelector = this.el.item(0).matches || this.el.item(0).webkitMatchesSelector || this.el.item(0).mozMatchesSelector || this.el.item(0).msMatchesSelector
+        //     const parentsMatch = [];
+        //     let el=this.el.item(0).parentElement;
+        //     console.log(this.el.item(0).parentNode.nodeName)
+        //     while (el!== null) {
+        //         console.log(el)
+        //         if (matchesSelector.call(el, selector)) {
+        //             parentsMatch.push(el)
+        //         }
+        //         el=el.parentElement;
+        //     }
+        //     return XNQuery(this.reverseArryToNodeList(parentsMatch))
+        // },
         reverseArryToNodeList(arry){
             var div=document.createElement('div')
             for(let i=0;i<arry.length;i++){
@@ -109,9 +145,7 @@
             if(!this.el){
                 return XNQuery(this.reverseArryToNodeList([]));
             }
-            return XNQuery(query);
-            // var el=this.el.querySelector(query);
-            // return el;
+            return XNQuery(this.el.item(0).querySelectorAll(query));
         },
         each(i,ele){
             return this.el.forEach((ele,i))
@@ -127,6 +161,9 @@
             else{
                 return XNQuery(this.reverseArryToNodeList([]))
             }
+        },
+        get(index){
+            return this.el.item(index)
         },
         addClass(classname){
             this.el.forEach((e)=>{

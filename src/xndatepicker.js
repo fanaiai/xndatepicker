@@ -593,19 +593,20 @@ import './xndatepicker.css';
         addEvent() {
             var mouseMoveFunc = (e) => {
                 var $t = $(e.target);
-                if ($t.parents('.xndatepicker')[0] == this.$container[0]) {
+                console.log(222,$t.parents('.xndatepicker').get(0))
+                if ($t.parents('.xndatepicker').get(0) == this.$container.get(0)) {
                     if ($t.hasClass("day-item") || $t.hasClass("month-item") || $t.hasClass("year-item")) {
-                        this.rendHoverStyle($t);
+                        console.log('111')
+                        // this.rendHoverStyle($t);
                     }
-                } else {
-                    // this.rendHoverStyle();
                 }
             }
             this.removeMoveEvent = () => {
                 document.removeEventListener('mousemove', mouseMoveFunc)//捕获阶段
             }
+            //
             document.addEventListener("mousemove", mouseMoveFunc)
-            this.$container.el.item(0).addEventListener("click", (e) => {
+            this.$container.get(0).addEventListener("click", (e) => {
                 var $t = $(e.target);
                 var datenum = $t.parents(".dater1")[0] ? 1 : 2;
                 if ($t.hasClass("skip-date")) {
@@ -1234,6 +1235,7 @@ import './xndatepicker.css';
             return disable;
         },
         _rendYearHtml(date, $cont) {//需要重新生成哦
+            console.log(date,$cont)
             var ynow = date.year();
             var mnow = date.month() + 1;
             $cont.find(".year-info").html("<span class='year'>" + ynow + this.option.locale.yearHeadSuffix + "<\/span><span class='month'>" + this.option.locale.monthHead[mnow - 1] + "<\/span>");
