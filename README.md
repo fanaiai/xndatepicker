@@ -19,12 +19,10 @@
 # 使用步骤
 ### 下载代码
 ### 引用js
-    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="moment.js"></script>
-    <script type="text/javascript" src="xndatepicker.js"></script>
+    <script type="text/javascript" src="./dist/xndatepicker.min.js"></script>
     
 ### 初始化选择器
-    var date=new XNDatepicker(
+    var xndatepicker=new XNDatepicker(
     $("#date"),//日历容器，可以是input，或其他标签
     {
             type:'daterange',日历类型 date,datetime,daterange,datetimerange,month,monthrange,year,yearrange,week,multiple
@@ -85,7 +83,8 @@
             console.log(data)
         },)
 ## 方法
-+ 销毁实例 fcolorpicker.destroy()
++ 日期格式化 xndatepicker.format(date,formatString)
++ 销毁实例 xndatepicker.destroy()
 ## 示例代码请参考 src/index.html
 ## 后续功能点
 + 移动端的支持

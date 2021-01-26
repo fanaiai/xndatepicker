@@ -16,5 +16,5 @@ app.use(
 
 // 将文件 serve 到 port 3000。
 app.listen(3001, function () {
-    console.log('Example app listening on port 3002!\n');
+    console.log('Example app listening on port 3001!\n');
 });
