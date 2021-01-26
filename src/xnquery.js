@@ -80,12 +80,16 @@
             var parents = [];
             parentSelector.forEach((e)=>{
                 var p=el.parentNode;
-                while (p == e && p!=null) {
-                    var o = p;
-                    parents.push(o);
-                    p = o.parentNode;
+                while (p != e && p!=null) {
+                    // var o = p;
+                    p = p.parentNode;
+                }
+                if(p!=null){
+                    console.log(p)
+                    parents.push(p);
                 }
             })
+            // console.log(parents)
             return XNQuery(this.reverseArryToNodeList(parents))
             // var p = el.parentNode;
             // console.log(parentSelector,p)
