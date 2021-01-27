@@ -3,17 +3,23 @@
         if(typeof el =='string'){
         this.el=document.querySelectorAll(el);
         }
-        if(el instanceof NodeList){
+        if(el instanceof NodeList || Array.isArray(el)){
             this.el=el;
         }
         if(el instanceof Node){
-            this.el=this.reverseArryToNodeList([el])
+            this.el=[el]
+        }
+        if(!this.el){
+            this.el=[];
         }
     }
     function XNQuery(el){
         return new init(el);
     }
     XNQuery.prototype=init.prototype={
+        length(){
+            return this.el.length;
+        },
         extend(){
             var options, name, src, copy, copyIsArray, clone,
                 target = arguments[0] || {}, // 目标对象
@@ -69,8 +75,17 @@
             // 返回已经被修改的对象
             return target;
         },
+        parent(){
+            let el=this.el[0]
+            if(el && el.parentNode){
+                return XNQuery([el.parentNode])
+            }
+            else{
+                return XNQuery([])
+            }
+        },
         parents( parentSelector /* optional */) {
-            let el=this.el.item(0)
+            let el=this.el[0]
             if (parentSelector === undefined) {
                 parentSelector = this.reverseArryToNodeList([document]);
             }
@@ -78,18 +93,17 @@
                 parentSelector=document.querySelectorAll(parentSelector)
             }
             var parents = [];
+            if(el){
             parentSelector.forEach((e)=>{
                 var p=el.parentNode;
                 while (p != e && p!=null) {
-                    // var o = p;
                     p = p.parentNode;
                 }
+
                 if(p!=null){
-                    console.log(p)
                     parents.push(p);
                 }
-            })
-            // console.log(parents)
+            })}
             return XNQuery(this.reverseArryToNodeList(parents))
             // var p = el.parentNode;
             // console.log(parentSelector,p)
@@ -105,13 +119,13 @@
             // return XNQuery(this.reverseArryToNodeList(parents))
         },
         // parents(selector = '*') {
-        //     if(!this.el || !this.el.item(0)){
+        //     if(!this.el || !this.el[0]){
         //         return this.reverseArryToNodeList([]);
         //     }
-        //     const matchesSelector = this.el.item(0).matches || this.el.item(0).webkitMatchesSelector || this.el.item(0).mozMatchesSelector || this.el.item(0).msMatchesSelector
+        //     const matchesSelector = this.el[0].matches || this.el[0].webkitMatchesSelector || this.el[0].mozMatchesSelector || this.el[0].msMatchesSelector
         //     const parentsMatch = [];
-        //     let el=this.el.item(0).parentElement;
-        //     console.log(this.el.item(0).parentNode.nodeName)
+        //     let el=this.el[0].parentElement;
+        //     console.log(this.el[0].parentNode.nodeName)
         //     while (el!== null) {
         //         console.log(el)
         //         if (matchesSelector.call(el, selector)) {
@@ -122,6 +136,7 @@
         //     return XNQuery(this.reverseArryToNodeList(parentsMatch))
         // },
         reverseArryToNodeList(arry){
+            return arry
             var div=document.createElement('div')
             for(let i=0;i<arry.length;i++){
                 div.appendChild(arry[i])
@@ -130,36 +145,95 @@
         },
         hasClass(className){
             if(this.el.length>0){
-            return this.el.item(0).classList.contains(className);}
+            return this.el[0].classList.contains(className);}
             else{
                 return false;
             }
         },
         attr(attr,value){
-            this.el.forEach((e)=>{
-                if(!value){
-                    e.getAttribute(attr)}
-                else{
-                    e.setAttribute(attr,value)
+            if(value) {
+                this.el.forEach((e) => {
+                    e.setAttribute(attr, value)
+                })
+            }
+            else{
+                if(!this.el[0]){
+                    return null;
                 }
-            })
-
+                return this.el[0].getAttribute(attr)
+            }
         },
         find(query){
-            if(!this.el){
-                return XNQuery(this.reverseArryToNodeList([]));
+            if(!this.el ||this.el.length<=0){
+                return XNQuery([]);
             }
-            return XNQuery(this.el.item(0).querySelectorAll(query));
+            if(typeof query !='string'){
+                var list=[];
+                this.el.forEach((e)=> {
+                    var arry = e.querySelectorAll('*');
+                    for (let i = 0; i < arry.length; i++) {
+                        if (arry[i] == query) {
+                            list.push(query)
+                            console.log(111)
+                        }
+                    }
+                })
+                console.log(list)
+                return XNQuery(list)
+            }
+            else{
+                var list=[];
+                this.el.forEach((e)=>{
+                    list=list.concat(this.ConvertToArray(e.querySelectorAll(query)))
+                })
+                return XNQuery(list);
+            }
         },
-        each(i,ele){
-            return this.el.forEach((ele,i))
+        children(query){
+            if(!this.el ||this.el.length<=0){
+                return XNQuery([]);
+            }
+            var queryList=[];
+            if(Array.isArray(query)){
+                queryList=query;
+            }
+            var children=[]
+            this.el.forEach((e)=>{
+                children=children.concat(this.ConvertToArray(e.children))
+                if(typeof query =='string'){
+                    queryList=queryList.concat(this.ConvertToArray(e.querySelectorAll(query)))
+                }
+
+            })
+            var list=[];
+            var queryListLength=queryList.length;
+            for(let i=0;i<children.length;i++){
+                let c=children[i];
+                for(let j=0;j<queryListLength;j++){
+                    if(queryList[j]==c){
+                        list.push(c);
+                        break;
+                    }
+                }
+            }
+            return XNQuery(list);
+        },
+        each(callback){
+            return this.el.forEach(callback)
         },
         index(targetDom){
-            var index;
-            return index;
+            if(!targetDom){
+            return this.el[0].index;}
+            else{
+                for(let i=0;i<this.el.length;i++){
+                    if(this.el[i]==targetDom){
+                        return i;
+                    }
+                }
+            }
         },
         eq(index){
-            var el=this.el.item(index);
+            var el=this.el[index];
             if(el){
             return XNQuery(this.reverseArryToNodeList([el]))}
             else{
@@ -167,16 +241,45 @@
             }
         },
         get(index){
-            return this.el.item(index)
+            return this.el[index]
         },
         addClass(classname){
             this.el.forEach((e)=>{
-                e.classList.add(classname)
+                if(e.classList){
+                e.classList.add(...classname.split(' '))}
             })
         },
-        nextUntil(query){},
-        prevAll(query){},
-        nextAll(query){},
+        nextUntil(query,isprev){
+            var el=this.el[0]
+            if(!el){
+                return XNQuery([]);
+            }
+            if(!query){
+                var next=null;
+            }
+            else{
+                if(typeof query =='object' && query instanceof Node){
+                    var next=query;
+                }
+                else{
+                    var next=el.parentNode.querySelector(query)
+                }
+            }
+            var list=[];
+            var func=isprev?'previousSibling':'nextSibling'
+            var n=el[func];
+            while(n!=next && n!=null){
+                list.push(n)
+                n=n[func];
+            }
+            return XNQuery(list)
+        },
+        prevAll(){
+            return this.nextUntil(null,true)
+        },
+        nextAll(){
+            return this.nextUntil()
+        },
         removeClass(classname){
             this.el.forEach((e)=>{
                 e.classList.remove(classname)
@@ -193,6 +296,9 @@
             }
         },
         html(val){
+            if(!this.el || !this.el[0]){
+                return;
+            }
             if(!val){
                 return this.el[0].innerHTML;
             }
@@ -214,23 +320,36 @@
                 div.innerHTML = str;}
             return div.childNodes;
         },
+        ConvertToArray(nodes){
+            var array=null;
+            try{
+                array=Array.prototype.slice.call(nodes,0);//非ie浏览器  ie8-将NodeList实现为COM对象，不能用这种方式检测
+            }catch(ex){//ie8-
+                array=new Array();
+                for(var i=0;i<nodes.length;i++){
+                    array.push(nodes[0]);
+                }
+            }
+            return array;
+        },
+        parseDomToString(dom){
+
+        },
         append(newel){
             var newele;
             if(typeof newel=='string'){
                 newele=this.parseToDOM(newel)
+                newele=this.ConvertToArray(newele)
             }
             else{
-                newele=this.reverseArryToNodeList([newel]);
+                newele=[newel];
             }
-            newele.forEach((newe)=>{
+            for(let i=0;i<newele.length;i++){
+                let newe=newele[i]
                 this.el.forEach((e)=>{
                     e.appendChild(newe)
                 })
-            })
-            // for(let i=0;i<newele.length;i++){
-            //
-            // }
-
+            }
         },
         remove(){
             this.el.forEach((e)=>{
@@ -238,12 +357,57 @@
             })
 
         },
-        slideUp(){
+        slideUp(time){
+            this.el.forEach((e)=>{
+                e.style.display='none'
+            })
+        },
+        css(css){
+            for(let i in css){
+                this.el.forEach((e)=>{
+                    e.style[i]=css[i]
+                })
+            }
+        },
+        fadeIn(time){
+            this.el.forEach((e)=>{
+                e.style.display='block'
+                e.style.opacity=1
+            })
+        },
+        animate(css,time){
+            if(!time){
+                time=300;
+            }
+
+        },
+        outerWidth(){
+            var el=this.el[0];
+            return el.offsetWidth
+        },
+        outerHeight(){
+            var el=this.el[0];
+            return el.offsetHeight
+        },
+        hide(){
+            this.el.forEach((e)=>{
+                e.style.display='none'
+            })
+            return this;
+        },
+        show(){
             this.el.forEach((e)=>{
                 e.style.display='block'
             })
+            return this;
+        },
+        position() {
+            return {
+                top: this.el[0].offsetTop,
+                left: this.el[0].offsetLeft,
+            }
         }
     }
     XNQuery.extend=XNQuery.prototype.extend;
-    window.$=XNQuery;
+    window.XNQuery=XNQuery;
 })(window)

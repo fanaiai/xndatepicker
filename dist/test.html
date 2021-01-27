@@ -12,11 +12,8 @@
             border:1px solid #ccc;
             cursor: pointer;
             position:relative;
-            /*top:10px;*/
-            /*left:20px;*/
             padding:0 6px;
             font-size: 12px !important;
-
         }
         #multiple{
             max-width: 160px;
@@ -93,10 +90,92 @@
 </div>
 
 </body>
-<script type="text/javascript" src="./dist/xndatepicker.min.js"></script>
+<script type="text/javascript" src="./xndatepicker.min.js"></script>
 <script type="text/javascript">
 
-    var date=new XNDatepicker(document.querySelector("#date"),{
+    // var date=new XNDatepicker(document.querySelector("#date"),{
+    //     // format:'YYYY-MM-DD',
+    //     type:'daterange',//year/month/date/multiple/ week/datetime/datetimerange/ daterange/monthrange/yearrange
+    //     multipleDates:[],//当为多选日期类型时的初始值
+    //     startTime:'',
+    //     // endTime:'2036-04-04',
+    //     // minDate:'2019-04-04',
+    //     maxDate:'',
+    //     separator:' 到 ',
+    //     showType:'modal',
+    //     linkPanels:false,//面板联动
+    //     showClear:true,//是否显示清除按钮
+    //     autoConfirm:true,
+    //     showShortKeys:true,
+    //     showWeek:true,
+    //     autoFillDate:true,//自动变更element里面的值
+    //     disableDate:function(date,dayjs){
+    //         if(dayjs(date).format('YYYY/MM/DD')=='2021/01/04'){
+    //             return true;
+    //         }
+    //         return false;
+    //     }
+    // },function(data){
+    //     console.log(data)
+    // })
+    // document.querySelector("#destroy").click(function(){
+    //     date.destroy();
+    // })
+    // var datetime=new XNDatepicker(document.querySelector("#datetime"),{
+    //     // format:'YYYY-MM-DD',
+    //     type:'datetime',//year/month/date/multiple/ week/datetime/datetimerange/ daterange/monthrange/yearrange
+    //     multipleDates:[],//当为多选日期类型时的初始值
+    //     startTime:'',
+    //     // endTime:'2036-04-04',
+    //     // minDate:'2019-04-04',
+    //     maxDate:'',
+    //     separator:' 到 ',
+    //     showType:'modal',
+    //     linkPanels:false,//面板联动
+    //     showClear:true,//是否显示清除按钮
+    //     autoConfirm:true,
+    //     showShortKeys:true,
+    //     autoFillDate:true,//自动变更element里面的值
+    // },function(data){
+    //     console.log(data)
+    // })
+    // var month=new XNDatepicker(document.querySelector("#month"),{
+    //     // format:'YYYY-MM-DD',
+    //     type:'month',//year/month/date/multiple/ week/datetime/datetimerange/ daterange/monthrange/yearrange
+    //     multipleDates:[],//当为多选日期类型时的初始值
+    //     startTime:'',
+    //     // endTime:'2036-04-04',
+    //     // minDate:'2019-04-04',
+    //     maxDate:'',
+    //     separator:' 到 ',
+    //     showType:'modal',
+    //     linkPanels:false,//面板联动
+    //     showClear:true,//是否显示清除按钮
+    //     autoConfirm:true,
+    //     showShortKeys:true,
+    //     autoFillDate:true,//自动变更element里面的值
+    // },function(data){
+    //     console.log(data)
+    // })
+    // var year=new XNDatepicker(document.querySelector("#year"),{
+    //     // format:'YYYY-MM-DD',
+    //     type:'year',//year/month/date/multiple/ week/datetime/datetimerange/ daterange/monthrange/yearrange
+    //     multipleDates:[],//当为多选日期类型时的初始值
+    //     startTime:'',
+    //     // endTime:'2036-04-04',
+    //     // minDate:'2019-04-04',
+    //     maxDate:'',
+    //     separator:' 到 ',
+    //     showType:'modal',
+    //     linkPanels:false,//面板联动
+    //     showClear:true,//是否显示清除按钮
+    //     autoConfirm:true,
+    //     showShortKeys:true,
+    //     autoFillDate:true,//自动变更element里面的值
+    // },function(data){
+    //     console.log(data)
+    // })
+    var daterange=new XNDatepicker(document.querySelector("#daterange"),{
         // format:'YYYY-MM-DD',
         type:'daterange',//year/month/date/multiple/ week/datetime/datetimerange/ daterange/monthrange/yearrange
         multipleDates:[],//当为多选日期类型时的初始值
@@ -111,90 +190,10 @@
         autoConfirm:true,
         showShortKeys:true,
         autoFillDate:true,//自动变更element里面的值
-        disableDate:function(date,dayjs){
-            if(dayjs(date).format('YYYY/MM/DD')=='2021/01/04'){
-                return true;
-            }
-            return false;
-        }
     },function(data){
         console.log(data)
     })
-    document.querySelector("#destroy").click(function(){
-        date.destroy();
-    })
-//     var datetime=new XNDatepicker(document.querySelector("#datetime"),{
-//         // format:'YYYY-MM-DD',
-//         type:'datetime',//year/month/date/multiple/ week/datetime/datetimerange/ daterange/monthrange/yearrange
-//         multipleDates:[],//当为多选日期类型时的初始值
-//         startTime:'',
-//         // endTime:'2036-04-04',
-//         // minDate:'2019-04-04',
-//         maxDate:'',
-//         separator:' 到 ',
-//         showType:'modal',
-//         linkPanels:false,//面板联动
-//         showClear:true,//是否显示清除按钮
-//         autoConfirm:true,
-//         showShortKeys:true,
-//         autoFillDate:true,//自动变更element里面的值
-//     },function(data){
-//         console.log(data)
-//     })
-//     var month=new XNDatepicker(document.querySelector("#month"),{
-//         // format:'YYYY-MM-DD',
-//         type:'month',//year/month/date/multiple/ week/datetime/datetimerange/ daterange/monthrange/yearrange
-//         multipleDates:[],//当为多选日期类型时的初始值
-//         startTime:'',
-//         // endTime:'2036-04-04',
-//         // minDate:'2019-04-04',
-//         maxDate:'',
-//         separator:' 到 ',
-//         showType:'modal',
-//         linkPanels:false,//面板联动
-//         showClear:true,//是否显示清除按钮
-//         autoConfirm:true,
-//         showShortKeys:true,
-//         autoFillDate:true,//自动变更element里面的值
-//     },function(data){
-//         console.log(data)
-//     })
-//     var year=new XNDatepicker(document.querySelector("#year"),{
-//         // format:'YYYY-MM-DD',
-//         type:'year',//year/month/date/multiple/ week/datetime/datetimerange/ daterange/monthrange/yearrange
-//         multipleDates:[],//当为多选日期类型时的初始值
-//         startTime:'',
-//         // endTime:'2036-04-04',
-//         // minDate:'2019-04-04',
-//         maxDate:'',
-//         separator:' 到 ',
-//         showType:'modal',
-//         linkPanels:false,//面板联动
-//         showClear:true,//是否显示清除按钮
-//         autoConfirm:true,
-//         showShortKeys:true,
-//         autoFillDate:true,//自动变更element里面的值
-//     },function(data){
-//         console.log(data)
-//     })
-//     var daterange=new XNDatepicker(document.querySelector("#daterange"),{
-//         // format:'YYYY-MM-DD',
-//         type:'daterange',//year/month/date/multiple/ week/datetime/datetimerange/ daterange/monthrange/yearrange
-//         multipleDates:[],//当为多选日期类型时的初始值
-//         startTime:'',
-//         // endTime:'2036-04-04',
-//         // minDate:'2019-04-04',
-//         maxDate:'',
-//         separator:' 到 ',
-//         showType:'modal',
-//         linkPanels:false,//面板联动
-//         showClear:true,//是否显示清除按钮
-//         autoConfirm:true,
-//         showShortKeys:true,
-//         autoFillDate:true,//自动变更element里面的值
-//     },function(data){
-//         console.log(data)
-//     })
+
 //     var monthrange=new XNDatepicker(document.querySelector("#monthrange"),{
 //         // format:'YYYY-MM-DD',
 //         type:'monthrange',//year/month/date/multiple/ week/datetime/datetimerange/ daterange/monthrange/yearrange

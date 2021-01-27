@@ -3,7 +3,7 @@
 //! authors : 范媛媛
 //! create date:2021/01/01
 //! update date:2021/01/05
-import jQuery from './jquery.min.js';
+import './xnquery.js';
 import dayjs from 'dayjs';
 (function (window, $) {
     var option = {
@@ -11,8 +11,9 @@ import dayjs from 'dayjs';
     }
 
     function XNTimepicker(targetDom, options) {
-        this.$targetDom=$(targetDom);
-        this.option = $.extend(false, option, options);
+        this.$targetDom=$(targetDom.get(0));
+        console.log(targetDom)
+        this.option = $.extend({}, option, options);
 
         this.id=this.getRandomString();
         this.show=false;
@@ -46,10 +47,10 @@ import dayjs from 'dayjs';
         },
         addTargetEvent(){
             document.addEventListener('click',(e)=>{
-                if(e.target==this.$targetDom[0] || (this.$targetDom.find(e.target)[0] && !$(e.target).parents('.xntimepicker')[0])){
+                if(e.target==this.$targetDom.get(0) || (this.$targetDom.find(e.target).get(0) && !$(e.target).parents('.xntimepicker').get(0))){
                     this.changeShowStatus();
                 }
-                else if(!$(e.target).parents('.xntimepicker')[0] || ($(e.target).parents('.xntimepicker')[0].id!=this.id)){
+                else if(!$(e.target).parents('.xntimepicker').get(0) || ($(e.target).parents('.xntimepicker').get(0).id!=this.id)){
 
                     this.changeShowStatus(true);
                 }
@@ -63,7 +64,9 @@ import dayjs from 'dayjs';
             }
             else{
                 this.$container.show();
+                console.log(222444)
                 this.setPosition();
+                console.log(99999)
             }
             this.show=!this.show;
         },
@@ -77,12 +80,12 @@ import dayjs from 'dayjs';
             })
         },
         setPosition:function(){
-            if(!this.$container[0]){
+            if(!this.$container.get(0)){
                 return;
             }
             var wwidth=document.documentElement.clientWidth;
             var wheight=document.documentElement.clientHeight;
-            var curcolordom=this.$targetDom[0]
+            var curcolordom=this.$targetDom.get(0)
             var targetTop=curcolordom.getBoundingClientRect().top;
             var top=targetTop;
             var targetLeft=curcolordom.getBoundingClientRect().left;
@@ -111,8 +114,8 @@ import dayjs from 'dayjs';
             //     top=top+targetHeight+10;
             //     left=targetLeft+targetWidth-domwidth;
             // }
-            this.$container[0].style.top=top+"px";
-            this.$container[0].style.left=left+"px";
+            this.$container.get(0).style.top=top+"px";
+            this.$container.get(0).style.left=left+"px";
         },
         rendtime() {
             if (!this.option.format) {
@@ -148,11 +151,12 @@ import dayjs from 'dayjs';
             this.changeShowStatus(true)
         },
         addEvent(){
-            this.$targetDom[0].addEventListener("click",(e)=>{
+            console.log(this.$targetDom)
+            this.$targetDom.get(0).addEventListener("click",(e)=>{
                 var $t=$(e.target);
                 this.selectTime($t.parents(".timecont").eq(0), $t);
             })
-            this.$container[0].addEventListener("click",(e)=>{
+            this.$container.get(0).addEventListener("click",(e)=>{
                 var $t=$(e.target);
                 // if ($t.parents(".timecont")[0]) {
                 //     this.selectTime($t.parents(".timecont").eq(0), $t);
@@ -174,25 +178,24 @@ import dayjs from 'dayjs';
             var that = this;
             if ($target.parent().hasClass("timecont")) {
                 // $ele.children("div").toggle();
-                if ($ele.children("div").css("display") == 'none') {
+                if ($ele.children("div").get(0).style.display == 'none') {
                     return;
                 }
-                var curTime = $ele.children("span")[0].innerHTML.split(":");
+                var curTime = $ele.children("span").get(0).innerHTML.split(":");
                 var hour = curTime[0];
-                22
                 var minute = curTime[1];
                 var second = curTime[2];
                 $ele.find(".on").removeClass("on")
-                $ele.find(".hours li[data-i=" + hour + "]").addClass("on")
-                $ele.find(".minutes li[data-i=" + minute + "]").addClass("on")
-                $ele.find(".seconds li[data-i=" + second + "]").addClass("on")
-                $ele.find(".on").each((i, ele) => {
+                $ele.find(".hours li[data-i='" + hour + "']").addClass("on")
+                $ele.find(".minutes li[data-i='" + minute + "']").addClass("on")
+                $ele.find(".seconds li[data-i='" + second + "']").addClass("on")
+                $ele.find(".on").each((ele,i) => {
                     var top = $(ele).position().top - 20;
-                    $(ele).parent()[0].scrollBy(0, top)
+                    $(ele).parent().get(0).scrollBy(0, top)
                 })
                 return;
             }
-            if ($target[0].nodeName == 'LI') {
+            if ($target.get(0).nodeName == 'LI') {
                 $target.parent().find("li").removeClass("on")
                 $target.addClass("on")
                 return;
@@ -236,4 +239,4 @@ import dayjs from 'dayjs';
         },
     }
     window.XNTimepicker = XNTimepicker;
-})(window, jQuery)
+})(window, XNQuery)

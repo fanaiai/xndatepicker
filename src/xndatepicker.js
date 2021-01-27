@@ -210,7 +210,7 @@ import './xndatepicker.css';
         this.eventList = {};
         this.init();
         this.addPosEvent();
-        // this.addTargetEvent();
+        this.addTargetEvent();
     }
 
     XNDatepicker.prototype = {
@@ -223,7 +223,7 @@ import './xndatepicker.css';
             this.initTimePicker();
             this.rendHoverStyle();
             this.setDate();
-            // this.confirm(false, true);
+            this.confirm(false, true);
         },
         resetCurrentTime(startTime, endTime) {//显示日历的时候，重新设置当前的日期
             if (this.type == 'multiple') {
@@ -249,10 +249,10 @@ import './xndatepicker.css';
         },
         getCurrentTargetTime() {
             var str = ''
-            if (this.$targetDom.el.item(0).nodeName == 'INPUT') {
-                str = this.$targetDom.el.item(0).value;
+            if (this.$targetDom.get(0).nodeName == 'INPUT') {
+                str = this.$targetDom.get(0).value;
             } else {
-                str = this.$targetDom.el.item(0).innerHTML;
+                str = this.$targetDom.get(0).innerHTML;
             }
             // console.log(str)
         },
@@ -265,6 +265,7 @@ import './xndatepicker.css';
         initTimePicker() {
             var that = this;
             if (this.type == 'datetime' || this.type == 'datetimerange') {
+                console.log(this.$container.find('.time1 .timecont'))
                 this.timepicker1 = new XNTimepicker(this.$container.find('.time1 .timecont'), {
                     time: that.selectedDate[0],
                     onConfirm(res) {
@@ -296,9 +297,9 @@ import './xndatepicker.css';
         },
         addTargetEvent() {
             var clickFunc = (e) => {
-                if (e.target == this.$targetDom.el.item(0)) {
+                if (e.target == this.$targetDom.get(0)) {
                     this.changeShowStatus();
-                } else if (!$(e.target).parents('.xndatepicker')[0] || ($(e.target).parents('.xndatepicker')[0].id != this.id)) {
+                } else if (!$(e.target).parents('.xndatepicker').get(0) || ($(e.target).parents('.xndatepicker').get(0).id != this.id)) {
 
                     this.changeShowStatus(true);
                 }
@@ -315,7 +316,7 @@ import './xndatepicker.css';
             } else {
                 this.$container.css({display: 'block', opacity: '0'})
                 this.resetCurrentTime();
-                this.$container.animate({'opacity': 1}, 200);
+                this.$container.fadeIn(200);
             }
             this.show = !this.show;
         },
@@ -329,12 +330,12 @@ import './xndatepicker.css';
             })
         },
         setPosition: function () {
-            if (!this.$container[0]) {
+            if (!this.$container.get(0)) {
                 return;
             }
             var wwidth = document.documentElement.clientWidth;
             var wheight = document.documentElement.clientHeight;
-            var curcolordom = this.$targetDom.el.item(0)
+            var curcolordom = this.$targetDom.get(0)
 
             var targetTop = curcolordom.getBoundingClientRect().top;
             var top = targetTop;
@@ -368,17 +369,17 @@ import './xndatepicker.css';
             if (left < 0) {
                 left = 0
             }
-            this.$container[0].style.top = top + "px";
-            this.$container[0].style.left = left + "px";
-            this.$container.find('.xntriangle')[0].style.left = trangleleft + "px";
-            this.$container.find('.xntriangle')[0].style.top = trangletop + "px";
-            this.$container.find('.xntriangle')[0].style.borderWidth = borderWidth;
+            this.$container.get(0).style.top = top + "px";
+            this.$container.get(0).style.left = left + "px";
+            this.$container.find('.xntriangle').get(0).style.left = trangleleft + "px";
+            this.$container.find('.xntriangle').get(0).style.top = trangletop + "px";
+            this.$container.find('.xntriangle').get(0).style.borderWidth = borderWidth;
         },
         rendHoverStyle($t) {
-            if ($t && ((this.type.indexOf('year') < 0 && $t.hasClass('year-item')) || (this.type.indexOf('date') >= 0 && !$t.hasClass('day-item')))) {
+            //判断$t是干啥来着？
+            if ($t && $t.get(0) && ((this.type.indexOf('year') < 0 && $t.hasClass('year-item')) || (this.type.indexOf('date') >= 0 && !$t.hasClass('day-item')))) {
                 return;
             }
-
             var format = 'YYYY-MM';
             var curFormat = 'YYYY-MM-DD'
             if (this.type.indexOf('month') > -1) {
@@ -413,11 +414,11 @@ import './xndatepicker.css';
                     this.$container.find(".hover").removeClass("hover");
                     this.$container.find("[data-date='" + date1 + "']").addClass('hover')
                     this.$container.find("[data-date='" + date2 + "']").addClass('hover')
-                    this.$container.find("[data-date='" + date1 + "']").nextUntil(this.$container.find("[data-date='" + date2 + "']")).addClass('hover')
+                    this.$container.find("[data-date='" + date1 + "']").nextUntil(this.$container.find("[data-date='" + date2 + "']").get(0)).addClass('hover')
                 } else {
                     this.$container.find(".hover").removeClass("hover");
                 }
-                this.$container.find(".cur-date").eq(0).nextUntil(this.$container.find(".cur-date").eq(1)).addClass('hover')
+                this.$container.find(".cur-date").eq(0).nextUntil(this.$container.find(".cur-date").get(1)).addClass('hover')
                 this.$container.find(".cur-date").eq(1).addClass('right-date')
                 return;
             }
@@ -429,8 +430,7 @@ import './xndatepicker.css';
                 return;
             }
             this.$container.find(".hover").removeClass("hover");
-
-            if ($t && !this.$container.find(".cur-date")[1] && (!this.date2)) {
+            if ($t && !this.$container.find(".cur-date").get(1) && (!this.date2)) {
                 var date1 = this.$container.find(".cur-date").eq(0).attr('data-date')
                 var date2 = $t.attr('data-date');
                 $('.circle-date').removeClass('circle-date')
@@ -444,10 +444,10 @@ import './xndatepicker.css';
                 if (date1 != date2) {
                     if (inSame) {
                         if (isBefore) {
-                            this.$container.find(".cur-date").eq(0).nextUntil($t).addClass("hover")
+                            this.$container.find(".cur-date").eq(0).nextUntil($t.get(0)).addClass("hover")
                         } else {
                             this.$container.find(".cur-date").eq(0).addClass('right-date')
-                            $t.nextUntil(this.$container.find(".cur-date").eq(0)).addClass("hover")
+                            $t.nextUntil(this.$container.find(".cur-date").get(0)).addClass("hover")
                         }
                     } else {
                         if (isBefore) {
@@ -485,9 +485,9 @@ import './xndatepicker.css';
                 if (date1 != date2) {
                     if (inSame) {
                         if (isBefore) {
-                            this.$container.find(".cur-date").eq(0).nextUntil(this.$container.find(".cur-date").eq(1)).addClass("hover")
+                            this.$container.find(".cur-date").eq(0).nextUntil(this.$container.find(".cur-date").get(1)).addClass("hover")
                         } else {
-                            this.$container.find(".cur-date").eq(1).nextUntil(this.$container.find(".cur-date").eq(0)).addClass("hover")
+                            this.$container.find(".cur-date").eq(1).nextUntil(this.$container.find(".cur-date").get(0)).addClass("hover")
                         }
                     } else {
                         this.$container.find(".cur-date").eq(0).nextAll('span').addClass("hover")
@@ -506,7 +506,7 @@ import './xndatepicker.css';
         setDate() {
             var date = {};
 
-            this.$container.find(".cur-date").each((i, ele) => {
+            this.$container.find(".cur-date").each((ele, i) => {
                 var datekey = $(ele).parents(".date-item").attr("data-id");
                 var day = dayjs($(ele).attr('data-date'), 'YYYY-MM-DD').format('YYYY-MM-DD')
                 var time = ''
@@ -593,11 +593,9 @@ import './xndatepicker.css';
         addEvent() {
             var mouseMoveFunc = (e) => {
                 var $t = $(e.target);
-                console.log(222,$t.parents('.xndatepicker').get(0))
                 if ($t.parents('.xndatepicker').get(0) == this.$container.get(0)) {
                     if ($t.hasClass("day-item") || $t.hasClass("month-item") || $t.hasClass("year-item")) {
-                        console.log('111')
-                        // this.rendHoverStyle($t);
+                        this.rendHoverStyle($t);
                     }
                 }
             }
@@ -608,7 +606,7 @@ import './xndatepicker.css';
             document.addEventListener("mousemove", mouseMoveFunc)
             this.$container.get(0).addEventListener("click", (e) => {
                 var $t = $(e.target);
-                var datenum = $t.parents(".dater1")[0] ? 1 : 2;
+                var datenum = $t.parents(".dater1").get(0) ? 1 : 2;
                 if ($t.hasClass("skip-date")) {
                     var func = $t.attr('data-func');
                     var unit = $t.attr('data-unit');
@@ -718,8 +716,8 @@ import './xndatepicker.css';
                         this.rendOtherDateList(datenum);
                     }
                 }
-                if ($t[0].nodeName == 'LI' && $t.parents('.shortcut')[0]) {
-                    var index = $t.parent().find("LI").index($t);
+                if ($t.get(0).nodeName == 'LI' && $t.parents('.shortcut').get(0)) {
+                    var index = $t.parent().find("LI").index($t.get(0));
                     this.setCurrentTime(this.option.shortList[index].value);
                     this.setCurrentDay();
                     this.updateCurrentTime(1);
@@ -760,7 +758,7 @@ import './xndatepicker.css';
 
             } else {
                 if (this.type.indexOf('range') > -1) {
-                    if (this.$container.find(".cur-date").length > 1 || this.$container.find(".circle-date")[0]) {
+                    if (this.$container.find(".cur-date").length() > 1 || this.$container.find(".circle-date").get(0)) {
                         this.$container.find(".cur-date").removeClass('cur-date')
                     } else {
                         if (this.$container.find(".cur-date").eq(0).attr('data-date') == $t.attr('data-date')) {
@@ -949,6 +947,7 @@ import './xndatepicker.css';
                         }
                         var showstr = (startTime||this.option.placeholder);
                     }
+                    console.log(showstr)
                     canconfirm=true;
                 } else {
                     this.date1 && (this.selectedDate[0] = this.date1.clone());
@@ -990,20 +989,20 @@ import './xndatepicker.css';
             if (!this.option.autoFillDate) {
                 return;
             }
-            if (this.$targetDom.el.item(0).nodeName == 'INPUT') {
-                this.$targetDom.el.item(0).value = showstr;
+            if (this.$targetDom.get(0).nodeName == 'INPUT') {
+                this.$targetDom.get(0).value = showstr;
             } else {
-                this.$targetDom.el.item(0).innerHTML = showstr;
+                this.$targetDom.get(0).innerHTML = showstr;
             }
             this.$targetDom.addClass('iconfont-xndatepicker icon-xndatepickerrili xndatepicker-input')
             this.$targetDom.attr('data-placeholder', this.option.placeholder)
         },
 
         rendMonth(datenum) {
-            if (!this.$container.find('.dater' + datenum)[0]) {
+            if (!this.$container.find('.dater' + datenum).get(0)) {
                 return;
             }
-            var $html = `
+            var html = `
                 <div class="year-picker">
                     <div class="prev">
                     <span class="iconfont-xndatepicker icon-xndatepickerprev1 month-prev-year skip-date" data-unit="year" data-func="subtract"></span>
@@ -1017,14 +1016,14 @@ import './xndatepicker.css';
                     
 </div>
             `
-            this.$container.find('.dater' + datenum).empty().append($html)
+            this.$container.find('.dater' + datenum).empty().append(html)
             var monthlist = this.getMonthList(datenum);
             this.$container.find('.dater' + datenum).find(".month-list").append(monthlist);
             this.setTodayDot('month')
         },
         getMonthList(datenum) {
             var curYear = dayjs(this['tempdate' + datenum]).format('YYYY');
-            this.$container.find(".dater" + datenum + " .month-info")[0].innerHTML = curYear;
+            this.$container.find(".dater" + datenum + " .month-info").get(0).innerHTML = curYear;
             var html = ''
             for (let i = 0; i < 12; i++) {
                 let disable = (!(((this.option.minDate && dayjs(this.option.minDate).startOf('month').isSameOrBefore((curYear + '/' + (i + 1) + '/01'))) || !this.option.minDate) && ((this.option.maxDate && dayjs(this.option.maxDate).startOf('month').isSameOrAfter((curYear + '/' + (i + 1) + '/01'))) || !this.option.maxDate))) || this.disableDate(dayjs(curYear + '/' + (i + 1), 'YYYY/MM'),dayjs)
@@ -1033,10 +1032,10 @@ import './xndatepicker.css';
             return html;
         },
         rendYears(datenum) {
-            if (!this.$container.find('.dater' + datenum)[0]) {
+            if (!this.$container.find('.dater' + datenum).get(0)) {
                 return;
             }
-            var $html = $(`
+            var html = (`
                 <div class="year-picker">
                     <div class="prev">
                     <span class="iconfont-xndatepicker icon-xndatepickerprev1 year-prev-year"></span>
@@ -1050,7 +1049,7 @@ import './xndatepicker.css';
                     
 </div>
             `)
-            this.$container.find('.dater' + datenum).empty().append($html)
+            this.$container.find('.dater' + datenum).empty().append(html)
             var yearlist = this.getYearList(datenum);
             this.$container.find('.dater' + datenum).find(".year-list").append(yearlist);
             this.setTodayDot('year')
@@ -1058,7 +1057,7 @@ import './xndatepicker.css';
         getYearList(datenum) {
             var chooseYear = dayjs(this['tempdate' + datenum]).format('YYYY');
             var curYear = chooseYear - chooseYear % 12;
-            this.$container.find(".dater" + datenum + " .year-info")[0].innerHTML = curYear + '-' + (parseInt(curYear) + 11);
+            this.$container.find(".dater" + datenum + " .year-info").html(curYear + '-' + (parseInt(curYear) + 11));
             var html = ''
             for (let i = 0; i < 12; i++) {
                 let disable = (!(((this.option.minDate && dayjs(this.option.minDate).startOf('year').isSameOrBefore(((parseInt(curYear) + i) + '/01/01'))) || !this.option.minDate) && ((this.option.maxDate && dayjs(this.option.maxDate).startOf('year').isSameOrAfter(((parseInt(curYear) + i) + '/01/01'))) || !this.option.maxDate))) || this.disableDate(dayjs(curYear, 'YYYY'),dayjs)
@@ -1170,10 +1169,9 @@ import './xndatepicker.css';
                 return;
             }
             var date = curdate.clone();
-            $cont.empty().append(this.getDateCont())
+            $cont.empty().html(this.getDateCont())
             var ynow = date.year();
             var mnow = date.month() + 1;
-            console.log(ynow,mnow,$cont)
             var firstday = dayjs(date).startOf('month').day() - parseInt(this.option.firstDayOfWeek);
             if (firstday < 0) {
                 firstday += 7;
@@ -1200,7 +1198,7 @@ import './xndatepicker.css';
             this._rendYearHtml(date, $cont);
             if (this.type == 'multiple') {
                 for (let i = 0; i < this.multipleDates.length; i++) {
-                    this.$container.find('span[data-date=' + this.multipleDates[i] + ']').addClass('cur-date');
+                    this.$container.find('span[data-date="' + this.multipleDates[i] + '"]').addClass('cur-date');
                 }
             }
             // console.log(this.tempdate1,this.date1,this.selectedDate[0])
@@ -1235,14 +1233,13 @@ import './xndatepicker.css';
             return disable;
         },
         _rendYearHtml(date, $cont) {//需要重新生成哦
-            console.log(date,$cont)
             var ynow = date.year();
             var mnow = date.month() + 1;
             $cont.find(".year-info").html("<span class='year'>" + ynow + this.option.locale.yearHeadSuffix + "<\/span><span class='month'>" + this.option.locale.monthHead[mnow - 1] + "<\/span>");
         },
         _rendDayHtml(datelist, $cont, year) {
             var $c = $cont.find(".dater")
-            if ($c.length < 1) {
+            if ($c.length() < 1) {
                 $cont.append('<div class="dater"></div>')
             }
             $c.empty();
@@ -1358,4 +1355,4 @@ import './xndatepicker.css';
         }
     }
     window.XNDatepicker = XNDatepicker;
-})(window, $)
+})(window,XNQuery)

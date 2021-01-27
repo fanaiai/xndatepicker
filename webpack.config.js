@@ -17,7 +17,7 @@ module.exports = {
     plugins: [
         // new CleanWebpackPlugin({cleanStaleWebpackAssets:false}),
         new HtmlWebpackPlugin({
-            template: './test.html',
+            template: './index.html',
         }),
         new UglifyJsPlugin()
     ],
