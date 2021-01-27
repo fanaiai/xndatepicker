@@ -5,75 +5,80 @@
 //! create date:2021/01/27 V1.0.0
 // https://github.com/fanaiai/xndatepicker
 (function (window) {
-    function init(el){
-        if(typeof el =='string'){
-        this.el=document.querySelectorAll(el);
+    function init(el) {
+        if (typeof el == 'string') {
+            this.el = this.ConvertToArray(document.querySelectorAll(el));
         }
-        if(el instanceof NodeList || Array.isArray(el)){
-            this.el=el;
+        if (el instanceof NodeList) {
+            this.el = this.ConvertToArray(el);
         }
-        if(el instanceof Node){
-            this.el=[el]
+        else if(Array.isArray(el)){
+            this.el = el;
         }
-        if(!this.el){
-            this.el=[];
+        if (el instanceof Node) {
+            this.el = [el]
+        }
+        if (!this.el) {
+            this.el = [];
         }
     }
-    function XNQuery(el){
+
+    function XNQuery(el) {
         return new init(el);
     }
-    XNQuery.prototype=init.prototype={
-        length(){
+
+    XNQuery.prototype = init.prototype = {
+        length() {
             return this.el.length;
         },
-        extend(){
+        extend() {
             var options, name, src, copy, copyIsArray, clone,
                 target = arguments[0] || {}, // 目标对象
                 i = 1,
                 length = arguments.length,
                 deep = false;
             // 处理深度拷贝情况（第一个参数是boolean类型且为true）
-            if ( typeof target === "boolean" ) {
+            if (typeof target === "boolean") {
                 deep = target;
                 target = arguments[1] || {};
                 // 跳过第一个参数（是否深度拷贝）和第二个参数（目标对象）
                 i = 2;
             }
             // 如果目标不是对象或函数，则初始化为空对象
-            if ( typeof target !== "object" ) {
+            if (typeof target !== "object") {
                 target = {};
             }
             // 如果只指定了一个参数，则使用jQuery自身作为目标对象
-            if ( length === i ) {
+            if (length === i) {
                 target = this;
                 --i;
             }
-            for ( ; i < length; i++ ) {
+            for (; i < length; i++) {
                 // Only deal with non-null/undefined values
-                if ( (options = arguments[ i ]) != null ) {
+                if ((options = arguments[i]) != null) {
                     // Extend the base object
-                    for ( name in options ) {
-                        src = target[ name ];
-                        copy = options[ name ];
+                    for (name in options) {
+                        src = target[name];
+                        copy = options[name];
                         // Prevent never-ending loop
-                        if ( target === copy ) {
+                        if (target === copy) {
                             continue;
                         }
                         // 如果对象中包含了数组或者其他对象，则使用递归进行拷贝
-                        if ( deep && copy && ( typeof copy =='object' || (copyIsArray = Array.isArray(copy)) ) ) {
+                        if (deep && copy && (typeof copy == 'object' || (copyIsArray = Array.isArray(copy)))) {
                             // 处理数组
-                            if ( copyIsArray ) {
+                            if (copyIsArray) {
                                 copyIsArray = false;
                                 // 如果目标对象不存在该数组，则创建一个空数组；
                                 clone = src && Array.isArray(src) ? src : [];
                             } else {
-                                clone = src && typeof src =='object' ? src : {};
+                                clone = src && typeof src == 'object' ? src : {};
                             }
                             // 从不改变原始对象，只做拷贝
-                            target[ name ] = this.extend( deep, clone, copy );
+                            target[name] = this.extend(deep, clone, copy);
                             // 不拷贝undefined值
-                        } else if ( copy !== undefined ) {
-                            target[ name ] = copy;
+                        } else if (copy !== undefined) {
+                            target[name] = copy;
                         }
                     }
                 }
@@ -81,36 +86,35 @@
             // 返回已经被修改的对象
             return target;
         },
-        parent(){
-            let el=this.el[0]
-            if(el && el.parentNode){
+        parent() {
+            let el = this.el[0]
+            if (el && el.parentNode) {
                 return XNQuery([el.parentNode])
-            }
-            else{
+            } else {
                 return XNQuery([])
             }
         },
-        parents( parentSelector /* optional */) {
-            let el=this.el[0]
+        parents(parentSelector /* optional */) {
+            let el = this.el[0]
             if (parentSelector === undefined) {
-                parentSelector = this.reverseArryToNodeList([document]);
-            }
-            else{
-                parentSelector=document.querySelectorAll(parentSelector)
+                parentSelector = [document];
+            } else {
+                parentSelector = this.ConvertToArray(document.querySelectorAll(parentSelector))
             }
             var parents = [];
-            if(el){
-            parentSelector.forEach((e)=>{
-                var p=el.parentNode;
-                while (p != e && p!=null) {
-                    p = p.parentNode;
-                }
+            if (el) {
+                parentSelector.forEach((e) => {
+                    var p = el.parentNode;
+                    while (p != e && p != null) {
+                        p = p.parentNode;
+                    }
 
-                if(p!=null){
-                    parents.push(p);
-                }
-            })}
-            return XNQuery(this.reverseArryToNodeList(parents))
+                    if (p != null) {
+                        parents.push(p);
+                    }
+                })
+            }
+            return XNQuery(parents)
             // var p = el.parentNode;
             // console.log(parentSelector,p)
             // while (p !== parentSelector && p!=null) {
@@ -124,99 +128,79 @@
             // // return parents;
             // return XNQuery(this.reverseArryToNodeList(parents))
         },
-        // parents(selector = '*') {
-        //     if(!this.el || !this.el[0]){
-        //         return this.reverseArryToNodeList([]);
-        //     }
-        //     const matchesSelector = this.el[0].matches || this.el[0].webkitMatchesSelector || this.el[0].mozMatchesSelector || this.el[0].msMatchesSelector
-        //     const parentsMatch = [];
-        //     let el=this.el[0].parentElement;
-        //     console.log(this.el[0].parentNode.nodeName)
-        //     while (el!== null) {
-        //         console.log(el)
-        //         if (matchesSelector.call(el, selector)) {
-        //             parentsMatch.push(el)
-        //         }
-        //         el=el.parentElement;
-        //     }
-        //     return XNQuery(this.reverseArryToNodeList(parentsMatch))
-        // },
-        reverseArryToNodeList(arry){
+        reverseArryToNodeList(arry) {
             return arry
-            var div=document.createElement('div')
-            for(let i=0;i<arry.length;i++){
+            var div = document.createElement('div')
+            for (let i = 0; i < arry.length; i++) {
                 div.appendChild(arry[i])
             }
             return div.childNodes;
         },
-        hasClass(className){
-            if(this.el.length>0){
-            return this.el[0].classList.contains(className);}
-            else{
+        hasClass(className) {
+            if (this.el.length > 0) {
+                return this.el[0].classList.contains(className);
+            } else {
                 return false;
             }
         },
-        attr(attr,value){
-            if(value) {
+        attr(attr, value) {
+            if (value) {
                 this.el.forEach((e) => {
                     e.setAttribute(attr, value)
                 })
-            }
-            else{
-                if(!this.el[0]){
+                return this;
+            } else {
+                if (!this.el[0]) {
                     return null;
                 }
                 return this.el[0].getAttribute(attr)
             }
         },
-        find(query){
-            if(!this.el ||this.el.length<=0){
+        find(query) {
+            if (!this.el || this.el.length <= 0) {
                 return XNQuery([]);
             }
-            if(typeof query !='string'){
-                var list=[];
-                this.el.forEach((e)=> {
+            if (typeof query != 'string') {
+                var list = [];
+                this.el.forEach((e) => {
                     var arry = e.querySelectorAll('*');
                     for (let i = 0; i < arry.length; i++) {
                         if (arry[i] == query) {
                             list.push(query)
-                            console.log(111)
                         }
                     }
                 })
-                console.log(list)
                 return XNQuery(list)
-            }
-            else{
-                var list=[];
-                this.el.forEach((e)=>{
-                    list=list.concat(this.ConvertToArray(e.querySelectorAll(query)))
+            } else {
+                var list = [];
+                this.el.forEach((e) => {
+                    list = list.concat(this.ConvertToArray(e.querySelectorAll(query)))
                 })
                 return XNQuery(list);
             }
         },
-        children(query){
-            if(!this.el ||this.el.length<=0){
+        children(query) {
+            if (!this.el || this.el.length <= 0) {
                 return XNQuery([]);
             }
-            var queryList=[];
-            if(Array.isArray(query)){
-                queryList=query;
+            var queryList = [];
+            if (Array.isArray(query)) {
+                queryList = query;
             }
-            var children=[]
-            this.el.forEach((e)=>{
-                children=children.concat(this.ConvertToArray(e.children))
-                if(typeof query =='string'){
-                    queryList=queryList.concat(this.ConvertToArray(e.querySelectorAll(query)))
+            var children = []
+            this.el.forEach((e) => {
+                children = children.concat(this.ConvertToArray(e.children))
+                if (typeof query == 'string') {
+                    queryList = queryList.concat(this.ConvertToArray(e.querySelectorAll(query)))
                 }
 
             })
-            var list=[];
-            var queryListLength=queryList.length;
-            for(let i=0;i<children.length;i++){
-                let c=children[i];
-                for(let j=0;j<queryListLength;j++){
-                    if(queryList[j]==c){
+            var list = [];
+            var queryListLength = queryList.length;
+            for (let i = 0; i < children.length; i++) {
+                let c = children[i];
+                for (let j = 0; j < queryListLength; j++) {
+                    if (queryList[j] == c) {
                         list.push(c);
                         break;
                     }
@@ -224,186 +208,203 @@
             }
             return XNQuery(list);
         },
-        each(callback){
+        each(callback) {
             return this.el.forEach(callback)
         },
-        index(targetDom){
-            if(!targetDom){
-            return this.el[0].index;}
-            else{
-                for(let i=0;i<this.el.length;i++){
-                    if(this.el[i]==targetDom){
+        index(targetDom) {
+            if (!targetDom) {
+                var list=this.el[0].parentNode.childNodes;
+                for(let i=0;i<list.length;i++){
+                    if(list[i]==this.el[0]){
+                        return i;
+                    }
+                }
+                return null;
+            } else {
+                for (let i = 0; i < this.el.length; i++) {
+                    if (this.el[i] == targetDom) {
                         return i;
                     }
                 }
             }
         },
-        eq(index){
-            var el=this.el[index];
-            if(el){
-            return XNQuery(this.reverseArryToNodeList([el]))}
-            else{
+        eq(index) {
+            var el = this.el[index];
+            if (el) {
+                return XNQuery(this.reverseArryToNodeList([el]))
+            } else {
                 return XNQuery(this.reverseArryToNodeList([]))
             }
         },
-        get(index){
+        get(index) {
             return this.el[index]
         },
-        addClass(classname){
-            this.el.forEach((e)=>{
-                if(e.classList){
-                e.classList.add(...classname.split(' '))}
+        addClass(classname) {
+            this.el.forEach((e) => {
+                if (e.classList) {
+                    e.classList.add(...classname.split(' '))
+                }
             })
         },
-        nextUntil(query,isprev){
-            var el=this.el[0]
-            if(!el){
+        nextUntil(query, isprev) {
+            var el = this.el[0]
+            if (!el) {
                 return XNQuery([]);
             }
-            if(!query){
-                var next=null;
-            }
-            else{
-                if(typeof query =='object' && query instanceof Node){
-                    var next=query;
-                }
-                else{
-                    var next=el.parentNode.querySelector(query)
+            if (!query) {
+                var next = null;
+            } else {
+                if (typeof query == 'object' && query instanceof Node) {
+                    var next = query;
+                } else {
+                    var next = el.parentNode.querySelector(query)
                 }
             }
-            var list=[];
-            var func=isprev?'previousSibling':'nextSibling'
-            var n=el[func];
-            while(n!=next && n!=null){
+            var list = [];
+            var func = isprev ? 'previousSibling' : 'nextSibling'
+            var n = el[func];
+            while (n != next && n != null) {
                 list.push(n)
-                n=n[func];
+                n = n[func];
             }
             return XNQuery(list)
         },
-        prevAll(){
-            return this.nextUntil(null,true)
+        prevAll() {
+            return this.nextUntil(null, true)
         },
-        nextAll(){
+        nextAll() {
             return this.nextUntil()
         },
-        removeClass(classname){
-            this.el.forEach((e)=>{
+        removeClass(classname) {
+            this.el.forEach((e) => {
                 e.classList.remove(classname)
-            })
-        },
-        val(val){
-            if(!val){
-                return this.el[0].value;
-            }
-            else{
-                this.el.forEach((e)=>{
-                    e.value=val;
-                })
-            }
-        },
-        html(val){
-            if(!this.el || !this.el[0]){
-                return;
-            }
-            if(!val){
-                return this.el[0].innerHTML;
-            }
-            else{
-                this.el.forEach((e)=>{
-                    e.innerHTML=val;
-                })
-            }
-        },
-        empty(){
-            this.el.forEach((e)=>{
-                e.innerHTML='';
             })
             return this;
         },
-        parseToDOM(str){
+        val(val) {
+            if (!val) {
+                return this.el[0].value;
+            } else {
+                this.el.forEach((e) => {
+                    e.value = val;
+                })
+            }
+        },
+        html(val) {
+            if (!this.el || !this.el[0]) {
+                return;
+            }
+            if (!val) {
+                return this.el[0].innerHTML;
+            } else {
+                this.el.forEach((e) => {
+                    e.innerHTML = val;
+                })
+            }
+        },
+        empty() {
+            this.el.forEach((e) => {
+                e.innerHTML = '';
+            })
+            return this;
+        },
+        parseToDOM(str) {
             var div = document.createElement("div");
-            if(typeof str == "string"){
-                div.innerHTML = str;}
+            if (typeof str == "string") {
+                div.innerHTML = str;
+            }
             return div.childNodes;
         },
-        ConvertToArray(nodes){
-            var array=null;
-            try{
-                array=Array.prototype.slice.call(nodes,0);//非ie浏览器  ie8-将NodeList实现为COM对象，不能用这种方式检测
-            }catch(ex){//ie8-
-                array=new Array();
-                for(var i=0;i<nodes.length;i++){
+        ConvertToArray(nodes) {
+            var array = null;
+            try {
+                array = Array.prototype.slice.call(nodes, 0);//非ie浏览器  ie8-将NodeList实现为COM对象，不能用这种方式检测
+            } catch (ex) {//ie8-
+                array = new Array();
+                for (var i = 0; i < nodes.length; i++) {
                     array.push(nodes[0]);
                 }
             }
             return array;
         },
-        parseDomToString(dom){
+        parseDomToString(dom) {
 
         },
-        append(newel){
+        append(newel) {
             var newele;
-            if(typeof newel=='string'){
-                newele=this.parseToDOM(newel)
-                newele=this.ConvertToArray(newele)
+            if (typeof newel == 'string') {
+                newele = this.parseToDOM(newel)
+                newele = this.ConvertToArray(newele)
+            } else {
+                newele = [newel];
             }
-            else{
-                newele=[newel];
-            }
-            for(let i=0;i<newele.length;i++){
-                let newe=newele[i]
-                this.el.forEach((e)=>{
+            for (let i = 0; i < newele.length; i++) {
+                let newe = newele[i]
+                this.el.forEach((e) => {
                     e.appendChild(newe)
                 })
             }
         },
-        remove(){
-            this.el.forEach((e)=>{
+        remove() {
+            this.el.forEach((e) => {
                 e.parentNode.removeChild(e)
             })
 
         },
-        slideUp(time){
-            this.el.forEach((e)=>{
-                e.style.display='none'
+        slideUp(time) {
+            this.el.forEach((e) => {
+                e.style.display = 'none'
             })
         },
-        css(css){
-            for(let i in css){
-                this.el.forEach((e)=>{
-                    e.style[i]=css[i]
-                })
+        css(...css) {
+            if (typeof css[0] == 'object') {
+                for (let i in css[0]) {
+                    this.el.forEach((e) => {
+                        e.style[i] = css[0][i]
+                    })
+                }
+                return this;
+            } else {
+                if (css.length == 1) {
+                    return this.el[0].style[css[0]]
+                }
+                if(css.length==2){
+                    this.el.forEach((e) => {
+                        e.style[css[0]] = css[1]
+                    })
+                    return this;
+                }
             }
         },
-        fadeIn(time){
-            this.el.forEach((e)=>{
-                e.style.display='block'
-                e.style.opacity=1
+        fadeIn(time) {
+            this.el.forEach((e) => {
+                e.style.display = 'block'
+                e.style.opacity = 1
             })
         },
-        animate(css,time){
-            if(!time){
-                time=300;
+        animate(css, time) {
+            if (!time) {
+                time = 300;
             }
 
         },
-        outerWidth(){
-            var el=this.el[0];
+        outerWidth() {
+            var el = this.el[0];
             return el.offsetWidth
         },
-        outerHeight(){
-            var el=this.el[0];
+        outerHeight() {
+            var el = this.el[0];
             return el.offsetHeight
         },
-        hide(){
-            this.el.forEach((e)=>{
-                e.style.display='none'
+        hide() {
+            this.el.forEach((e) => {
+                e.style.display = 'none'
             })
             return this;
         },
-        show(){
-            this.el.forEach((e)=>{
-                e.style.display='block'
+        show() {
+            this.el.forEach((e) => {
+                e.style.display = 'block'
             })
             return this;
         },
@@ -412,8 +413,14 @@
                 top: this.el[0].offsetTop,
                 left: this.el[0].offsetLeft,
             }
+        },
+        not(dom){
+            this.el=this.el.filter((e)=>{
+                return e!=dom;
+            })
+            return this;
         }
     }
-    XNQuery.extend=XNQuery.prototype.extend;
-    window.XNQuery=XNQuery;
+    XNQuery.extend = XNQuery.prototype.extend;
+    window.XNQuery = XNQuery;
 })(window)
