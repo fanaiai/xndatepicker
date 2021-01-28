@@ -184,7 +184,7 @@ table {
 .xndatepicker .dater>span.active-day:hover{
 	background:#2979ff;
 	color:#fff;
-	/*border-radius:15px;*/
+	border-radius:2px;
 }
 .xndatepicker .week{
 	display: flex;

@@ -1,8 +1,9 @@
 //! xnquery.js
 //! 仙女座js方法库，使用es6实现部分jquery方法
-//! version : 1.0.0
+//! version : 1.0.1
 //! authors : 范媛媛
 //! create date:2021/01/27 V1.0.0
+//! create date:2021/01/28 V1.0.1
 // https://github.com/fanaiai/xndatepicker
 (function (window) {
     function init(el) {
@@ -376,17 +377,49 @@
                 }
             }
         },
+        fadeOut(time){
+            this.el.forEach((e) => {
+                this.animate({opacity:0},time,e,()=>{
+                    e.style.display = 'none'
+                })
+            })
+        },
         fadeIn(time) {
             this.el.forEach((e) => {
                 e.style.display = 'block'
-                e.style.opacity = 1
+                // e.style.opacity = 1;
+                this.animate({opacity:1},time,e)
             })
         },
-        animate(css, time) {
+        animate(css, time,ele,callback) {
             if (!time) {
                 time = 300;
             }
+            var totalTimes=time/50;
+            var initTime=0;
+            var initCss={};
+            for(let i in css){
+                if(!isNaN(parseFloat(css[i]))){
+                    initCss[i]={init:parseFloat(ele.style[i])||0,unit:String(css[i]).substring(String(parseFloat(css[i])).length)};
+                }
+            }
+            var interval=window.setInterval(()=>{
+                for(let i in initCss){
+                    if(initTime>=totalTimes){
+                        ele.style[i]=css[i];
+                    }
+                    else{
+                        ele.style[i]=((parseFloat(css[i])-initCss[i].init)*initTime/totalTimes+initCss[i].init)+initCss[i].unit;
+                    }
 
+                }
+                if(initTime>=totalTimes){
+                    if(typeof callback=='function'){
+                    callback()}
+                    window.clearInterval(interval);
+                }
+                initTime++;
+            },20)
         },
         outerWidth() {
             var el = this.el[0];

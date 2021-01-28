@@ -1,5 +1,13 @@
 # [样例地址](https://www.jq22.com/yanshi23561) (样例不是最新代码哦)
 
+# 2021/01/28 V1.1.0
+## 更新功能点
++ 移除moment.js，改为dayjs
++ 处理初始化日期为空的状态
++ 增加不可选日期配置方法 disableDate
++ 改为webpack打包
++ 剔除jquery
+
 # 概要
 此选择器比较了市面上各种不同的日期时间选择器，争取最大化的支持各种需要的功能，目前支持的选择器类型有：
 + 单日期选择
@@ -80,8 +88,17 @@
             endTime:'',//初始结束时间
             minDate:'',//最小时间
             maxDate:'',//最大时间
+            disableDate:function(date,dayjs,calcType){//还未对初始时间做处理
+                if(dayjs(date).format('YYYY')=='2019')//当前是2019年时不可选
+                    return true;
+                if(calcType=='month' && dayjs(date).format('MM')=='09')//当当前显示的是月选择器，而且月份为09的时候不可选
+                    return true;
+                return false;
+            }
         },
-        function(data){ //选择日期后的回调函数
+        function(data){ 
+        //选择日期后的回调函数
+        //data.startTime,data.endTime,data.dayjs
             console.log(data)
         },)
 ## 方法

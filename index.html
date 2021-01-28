@@ -99,7 +99,7 @@
         // format:'YYYY-MM-DD',
         type:'date',//year/month/date/multiple/ week/datetime/datetimerange/ daterange/monthrange/yearrange
         multipleDates:[],//当为多选日期类型时的初始值
-        startTime:'',
+        startTime:'2019-04-04',
         // endTime:'2036-04-04',
         // minDate:'2019-04-04',
         maxDate:'',
@@ -110,7 +110,13 @@
         autoConfirm:true,
         showShortKeys:true,
         autoFillDate:true,//自动变更element里面的值
-        disableDate:null,
+        disableDate:function(date,dayjs,calcType){//还未对初始时间做处理
+            if(dayjs(date).format('YYYY')=='2019')//当前是2019年时不可选
+                return true;
+            if(calcType=='month' && dayjs(date).format('MM')=='09')//当当前显示的是月选择器，而且月份为09的时候不可选
+                return true;
+            return false;
+        },
     },function(data){
         console.log(data)
     })

@@ -12,7 +12,6 @@ import dayjs from 'dayjs';
 
     function XNTimepicker(targetDom, options) {
         this.$targetDom=$(targetDom.get(0));
-        console.log(targetDom)
         this.option = $.extend({}, option, options);
 
         this.id=this.getRandomString();
@@ -64,9 +63,7 @@ import dayjs from 'dayjs';
             }
             else{
                 this.$container.show();
-                console.log(222444)
                 this.setPosition();
-                console.log(99999)
             }
             this.show=!this.show;
         },
@@ -151,7 +148,6 @@ import dayjs from 'dayjs';
             this.changeShowStatus(true)
         },
         addEvent(){
-            console.log(this.$targetDom)
             this.$targetDom.get(0).addEventListener("click",(e)=>{
                 var $t=$(e.target);
                 this.selectTime($t.parents(".timecont").eq(0), $t);

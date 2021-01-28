@@ -4,7 +4,7 @@
 //! authors : 范媛媛
 //! create date:2021/01/01
 //! update date:2021/01/05 V1.0.0
-//! update date:2021/01/25 V1.1.0
+//! update date:2021/01/28 V1.1.0
 // https://github.com/fanaiai/xndatepicker
 function dynamicLoadCss(urllist) {
     for (let i = 0; i < urllist.length; i++) {
@@ -191,7 +191,7 @@ import './xndatepicker.css';
 
         this.option.minDate && (this.option.minDate = dayjs(this.option.minDate));
         this.option.maxDate && (this.option.maxDate = dayjs(this.option.maxDate));
-        this.disableDate = this.option.disableDate||function(date,dayjs){return false};
+        this.disableDate = this.option.disableDate||function(date,dayjs,calcType){return false};
         this.onConfirm = onConfirm;
         this.selectedDate = {};//已确认的时间
         this.date1 = this.option.startTime ? (this.option.startTime.clone()) : dayjs();//当前选择的起始时间
@@ -265,7 +265,6 @@ import './xndatepicker.css';
         initTimePicker() {
             var that = this;
             if (this.type == 'datetime' || this.type == 'datetimerange') {
-                console.log(this.$container.find('.time1 .timecont'))
                 this.timepicker1 = new XNTimepicker(this.$container.find('.time1 .timecont'), {
                     time: that.selectedDate[0],
                     onConfirm(res) {
@@ -312,7 +311,7 @@ import './xndatepicker.css';
         changeShowStatus(hide) {
             if (this.show || hide) {
                 this.show = true;
-                this.$container.slideUp(100);
+                this.$container.fadeOut(100);
             } else {
                 this.$container.css({display: 'block', opacity: '0'})
                 this.resetCurrentTime();
@@ -918,14 +917,14 @@ import './xndatepicker.css';
             if (this.type == 'multiple') {
                 if (clear) {
                     if ((isFirst && this.option.confirmFirst) || !isFirst) {
-                        this.trigger("confirm", {startTime: this.selectedMultiple})
+                        this.trigger("confirm", {startTime: this.selectedMultiple,dayjs:dayjs})
                     }
                     var showstr = ''
                     canconfirm = true;
                 } else {
                     this.selectedMultiple = this.multipleDates;
                     if ((isFirst && this.option.confirmFirst) || !isFirst) {
-                        this.trigger("confirm", {startTime: this.selectedMultiple})
+                        this.trigger("confirm", {startTime: this.selectedMultiple,dayjs:dayjs})
                     }
                     var showstr = this.multipleDates.join(',')
                     canconfirm = true;
@@ -938,16 +937,15 @@ import './xndatepicker.css';
                     endTime = date1.endTime ? dayjs(date1.endTime).format(this.option.format) : '';
                     if ((this.type.indexOf('range') > -1) || this.type.indexOf('week') > -1) {
                         if (this.option.confirmFirst) {
-                            this.trigger("confirm", {startTime: startTime, endTime: endTime})
+                            this.trigger("confirm", {startTime: startTime, endTime: endTime,dayjs:dayjs})
                         }
                         var showstr = (startTime||this.option.placeholder) + this.option.separator + (endTime||this.option.placeholder);
                     } else if (this.type.indexOf('range') < 0) {
                         if (this.option.confirmFirst) {
-                            this.trigger("confirm", {startTime: startTime})
+                            this.trigger("confirm", {startTime: startTime,dayjs:dayjs})
                         }
                         var showstr = (startTime||this.option.placeholder);
                     }
-                    console.log(showstr)
                     canconfirm=true;
                 } else {
                     this.date1 && (this.selectedDate[0] = this.date1.clone());
@@ -961,7 +959,7 @@ import './xndatepicker.css';
                     }
                     if ((this.type.indexOf('range') > -1 && this.date2) || this.type.indexOf('week') > -1) {
                         if ((isFirst && this.option.confirmFirst) || !isFirst) {
-                            this.trigger("confirm", {startTime: this.selectedDate[0], endTime: this.selectedDate[1]})
+                            this.trigger("confirm", {startTime: this.selectedDate[0], endTime: this.selectedDate[1],dayjs:dayjs})
                         }
                         try {
                             var showstr = (this.selectedDate[0].format(this.option.format) + this.option.separator + this.selectedDate[1].format(this.option.format))
@@ -971,7 +969,7 @@ import './xndatepicker.css';
                         canconfirm = true;
                     } else if (this.type.indexOf('range') < 0 && this.date1) {
                         if ((isFirst && this.option.confirmFirst) || !isFirst) {
-                            this.trigger("confirm", {startTime: this.selectedDate[0]})
+                            this.trigger("confirm", {startTime: this.selectedDate[0],dayjs:dayjs})
                         }
                         try {
                             var showstr = this.selectedDate[0].format(this.option.format);
@@ -1026,7 +1024,7 @@ import './xndatepicker.css';
             this.$container.find(".dater" + datenum + " .month-info").get(0).innerHTML = curYear;
             var html = ''
             for (let i = 0; i < 12; i++) {
-                let disable = (!(((this.option.minDate && dayjs(this.option.minDate).startOf('month').isSameOrBefore((curYear + '/' + (i + 1) + '/01'))) || !this.option.minDate) && ((this.option.maxDate && dayjs(this.option.maxDate).startOf('month').isSameOrAfter((curYear + '/' + (i + 1) + '/01'))) || !this.option.maxDate))) || this.disableDate(dayjs(curYear + '/' + (i + 1), 'YYYY/MM'),dayjs)
+                let disable = (!(((this.option.minDate && dayjs(this.option.minDate).startOf('month').isSameOrBefore((curYear + '/' + (i + 1) + '/01'))) || !this.option.minDate) && ((this.option.maxDate && dayjs(this.option.maxDate).startOf('month').isSameOrAfter((curYear + '/' + (i + 1) + '/01'))) || !this.option.maxDate))) || this.disableDate(dayjs(curYear + '/' + (i + 1), 'YYYY/MM'),dayjs,'month')
                 html += `<span class="month-item ${disable ? 'disable-month' : 'active-day'}" data-date="${dayjs(curYear + '/' + (i + 1), 'YYYY/MM').format('YYYY-MM')}">` + this.option.locale.month[i] + "</span>";
             }
             return html;
@@ -1060,7 +1058,7 @@ import './xndatepicker.css';
             this.$container.find(".dater" + datenum + " .year-info").html(curYear + '-' + (parseInt(curYear) + 11));
             var html = ''
             for (let i = 0; i < 12; i++) {
-                let disable = (!(((this.option.minDate && dayjs(this.option.minDate).startOf('year').isSameOrBefore(((parseInt(curYear) + i) + '/01/01'))) || !this.option.minDate) && ((this.option.maxDate && dayjs(this.option.maxDate).startOf('year').isSameOrAfter(((parseInt(curYear) + i) + '/01/01'))) || !this.option.maxDate))) || this.disableDate(dayjs(curYear, 'YYYY'),dayjs)
+                let disable = (!(((this.option.minDate && dayjs(this.option.minDate).startOf('year').isSameOrBefore(((parseInt(curYear) + i) + '/01/01'))) || !this.option.minDate) && ((this.option.maxDate && dayjs(this.option.maxDate).startOf('year').isSameOrAfter(((parseInt(curYear) + i) + '/01/01'))) || !this.option.maxDate))) || this.disableDate(dayjs((parseInt(curYear) + i) + '/01/01'),dayjs,'year')
                 html += `<span class="year-item ${disable ? 'disable-year' : 'active-day'}" data-date="${(parseInt(curYear) + i)}">` + (parseInt(curYear) + i) + "</span>";
             }
             return html;
@@ -1183,7 +1181,7 @@ import './xndatepicker.css';
                 ldates.push({day: l_days - i});
             }
             for (let i = 0; i < m_days; i++) {
-                let disable = this.checkDisable(dayjs(ynow + '/' + mnow + '/' + (i + 1), 'YYYY/MM/DD'), 0, this.type, 'date') || this.disableDate(dayjs(ynow + '/' + mnow + '/' + (i + 1), 'YYYY/MM/DD'),dayjs)
+                let disable = this.checkDisable(dayjs(ynow + '/' + mnow + '/' + (i + 1), 'YYYY/MM/DD'), 0, this.type, 'date') || this.disableDate(dayjs(ynow + '/' + mnow + '/' + (i + 1), 'YYYY/MM/DD'),dayjs,'date')
                 ldates.push({
                     iscur: true,
                     disable: disable,
@@ -1201,7 +1199,6 @@ import './xndatepicker.css';
                     this.$container.find('span[data-date="' + this.multipleDates[i] + '"]').addClass('cur-date');
                 }
             }
-            // console.log(this.tempdate1,this.date1,this.selectedDate[0])
         },
         checkDisable(date, dir, type, unit) {
             var disable = true;
@@ -1304,24 +1301,14 @@ import './xndatepicker.css';
             return pwd;
         },
         _setData(_key, $watch) {
-            // console.log(_key)
             Object.defineProperty(this, _key, {
                 get: () => {
-                    // console.log(this[_key])
                     return this[_key];
                 },
                 set: (val) => {
                     const oldVal = this[_key];
-                    // if (oldVal === val) return val;
-                    console.log(val)
-
                     this[_key] = val;
-
-                    // typeof $watch === 'function' && (
-                    //     $watch.call(this, val, oldVal)
-                    // );
                     $watch(val, oldVal)
-                    console.log(val)
                     return val;
                 },
             });
