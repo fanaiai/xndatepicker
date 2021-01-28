@@ -1,8 +1,20 @@
+<<<<<<< HEAD
 # V1.1.0 功能点列表（未发布）
 + 移除moment.js，改为dayjs
 + 处理初始化日期为空的状态
 + 增加不可选日期配置 disableDate
 + 改为webpack打包
+=======
+# [样例地址](https://www.jq22.com/yanshi23561) (样例不是最新代码哦)
+
+# 2021/01/28 V1.1.0
+## 更新功能点
++ 移除moment.js，改为dayjs
++ 处理初始化日期为空的状态
++ 增加不可选日期配置方法 disableDate
++ 改为webpack打包
++ 剔除jquery
+>>>>>>> develop
 
 # 概要
 此选择器比较了市面上各种不同的日期时间选择器，争取最大化的支持各种需要的功能，目前支持的选择器类型有：
@@ -25,12 +37,10 @@
 # 使用步骤
 ### 下载代码
 ### 引用js
-    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="moment.js"></script>
-    <script type="text/javascript" src="xndatepicker.js"></script>
+    <script type="text/javascript" src="./dist/xndatepicker.min.js"></script>
     
 ### 初始化选择器
-    var date=new XNDatepicker(
+    var xndatepicker=new XNDatepicker(
     $("#date"),//日历容器，可以是input，或其他标签
     {
             type:'daterange',日历类型 date,datetime,daterange,datetimerange,month,monthrange,year,yearrange,week,multiple
@@ -86,12 +96,22 @@
             endTime:'',//初始结束时间
             minDate:'',//最小时间
             maxDate:'',//最大时间
+            disableDate:function(date,dayjs,calcType){//还未对初始时间做处理
+                if(dayjs(date).format('YYYY')=='2019')//当前是2019年时不可选
+                    return true;
+                if(calcType=='month' && dayjs(date).format('MM')=='09')//当当前显示的是月选择器，而且月份为09的时候不可选
+                    return true;
+                return false;
+            }
         },
-        function(data){ //选择日期后的回调函数
+        function(data){ 
+        //选择日期后的回调函数
+        //data.startTime,data.endTime,data.dayjs
             console.log(data)
         },)
 ## 方法
-+ 销毁实例 fcolorpicker.destroy()
++ 日期格式化 xndatepicker.format(date,formatString)
++ 销毁实例 xndatepicker.destroy()
 ## 示例代码请参考 src/index.html
 ## 后续功能点
 + 移动端的支持

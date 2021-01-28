@@ -1,11 +1,14 @@
 {
   "name": "xndatepicker",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "此选择器比较了市面上各种不同的日期时间选择器，争取最大化的支持各种需要的功能，目前支持的选择器类型有：\r + 单日期选择\r + 单日期时间选择\r + 日期/日期时间区间选择\r + 单月选择\r + 月份区间选择\r + 单年度选择\r + 年度区间选择\r + 按周选择\r + 多日期选择",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "babel src -d dist"
+    "build": "webpack",
+    "watch": "webpack --watch",
+    "start": "webpack serve --open",
+    "server": "node server.js"
   },
   "repository": {
     "type": "git",
@@ -18,7 +21,21 @@
   },
   "homepage": "https://github.com/fanaiai/xndatepicker#readme",
   "devDependencies": {
-    "babel-cli": "^6.26.0",
-    "babel-preset-latest": "^6.24.1"
+    "babel-core": "^6.26.3",
+    "babel-loader": "^7.1.5",
+    "babel-preset-env": "^1.7.0",
+    "clean-webpack-plugin": "^3.0.0",
+    "css-loader": "^5.0.1",
+    "express": "^4.17.1",
+    "html-webpack-plugin": "^4.5.1",
+    "style-loader": "^2.0.0",
+    "uglifyjs-webpack-plugin": "^2.2.0",
+    "webpack": "^5.17.0",
+    "webpack-cli": "^4.4.0",
+    "webpack-dev-middleware": "^4.1.0",
+    "webpack-dev-server": "^3.11.2"
+  },
+  "dependencies": {
+    "dayjs": "^1.10.4"
   }
 }
