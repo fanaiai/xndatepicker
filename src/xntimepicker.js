@@ -1,4 +1,4 @@
-//! Ftree.js
+//! XNTimepicker.js
 //! version : 1.0.0
 //! authors : 范媛媛
 //! create date:2021/01/01
