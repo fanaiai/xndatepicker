@@ -108,7 +108,7 @@
 ## 方法
 + 日期格式化 xndatepicker.format(date,formatString)
 + 销毁实例 xndatepicker.destroy()
-## 示例代码请参考 src/index.html
+## 示例代码请参考 index.html
 ## 后续功能点
 + 移动端的支持
 + 多主题的支持
