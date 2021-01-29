@@ -10,8 +10,8 @@ module.exports = {
             import:'./src/xndatepicker.js',
         }
     },
-    devtool:'eval-source-map',//追踪错误源码
-    // devtool:'source-map',//追踪错误源码
+    // devtool:'eval-source-map',//追踪错误源码
+    devtool:'source-map',//追踪错误源码
     devServer: {
         contentBase: './dist',
     },
