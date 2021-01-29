@@ -269,8 +269,8 @@ table {
 .weeknum-list .week-item{
 	flex: 0 0 calc(100% / 3 - 3%);
 	width: calc(100% / 3 - 3%);
-	height: 30px;
-	line-height: 30px;
+	height: 34px;
+	line-height: 34px;
 	margin: 2px 1%;
 }
 .year-list .year-item.disable-year,.month-list .month-item.disable-month,.weeknum-list .week-item.disable-week{

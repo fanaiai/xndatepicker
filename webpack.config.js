@@ -18,8 +18,8 @@ module.exports = {
     plugins: [
         // new CleanWebpackPlugin({cleanStaleWebpackAssets:false}),
         new HtmlWebpackPlugin({
-            // template: './index.html',
-            template: './test.html',
+            template: './index.html',
+            // template: './test.html',
         }),
         new UglifyJsPlugin()
     ],
@@ -76,6 +76,15 @@ module.exports = {
             {
                 test: /\.css$/i,
                 use: ['style-loader', 'css-loader'],
+            },
+            {
+                test: /\.(eot|svg|ttf|woff|woff2)$/,
+                use: {
+                    loader: 'file-loader',
+                    options: {
+                        outputPath: 'fonts/'
+                    }
+                }
             },
             {
                 test: /\.(png|svg|jpg|jpeg|gif)$/i,

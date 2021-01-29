@@ -5,6 +5,7 @@
 //! create date:2021/01/01
 //! update date:2021/01/05 V1.0.0
 //! update date:2021/01/28 V1.1.0
+//! update date:2021/01/29 V1.2.0
 // https://github.com/fanaiai/xndatepicker
 function dynamicLoadCss(urllist) {
     for (let i = 0; i < urllist.length; i++) {
@@ -23,7 +24,7 @@ var script = scripts[scripts.length - 1];
 var s = document.querySelector ? script.src : script.getAttribute("src", 4)//IE8直接.src
 var csspath = s.substr(0, s.lastIndexOf('/') - 0);
 var csslist = ["//at.alicdn.com/t/font_2213760_as9380qm7dw.css"]
-dynamicLoadCss(csslist);
+// dynamicLoadCss(csslist);
 // import jQuery from './jquery.min.js';
 import './xnquery';
 import './xntimepicker.js';
@@ -42,6 +43,7 @@ dayjs.extend(WeekOfYear)
 dayjs.extend(advancedFormat)
 // console.log(dayjs().week(1).startOf('week').format('YYYY-MM-DD'))
 import './xndatepicker.css';
+import './iconfont/iconfont.css';
 (function (window, $) {
     var format = {
         'week': 'YYYY-MM-DD',
@@ -184,7 +186,10 @@ import './xndatepicker.css';
             week: ['日', '一', '二', '三', '四', '五', '六'],
             clear: '清空',
             confirm: '确定',
-            yearHeadSuffix: '年'
+            yearHeadSuffix: '年',
+            weekNum:function(weeknum){
+                return '第'+weeknum+'周'
+            }
         },//显示信息
         confirmFirst: true,//第一次就搜索
         separator: ' 到 ',//双日历模式下的链接符
@@ -208,7 +213,7 @@ import './xndatepicker.css';
 
     function XNDatepicker(targetDom, options, onConfirm) {
         this.$targetDom = $(targetDom);
-        this.option = $.extend({}, option, options);
+        this.option = $.extend(true,{}, option, options);
         this.type = this.option.type;
         this.format = this.type.indexOf('year') > -1 ? 'YYYY' : (this.type.indexOf('month') > -1 ? 'YYYY-MM' : (this.type.indexOf('time') > -1 ? 'YYYY-MM-DD' : 'YYYY-MM-DD'));
         this.option.startTime && (this.option.startTime = dayjs(this.option.startTime));
@@ -241,7 +246,6 @@ import './xndatepicker.css';
     XNDatepicker.prototype = {
         init() {
             this.setCurrentTime({startTime: this.option.startTime, endTime: this.option.endTime})
-            console.log(this.tempdate1,this.tempdate2)
             this.rendDatePicker();
             this.setPosition();
             this.addEvent();
@@ -318,6 +322,9 @@ import './xndatepicker.css';
             }
         },
         initCallback() {
+            if(typeof this.onConfirm=='function'){
+                return false;
+            }
             this.on('confirm', this.onConfirm);
         },
         addTargetEvent() {
@@ -565,6 +572,7 @@ import './xndatepicker.css';
                 return;
             }
             var datenum = otherdatenum == 1 ? 2 : 1;
+
             if (otherdatenum < datenum) {
                 if (this.type.indexOf('date') > -1 || this.type=='week') {
                     if ((dayjs(this['tempdate' + otherdatenum].format('YYYY-MM')).isSameOrAfter(this['tempdate' + datenum].format('YYYY-MM'))) || this.option.linkPanels) {
@@ -609,10 +617,10 @@ import './xndatepicker.css';
                     this.rendMonth(datenum)
                 }
                 if ((this.type.indexOf('weeknum') > -1)) {
-                    if ((this['tempdate' + otherdatenum].isSameOrAfter(this['tempdate' + datenum], 'year')) || this.option.linkPanels) {
+                    if ((this['tempdate' + otherdatenum].isSameOrBefore(this['tempdate' + datenum], 'year')) || this.option.linkPanels) {
                         this['tempdate' + datenum] = this['tempdate' + otherdatenum].clone().subtract(1, 'years');
+                        this.rendWeekNum(datenum)
                     }
-                    this.rendWeekNum(datenum)
                 }
                 if ((this.type.indexOf('year') > -1)) {
                     var year1 = this['tempdate' + otherdatenum].format('YYYY');
@@ -647,7 +655,7 @@ import './xndatepicker.css';
                 if ($t.hasClass("skip-date")) {
                     var func = $t.attr('data-func');
                     var unit = $t.attr('data-unit');
-                    var newdate = $.extend(true, {}, dayjs(this["tempdate" + datenum]))
+                    var newdate = dayjs(this["tempdate" + datenum]).clone();
                     newdate = newdate[func](1, unit + 's').startOf(unit);
                     if (this.checkDisable(newdate, unit, this.type, unit)) {
                         return;
@@ -1094,7 +1102,7 @@ import './xndatepicker.css';
                 }
                 let disable = (!(((this.option.minDate && dayjs(this.option.minDate).startOf('week').isSameOrBefore(date)) || !this.option.minDate) && ((this.option.maxDate && dayjs(this.option.maxDate).endOf('week').isSameOrAfter(dayjs(date).endOf('week'))) || !this.option.maxDate))) || this.disableDate(date,dayjs,'weeknum')
                 // let disable=
-                html += `<span class="week-item ${disable ? 'disable-week' : 'active-day'}" data-date="${date}">` + '第'+(i+1)+'周' + "</span>";
+                html += `<span class="week-item ${disable ? 'disable-week' : 'active-day'}" data-date="${date}">` + this.option.locale.weekNum(i+1) + "</span>";
             }
             return html;
         },
@@ -1235,7 +1243,7 @@ import './xndatepicker.css';
             this.changeShowStatus(true)
             this.setCurrentDay();
             this.geneShortList();
-            if (this.type.indexOf('range') < 0 && this.type.indexOf('time') < 0 && this.type != 'multiple') {
+            if (this.type.indexOf('range') < 0 && this.type.indexOf('time') < 0 && this.type != 'multiple' && this.option.autoConfirm) {
                 this.$container.find('.confirm-date').remove();
             } else {
                 if (!this.option.showClear && this.option.autoConfirm && this.type != 'multiple') {
@@ -1326,7 +1334,6 @@ import './xndatepicker.css';
                     format = 'YYYY-MM-DD'
                 }
                 if ((!this.option.minDate || (this.option.minDate && this.option.minDate.format(format) <= date.format(format))) && (!this.option.maxDate || (this.option.maxDate && this.option.maxDate.format(format) >= date.format(format)))) {
-                    console.log(111)
                     disable = false;
                 }
             }
@@ -1379,6 +1386,7 @@ import './xndatepicker.css';
         trigger(type, data) {
             if (this.eventList[type]) {
                 for (let i = 0; i < this.eventList[type].func.length; i++) {
+                    if(typeof this.eventList[type].func[i]=='function')
                     this.eventList[type].func[i](data);
                 }
             }
