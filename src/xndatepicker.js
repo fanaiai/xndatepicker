@@ -30,8 +30,17 @@ import './xntimepicker.js';
 import dayjs from 'dayjs';
 import isSameOrBefore from 'dayjs/plugin/isSameOrBefore';
 import isSameOrAfter from 'dayjs/plugin/isSameOrAfter'
+import isoWeeksInYear from 'dayjs/plugin/isoWeeksInYear'
+import WeekOfYear from 'dayjs/plugin/WeekOfYear'
+import isLeapYear from 'dayjs/plugin/isLeapYear'
+import advancedFormat from 'dayjs/plugin/advancedFormat'
 dayjs.extend(isSameOrBefore)
+dayjs.extend(isoWeeksInYear)
 dayjs.extend(isSameOrAfter)
+dayjs.extend(isLeapYear)
+dayjs.extend(WeekOfYear)
+dayjs.extend(advancedFormat)
+// console.log(dayjs().week(1).startOf('week').format('YYYY-MM-DD'))
 import './xndatepicker.css';
 (function (window, $) {
     var format = {
@@ -44,7 +53,9 @@ import './xndatepicker.css';
         'monthrange': 'YYYY-MM',
         'year': 'YYYY',
         'yearrange': 'YYYY',
-        'multiple': 'YYYY-MM-DD'
+        'multiple': 'YYYY-MM-DD',
+        'weeknum': 'YYYY第w周',
+        'weeknumrange': 'YYYY第w周'
     }
     var shortList = {
         'multiple': [],
@@ -116,6 +127,20 @@ import './xndatepicker.css';
             {"name": "五年前", "value": {startTime: dayjs().subtract(5, 'years').startOf('year')}},
         ],
         'yearrange': [
+            {"name": "最近一年", "value": {startTime: dayjs().startOf('year'), endTime: dayjs()}},
+            {"name": "最近两年", "value": {startTime: dayjs().subtract(2, 'years').startOf('year'), endTime: dayjs()}},
+            {"name": "最近三年", "value": {startTime: dayjs().subtract(3, 'years').startOf('year'), endTime: dayjs()}},
+            {"name": "最近五年", "value": {startTime: dayjs().subtract(5, 'years').startOf('year'), endTime: dayjs()}},
+            {"name": "最近十年", "value": {startTime: dayjs().subtract(10, 'years').startOf('year'), endTime: dayjs()}},
+        ],
+        'weeknum': [
+            {"name": "最近一年", "value": {startTime: dayjs().startOf('year'), endTime: dayjs()}},
+            {"name": "最近两年", "value": {startTime: dayjs().subtract(2, 'years').startOf('year'), endTime: dayjs()}},
+            {"name": "最近三年", "value": {startTime: dayjs().subtract(3, 'years').startOf('year'), endTime: dayjs()}},
+            {"name": "最近五年", "value": {startTime: dayjs().subtract(5, 'years').startOf('year'), endTime: dayjs()}},
+            {"name": "最近十年", "value": {startTime: dayjs().subtract(10, 'years').startOf('year'), endTime: dayjs()}},
+        ],
+        'weeknumrange': [
             {"name": "最近一年", "value": {startTime: dayjs().startOf('year'), endTime: dayjs()}},
             {"name": "最近两年", "value": {startTime: dayjs().subtract(2, 'years').startOf('year'), endTime: dayjs()}},
             {"name": "最近三年", "value": {startTime: dayjs().subtract(3, 'years').startOf('year'), endTime: dayjs()}},
@@ -216,6 +241,7 @@ import './xndatepicker.css';
     XNDatepicker.prototype = {
         init() {
             this.setCurrentTime({startTime: this.option.startTime, endTime: this.option.endTime})
+            console.log(this.tempdate1,this.tempdate2)
             this.rendDatePicker();
             this.setPosition();
             this.addEvent();
@@ -387,10 +413,10 @@ import './xndatepicker.css';
             if (this.type.indexOf('month') > -1) {
                 curFormat = 'YYYY'
             }
-            if (this.type.indexOf('month') > -1 || this.type.indexOf('year') > -1) {
+            if (this.type.indexOf('month') > -1 || this.type.indexOf('year') > -1 || this.type.indexOf('week') > -1) {
                 format = 'YYYY'
             }
-            if (this.type.indexOf('week') > -1) {
+            if (this.type=='week') {
                 if ($t) {
                     var date = $t.attr('data-date');
                     var date1 = dayjs(date).subtract((parseInt(this.option.firstDayOfWeek)) % 7, 'days').startOf('week').add((parseInt(this.option.firstDayOfWeek)) % 7, 'days').format('YYYY-MM-DD')
@@ -540,7 +566,7 @@ import './xndatepicker.css';
             }
             var datenum = otherdatenum == 1 ? 2 : 1;
             if (otherdatenum < datenum) {
-                if (this.type.indexOf('date') > -1 || this.type.indexOf('week') > -1) {
+                if (this.type.indexOf('date') > -1 || this.type=='week') {
                     if ((dayjs(this['tempdate' + otherdatenum].format('YYYY-MM')).isSameOrAfter(this['tempdate' + datenum].format('YYYY-MM'))) || this.option.linkPanels) {
                         this['tempdate' + datenum] = this['tempdate' + otherdatenum].clone().add(1, 'months');
                         this.geneDateList(this["tempdate" + datenum], this.$container.find(".dater" + datenum));
@@ -551,6 +577,12 @@ import './xndatepicker.css';
                         this['tempdate' + datenum] = this['tempdate' + otherdatenum].clone().add(1, 'years');
                     }
                     this.rendMonth(datenum)
+                }
+                if ((this.type.indexOf('weeknum') > -1)) {
+                    if ((this['tempdate' + otherdatenum].isSameOrAfter(this['tempdate' + datenum], 'year')) || this.option.linkPanels) {
+                        this['tempdate' + datenum] = this['tempdate' + otherdatenum].clone().add(1, 'years');
+                    }
+                    this.rendWeekNum(datenum)
                 }
                 if ((this.type.indexOf('year') > -1)) {
                     var year1 = this['tempdate' + otherdatenum].format('YYYY');
@@ -564,7 +596,7 @@ import './xndatepicker.css';
                     this.rendYears(datenum)
                 }
             } else {
-                if ((this.type.indexOf('date') > -1 || this.type.indexOf('week') > -1)) {
+                if ((this.type.indexOf('date') > -1 || this.type=='week')) {
                     if ((dayjs(this['tempdate' + otherdatenum].format('YYYY-MM')).isSameOrBefore(this['tempdate' + datenum].format('YYYY-MM'))) || this.option.linkPanels) {
                         this['tempdate' + datenum] = this['tempdate' + otherdatenum].clone().subtract(1, 'months');
                         this.geneDateList(this["tempdate" + datenum], this.$container.find(".dater" + datenum));
@@ -575,6 +607,12 @@ import './xndatepicker.css';
                         this['tempdate' + datenum] = this['tempdate' + otherdatenum].clone().subtract(1, 'years');
                     }
                     this.rendMonth(datenum)
+                }
+                if ((this.type.indexOf('weeknum') > -1)) {
+                    if ((this['tempdate' + otherdatenum].isSameOrAfter(this['tempdate' + datenum], 'year')) || this.option.linkPanels) {
+                        this['tempdate' + datenum] = this['tempdate' + otherdatenum].clone().subtract(1, 'years');
+                    }
+                    this.rendWeekNum(datenum)
                 }
                 if ((this.type.indexOf('year') > -1)) {
                     var year1 = this['tempdate' + otherdatenum].format('YYYY');
@@ -593,7 +631,7 @@ import './xndatepicker.css';
             var mouseMoveFunc = (e) => {
                 var $t = $(e.target);
                 if ($t.parents('.xndatepicker').get(0) == this.$container.get(0)) {
-                    if ($t.hasClass("day-item") || $t.hasClass("month-item") || $t.hasClass("year-item")) {
+                    if ($t.hasClass("day-item") || $t.hasClass("month-item") || $t.hasClass("year-item") || $t.hasClass("week-item")) {
                         this.rendHoverStyle($t);
                     }
                 }
@@ -632,6 +670,12 @@ import './xndatepicker.css';
                 if ($t.hasClass("month-next-year")) {
                     this.rendMonth(datenum)
                 }
+                if ($t.hasClass("week-prev-year")) {
+                    this.rendWeekNum(datenum)
+                }
+                if ($t.hasClass("week-next-year")) {
+                    this.rendWeekNum(datenum)
+                }
                 if ($t.hasClass("year-next-year")) {
                     var newdate = $.extend(true, {}, dayjs(this["tempdate" + datenum]))
                     newdate = newdate['add'](12, 'years').startOf('year');
@@ -653,11 +697,13 @@ import './xndatepicker.css';
                     this.rendOtherDateList(datenum);
                 }
 
-                if ((this.type.indexOf('date') > -1 && $t.hasClass("active-day")) || ($t.hasClass("day-item") && this.type.indexOf('week') > -1)) {
-                    this["date" + datenum] = this["tempdate" + datenum].date($t.html()).clone();
+                if ((this.type.indexOf('date') > -1 && $t.hasClass("active-day")) || ($t.hasClass("day-item") && this.type=='week')) {
+
+                        this["date" + datenum] = this["tempdate" + datenum].date($t.html()).clone();
+
                     this.setCurClass($t)
                     this.setDate();
-                    if ((this.type.indexOf('date') > -1 || this.type.indexOf('week') > -1) && $t.hasClass('day-item')) {
+                    if ((this.type.indexOf('date') > -1 || this.type=='week') && $t.hasClass('day-item')) {
                         this.autoConfirm($t);
                     }
                 }
@@ -693,12 +739,15 @@ import './xndatepicker.css';
                         this.setCurClass($t)
                         this.setDate();
                         this.autoConfirm($t);
-                    } else {
+                    } else if(this.type.indexOf('weeknum') > -1){
+                        this["tempdate" + datenum] = this["tempdate" + datenum].year($t.html())
+                        this.rendWeekNum(datenum)
+                        this.rendOtherDateList(datenum);
+                    }
+                    else {
                         this["tempdate" + datenum] = this["tempdate" + datenum].year($t.html())
                         this.rendMonth(datenum)
-                        // this['date'+datenum]=null;
                         this.rendOtherDateList(datenum);
-                        // this.geneDateList(this["tempdate" + datenum], this.$container.find(".dater" + datenum));
                     }
 
                 }
@@ -713,6 +762,14 @@ import './xndatepicker.css';
                         // this['date'+datenum]=null;
                         this.geneDateList(this["tempdate" + datenum], this.$container.find(".dater" + datenum));
                         this.rendOtherDateList(datenum);
+                    }
+                }
+                if ($t.hasClass("week-item") && !$t.hasClass("disable-week")) {
+                    this["date" + datenum] = dayjs($t.attr("data-date"))
+                    if (this.type.indexOf('weeknum') > -1) {
+                        this.setCurClass($t)
+                        this.setDate();
+                        this.autoConfirm($t);
                     }
                 }
                 if ($t.get(0).nodeName == 'LI' && $t.parents('.shortcut').get(0)) {
@@ -731,14 +788,14 @@ import './xndatepicker.css';
             if (!this.option.autoConfirm) {
                 return;
             }
-            if ((this.type.indexOf('range') < 0 && this.type.indexOf('time') < 0) || this.type.indexOf('week') > -1) {
+            if ((this.type.indexOf('range') < 0 && this.type.indexOf('time') < 0) || this.type=='week') {
                 this.confirm();
             } else if (this.type.indexOf('range') > -1 && this.date2 && this.date1 && this.type.indexOf('time') < 0) {
                 this.confirm();
             }
         },
         setCurClass($t) {
-            if (this.type.indexOf('week') > -1) {
+            if (this.type=='week') {
                 var date = $t.attr('data-date');
                 var date1 = dayjs(date).clone().subtract((parseInt(this.option.firstDayOfWeek)) % 7, 'days').startOf('week').add((parseInt(this.option.firstDayOfWeek)) % 7, 'days').format('YYYY-MM-DD')
                 // var date1 = dayjs(date).clone().startOf('week').format('YYYY-MM-DD')
@@ -821,7 +878,7 @@ import './xndatepicker.css';
                         this.tempdate1 = startTime;
                         this.tempdate2 = endTime;
                     }
-                } else if (this.type.indexOf('month') > -1) {
+                } else if (this.type.indexOf('month') > -1 || this.type.indexOf('weeknum') > -1) {
                     var endTime = date.endTime;
                     if (startTime.format('YYYY') == endTime.format('YYYY')) {
                         this.tempdate2 = endTime;
@@ -868,7 +925,11 @@ import './xndatepicker.css';
             } else if (this.type.indexOf('month') > -1) {
                 this.rendMonth(1)
                 this.rendMonth(2)
-            } else {
+            } else if (this.type.indexOf('weeknum') > -1) {
+                this.rendWeekNum(1)
+                this.rendWeekNum(2)
+            }
+            else {
                 this.geneDateList(this.tempdate1, this.$container.find(".dater1"));
                 this.geneDateList(this.tempdate2, this.$container.find(".dater2"));
             }
@@ -935,7 +996,7 @@ import './xndatepicker.css';
                     var date1=this.correctDate(this.option);
                     startTime = date1.startTime ? dayjs(date1.startTime).format(this.option.format) : '';
                     endTime = date1.endTime ? dayjs(date1.endTime).format(this.option.format) : '';
-                    if ((this.type.indexOf('range') > -1) || this.type.indexOf('week') > -1) {
+                    if ((this.type.indexOf('range') > -1) || this.type=='week') {
                         if (this.option.confirmFirst) {
                             this.trigger("confirm", {startTime: startTime, endTime: endTime,dayjs:dayjs})
                         }
@@ -957,7 +1018,7 @@ import './xndatepicker.css';
                         var showstr = ''
                         canconfirm = true;
                     }
-                    if ((this.type.indexOf('range') > -1 && this.date2) || this.type.indexOf('week') > -1) {
+                    if ((this.type.indexOf('range') > -1 && this.date2) || this.type=='week') {
                         if ((isFirst && this.option.confirmFirst) || !isFirst) {
                             this.trigger("confirm", {startTime: this.selectedDate[0], endTime: this.selectedDate[1],dayjs:dayjs})
                         }
@@ -995,7 +1056,48 @@ import './xndatepicker.css';
             this.$targetDom.addClass('iconfont-xndatepicker icon-xndatepickerrili xndatepicker-input')
             this.$targetDom.attr('data-placeholder', this.option.placeholder)
         },
-
+        rendWeekNum(datenum) {
+            if (!this.$container.find('.dater' + datenum).get(0)) {
+                return;
+            }
+            var html = `
+                <div class="year-picker">
+                    <div class="prev">
+                    <span class="iconfont-xndatepicker icon-xndatepickerprev1 week-prev-year skip-date" data-unit="year" data-func="subtract"></span>
+</div>
+                    <div class="month-info"></div>
+                    <div class="next">
+                    <span class="iconfont-xndatepicker icon-xndatepickerprev1 week-prev-year skip-date" data-unit="year" data-func="add"></span>
+</div>
+                </div>
+                <div class="weeknum-list">
+                    
+</div>
+            `
+            this.$container.find('.dater' + datenum).empty().append(html)
+            var weeklist = this.getWeekNumList(datenum);
+            this.$container.find('.dater' + datenum).find(".weeknum-list").append(weeklist);
+            this.setTodayDot('week')
+        },
+        getWeekNumList(datenum) {
+            var curYear = dayjs(this['tempdate' + datenum]).format('YYYY');
+            this.$container.find(".dater" + datenum + " .month-info").get(0).innerHTML = curYear;
+            var html = '';
+            var weeknums=dayjs((curYear + '/01/01')).isoWeeksInYear();
+            for (let i = 0; i < weeknums; i++) {
+                let date=dayjs(curYear+'01/01').week(i+1).startOf('week');
+                if(date.format('YYYY')!=curYear){
+                    date=dayjs(curYear+'01/01').format('YYYY-MM-DD')
+                }
+                else{
+                    date=date.format('YYYY-MM-DD')
+                }
+                let disable = (!(((this.option.minDate && dayjs(this.option.minDate).startOf('week').isSameOrBefore(date)) || !this.option.minDate) && ((this.option.maxDate && dayjs(this.option.maxDate).endOf('week').isSameOrAfter(dayjs(date).endOf('week'))) || !this.option.maxDate))) || this.disableDate(date,dayjs,'weeknum')
+                // let disable=
+                html += `<span class="week-item ${disable ? 'disable-week' : 'active-day'}" data-date="${date}">` + '第'+(i+1)+'周' + "</span>";
+            }
+            return html;
+        },
         rendMonth(datenum) {
             if (!this.$container.find('.dater' + datenum).get(0)) {
                 return;
@@ -1224,6 +1326,7 @@ import './xndatepicker.css';
                     format = 'YYYY-MM-DD'
                 }
                 if ((!this.option.minDate || (this.option.minDate && this.option.minDate.format(format) <= date.format(format))) && (!this.option.maxDate || (this.option.maxDate && this.option.maxDate.format(format) >= date.format(format)))) {
+                    console.log(111)
                     disable = false;
                 }
             }

@@ -10,15 +10,16 @@ module.exports = {
             import:'./src/xndatepicker.js',
         }
     },
-    // devtool:'eval-source-map',//追踪错误源码
-    devtool:'source-map',//追踪错误源码
+    devtool:'eval-source-map',//追踪错误源码
+    // devtool:'source-map',//追踪错误源码
     devServer: {
         contentBase: './dist',
     },
     plugins: [
         // new CleanWebpackPlugin({cleanStaleWebpackAssets:false}),
         new HtmlWebpackPlugin({
-            template: './index.html',
+            // template: './index.html',
+            template: './test.html',
         }),
         new UglifyJsPlugin()
     ],

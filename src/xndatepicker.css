@@ -84,6 +84,7 @@ table {
 	border: 1px solid #efefef;
 	border-radius: 4px;
 	user-select: none;
+	z-index: 999;
 }
 .xndatepicker-input.icon-xndatepickerrili{
 	padding-right:30px;
@@ -240,7 +241,7 @@ table {
 
 }
 
-.xndatepicker.week .dater>span.active-day:hover,.xndatepicker.week .dater>.hover,.xndatepicker .dater>.active-day.hover,.month-item.hover,.year-item.hover{
+.xndatepicker.week .dater>span.active-day:hover,.xndatepicker.week .dater>.hover,.xndatepicker .dater>.active-day.hover,.month-item.hover,.year-item.hover,.week-item.hover{
 	background: rgb(233, 241 ,255);
 	color:#2264d1;
 }
@@ -252,7 +253,7 @@ table {
 	display: flex;
 	flex-wrap: wrap;
 }
-.year-list .year-item,.month-list .month-item{
+.year-list .year-item,.month-list .month-item,.weeknum-list .week-item{
 	flex: 0 0 calc(100% / 3 - 3%);
 	width:calc(100% / 3 - 3%);
 	display: block;
@@ -265,17 +266,30 @@ table {
 	font-size:12px;
 	position: relative;
 }
-.year-list .year-item.disable-year,.month-list .month-item.disable-month{
+.weeknum-list .week-item{
+	flex: 0 0 calc(100% / 3 - 3%);
+	width: calc(100% / 3 - 3%);
+	height: 30px;
+	line-height: 30px;
+	margin: 2px 1%;
+}
+.year-list .year-item.disable-year,.month-list .month-item.disable-month,.weeknum-list .week-item.disable-week{
 	color:#ccc;
 }
-.year-list .year-item.disable-year:hover,.month-list .month-item.disable-month:hover{
+.year-list .year-item.disable-year:hover,.month-list .month-item.disable-month:hover,.weeknum-list .week-item.disable-week:hover{
 	background:none;
 	color:#ccc;
 }
-.year-list .year-item:hover,.month-list .month-item:hover{
+.year-list .year-item:hover,.month-list .month-item:hover,.weeknum-list .week-item:hover{
 	background:#4a9bfe;
 	color: #fff;
 	border-radius:4px;
+}
+.datepicker .weeknum-list{
+	max-height: 232px;
+	overflow: auto;
+	display: flex;
+	flex-wrap: wrap;
 }
 .xndatepicker .dater{
 	font-size:12px;
