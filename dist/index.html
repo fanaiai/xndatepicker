@@ -37,7 +37,19 @@
 
 <body>
 <div class="flex-div">
-    <span>date 单日选择器</span>
+    <span>weeknum 周次选择器</span>
+    <div id='weeknum' class="dateinputer">
+
+    </div>
+</div>
+<div class="flex-div">
+    <span>weeknumrange 周次区间选择器</span>
+    <div id='weeknumrange' class="dateinputer">
+
+    </div>
+</div>
+<div class="flex-div">
+    <span>date 单日选择器+设置不可选日期</span>
     <a id="destroy">销毁日历</a>
     <div id='date' class="dateinputer">
 
@@ -95,6 +107,45 @@
 <script src="/xndatepicker.min.js"></script></body>
 <script type="text/javascript" src="./dist/xndatepicker.min.js"></script>
 <script type="text/javascript">
+    var date=new XNDatepicker(document.querySelector("#weeknum"),{
+        // format:'YYYY-MM-DD',
+        type:'weeknum',//year/month/date/multiple/ week/datetime/datetimerange/ daterange/monthrange/yearrange
+        multipleDates:[],//当为多选日期类型时的初始值
+        startTime:'2021-01-24',
+        // endTime:'2036-04-04',
+        // minDate:'2019-04-04',
+        maxDate:'',
+        separator:' 到 ',
+        showType:'modal',
+        linkPanels:false,//面板联动
+        showClear:false,//是否显示清除按钮
+        autoConfirm:true,
+        showShortKeys:true,
+        autoFillDate:true,//自动变更element里面的值
+    },function(data){
+        console.log(data)
+    })
+    var date=new XNDatepicker(document.querySelector("#weeknumrange"),{
+        // format:'YYYY-MM-DD',
+        type:'weeknumrange',//year/month/date/multiple/ week/datetime/datetimerange/ daterange/monthrange/yearrange
+        multipleDates:[],//当为多选日期类型时的初始值
+        startTime:'2021-01-24',
+        // endTime:'2036-04-04',
+        // minDate:'2019-04-04',
+        maxDate:'',
+        separator:' 到 ',
+        showType:'modal',
+        linkPanels:false,//面板联动
+        showClear:true,//是否显示清除按钮
+        autoConfirm:true,
+        showShortKeys:true,
+        autoFillDate:true,//自动变更element里面的值
+        disableDate:function(date,dayjs,calcType){//还未对初始时间做处理
+            return false;
+        },
+    },function(data){
+        console.log(data)
+    })
     var date=new XNDatepicker(document.querySelector("#date"),{
         // format:'YYYY-MM-DD',
         type:'date',//year/month/date/multiple/ week/datetime/datetimerange/ daterange/monthrange/yearrange
@@ -127,7 +178,7 @@
         // format:'YYYY-MM-DD',
         type:'datetime',//year/month/date/multiple/ week/datetime/datetimerange/ daterange/monthrange/yearrange
         multipleDates:[],//当为多选日期类型时的初始值
-        startTime:'',
+        startTime:'2019-04-04',
         // endTime:'2036-04-04',
         // minDate:'2019-04-04',
         maxDate:'',
