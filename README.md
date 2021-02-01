@@ -1,12 +1,12 @@
 
 # [样例地址](https://www.jq22.com/yanshi23561) (样例不是最新代码哦)
-# 2021/01/28 V1.2.0(未发布)
-+ 周次选择器
+# 2021/02/02 V1.3.0(未发布)
 + 移动端支持
 
-# 2021/01/28 V1.2.0(已发布)
+# 2021/02/01 V1.2.0(已发布)
 + 周次选择器
 + iconfont从cdn改为本地
++ 修复部分bug
 
 # 2021/01/28 V1.1.0(已发布)
 ## 更新功能点
@@ -43,11 +43,11 @@
     var xndatepicker=new XNDatepicker(
     $("#date"),//日历容器，可以是input，或其他标签
     {
-            type:'daterange',日历类型 date,datetime,daterange,datetimerange,month,monthrange,year,yearrange,week,multiple
+            type:'daterange',日历类型 date,datetime,daterange,datetimerange,month,monthrange,year,yearrange,week,multiple,weeknum,weeknumrange
             showWeek: true,//是否显示周几
             placeholder:'请选择',
             shortList: [],//快捷选项，不写使用默认快捷选项
-            locale:{
+            locale:{//本地化参数配置
                 month:[
                     '一月',
                     '二月',
@@ -79,7 +79,12 @@
                 week:['日','一','二','三','四','五','六'],
                 clear:'清空',
                 confirm:'确定',
-                yearHeadSuffix:'年'
+                yearHeadSuffix: function(year){//日历头部年份显示
+                    return year+'年'
+                },
+                weekNum:function(weeknum){//周次选择器显示
+                    return '第'+weeknum+'周'
+                }
             },//显示信息
             confirmFirst:true,//第一次就搜索
             separator:' 到 ',//双日历模式下的链接符

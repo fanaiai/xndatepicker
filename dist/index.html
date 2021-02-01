@@ -105,7 +105,7 @@
 </div>
 
 <script src="/xndatepicker.min.js"></script></body>
-<script type="text/javascript" src="./dist/xndatepicker.min.js"></script>
+<!--<script type="text/javascript" src="./dist/xndatepicker.min.js"></script>-->
 <script type="text/javascript">
     var date=new XNDatepicker(document.querySelector("#weeknum"),{
         // format:'YYYY-MM-DD',
@@ -123,7 +123,7 @@
         showShortKeys:true,
         autoFillDate:true,//自动变更element里面的值
     },function(data){
-        console.log(data)
+        console.log(data.startTime.format('YYYY-MM-DD'))
     })
     var date=new XNDatepicker(document.querySelector("#weeknumrange"),{
         // format:'YYYY-MM-DD',

@@ -1,7 +1,3 @@
-/* http://meyerweb.com/eric/tools/css/reset/
-   v2.0 | 20110126
-   License: none (public domain)
-*/
 
 html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
@@ -126,7 +122,9 @@ table {
 }
 .xndatepicker .shortcut li{
 	cursor: pointer;
-	color: #5d90e6;
+	color: #183b76;
+	border-bottom: 1px solid #f2f2f2;
+	padding: 0 10px;
 }
 .xndatepicker .shortcut li:hover{
 	color:#1650b0;
@@ -426,5 +424,8 @@ table {
 	font-weight: bold;
 }
 .xndatepicker.multiple .day-item{
-	border-radius:15px !important;
+	border-radius: 4px !important;
+	flex: 0 0 30px;
+	width: 30px;
+	margin: 1px;
 }

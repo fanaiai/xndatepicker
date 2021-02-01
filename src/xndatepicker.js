@@ -5,27 +5,8 @@
 //! create date:2021/01/01
 //! update date:2021/01/05 V1.0.0
 //! update date:2021/01/28 V1.1.0
-//! update date:2021/01/29 V1.2.0
+//! update date:2021/02/01 V1.2.0
 // https://github.com/fanaiai/xndatepicker
-function dynamicLoadCss(urllist) {
-    for (let i = 0; i < urllist.length; i++) {
-        let url = urllist[i];
-        var head = document.getElementsByTagName('head')[0];
-        var link = document.createElement('link');
-        link.type = 'text/css';
-        link.rel = 'stylesheet';
-        link.href = url;
-        head.appendChild(link);
-    }
-}
-
-var scripts = document.getElementsByTagName("script")
-var script = scripts[scripts.length - 1];
-var s = document.querySelector ? script.src : script.getAttribute("src", 4)//IE8直接.src
-var csspath = s.substr(0, s.lastIndexOf('/') - 0);
-var csslist = ["//at.alicdn.com/t/font_2213760_as9380qm7dw.css"]
-// dynamicLoadCss(csslist);
-// import jQuery from './jquery.min.js';
 import './xnquery';
 import './xntimepicker.js';
 import dayjs from 'dayjs';
@@ -41,7 +22,6 @@ dayjs.extend(isSameOrAfter)
 dayjs.extend(isLeapYear)
 dayjs.extend(WeekOfYear)
 dayjs.extend(advancedFormat)
-// console.log(dayjs().week(1).startOf('week').format('YYYY-MM-DD'))
 import './xndatepicker.css';
 import './iconfont/iconfont.css';
 (function (window, $) {
@@ -136,18 +116,17 @@ import './iconfont/iconfont.css';
             {"name": "最近十年", "value": {startTime: dayjs().subtract(10, 'years').startOf('year'), endTime: dayjs()}},
         ],
         'weeknum': [
-            {"name": "最近一年", "value": {startTime: dayjs().startOf('year'), endTime: dayjs()}},
-            {"name": "最近两年", "value": {startTime: dayjs().subtract(2, 'years').startOf('year'), endTime: dayjs()}},
-            {"name": "最近三年", "value": {startTime: dayjs().subtract(3, 'years').startOf('year'), endTime: dayjs()}},
-            {"name": "最近五年", "value": {startTime: dayjs().subtract(5, 'years').startOf('year'), endTime: dayjs()}},
-            {"name": "最近十年", "value": {startTime: dayjs().subtract(10, 'years').startOf('year'), endTime: dayjs()}},
+            {"name": "本周", "value": {startTime: dayjs().startOf('week')}},
+            {"name": "上周", "value": {startTime: dayjs().subtract(1, 'weeks').startOf('week')}},
+            {"name": "本月第一周", "value": {startTime: dayjs().startOf('month')}},
+            {"name": "本年第一周", "value": {startTime: dayjs().startOf('year')}},
         ],
         'weeknumrange': [
-            {"name": "最近一年", "value": {startTime: dayjs().startOf('year'), endTime: dayjs()}},
-            {"name": "最近两年", "value": {startTime: dayjs().subtract(2, 'years').startOf('year'), endTime: dayjs()}},
-            {"name": "最近三年", "value": {startTime: dayjs().subtract(3, 'years').startOf('year'), endTime: dayjs()}},
-            {"name": "最近五年", "value": {startTime: dayjs().subtract(5, 'years').startOf('year'), endTime: dayjs()}},
-            {"name": "最近十年", "value": {startTime: dayjs().subtract(10, 'years').startOf('year'), endTime: dayjs()}},
+            {"name": "当前周", "value": {startTime: dayjs().startOf('week'), endTime: dayjs().startOf('week')}},
+            {"name": "最近两周", "value": {startTime: dayjs().subtract(2, 'weeks').startOf('week'), endTime: dayjs().startOf('week')}},
+            {"name": "最近三周", "value": {startTime: dayjs().subtract(3, 'weeks').startOf('week'), endTime: dayjs().startOf('week')}},
+            {"name": "最近五周", "value": {startTime: dayjs().subtract(5, 'weeks').startOf('week'), endTime: dayjs().startOf('week')}},
+            {"name": "最近十周", "value": {startTime: dayjs().subtract(10, 'weeks').startOf('week'), endTime: dayjs().startOf('week')}},
         ]
     }
     var option = {
@@ -186,7 +165,9 @@ import './iconfont/iconfont.css';
             week: ['日', '一', '二', '三', '四', '五', '六'],
             clear: '清空',
             confirm: '确定',
-            yearHeadSuffix: '年',
+            yearHeadSuffix: function(year){
+                return year+'年'
+            },
             weekNum:function(weeknum){
                 return '第'+weeknum+'周'
             }
@@ -322,9 +303,6 @@ import './iconfont/iconfont.css';
             }
         },
         initCallback() {
-            if(typeof this.onConfirm=='function'){
-                return false;
-            }
             this.on('confirm', this.onConfirm);
         },
         addTargetEvent() {
@@ -1002,18 +980,18 @@ import './iconfont/iconfont.css';
                 var startTime, endTime;
                 if (isFirst) {
                     var date1=this.correctDate(this.option);
-                    startTime = date1.startTime ? dayjs(date1.startTime).format(this.option.format) : '';
-                    endTime = date1.endTime ? dayjs(date1.endTime).format(this.option.format) : '';
+                    startTime = date1.startTime ? dayjs(date1.startTime): '';
+                    endTime = date1.endTime ? dayjs(date1.endTime) : '';
                     if ((this.type.indexOf('range') > -1) || this.type=='week') {
                         if (this.option.confirmFirst) {
                             this.trigger("confirm", {startTime: startTime, endTime: endTime,dayjs:dayjs})
                         }
-                        var showstr = (startTime||this.option.placeholder) + this.option.separator + (endTime||this.option.placeholder);
+                        var showstr = (startTime?startTime.format(this.option.format):this.option.placeholder) + this.option.separator + (endTime?endTime.format(this.option.format):this.option.placeholder) ;
                     } else if (this.type.indexOf('range') < 0) {
                         if (this.option.confirmFirst) {
                             this.trigger("confirm", {startTime: startTime,dayjs:dayjs})
                         }
-                        var showstr = (startTime||this.option.placeholder);
+                        var showstr = (startTime?startTime.format(this.option.format):this.option.placeholder);
                     }
                     canconfirm=true;
                 } else {
@@ -1342,7 +1320,7 @@ import './iconfont/iconfont.css';
         _rendYearHtml(date, $cont) {//需要重新生成哦
             var ynow = date.year();
             var mnow = date.month() + 1;
-            $cont.find(".year-info").html("<span class='year'>" + ynow + this.option.locale.yearHeadSuffix + "<\/span><span class='month'>" + this.option.locale.monthHead[mnow - 1] + "<\/span>");
+            $cont.find(".year-info").html("<span class='year'>" + this.option.locale.yearHeadSuffix(ynow) + "<\/span><span class='month'>" + this.option.locale.monthHead[mnow - 1] + "<\/span>");
         },
         _rendDayHtml(datelist, $cont, year) {
             var $c = $cont.find(".dater")
