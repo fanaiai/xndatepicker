@@ -98,7 +98,7 @@
     </div>
 </div>
 <div class="flex-div">
-    <span>multiple 多日期选择器</span>
+    <span>multiple 多日期选择器-自定义shortcut</span>
     <div id='multiple' class="dateinputer">
 
     </div>
@@ -315,6 +315,16 @@ var multiple=new XNDatepicker(document.querySelector("#multiple"),{
     autoConfirm:true,
     showShortKeys:true,
     autoFillDate:true,//自动变更element里面的值
+    shortList:[
+        {
+            name: "某三天",
+            value: { startTime: ['2021/02/01','2021-02-05','2020-01-08']}
+        },
+        {
+            name: "今天",
+            value: { startTime: '2021/02/01'}
+        }
+    ]
 },function(data){
     console.log(data)
 })

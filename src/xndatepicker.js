@@ -6,6 +6,7 @@
 //! update date:2021/01/05 V1.0.0
 //! update date:2021/01/28 V1.1.0
 //! update date:2021/02/01 V1.2.0
+//! update date:2021/02/03 V1.2.1 修复bug
 // https://github.com/fanaiai/xndatepicker
 import './xnquery';
 import './xntimepicker.js';
@@ -760,7 +761,13 @@ import './iconfont/iconfont.css';
                 }
                 if ($t.get(0).nodeName == 'LI' && $t.parents('.shortcut').get(0)) {
                     var index = $t.parent().find("LI").index($t.get(0));
-                    this.setCurrentTime(this.option.shortList[index].value);
+                    if(this.type=='multiple'){
+                        var startTime=Array.isArray(this.option.shortList[index].value.startTime)?this.option.shortList[index].value.startTime:[this.option.shortList[index].value.startTime]
+                        this.multipleDates = startTime;
+                    }
+                    else{
+                        this.setCurrentTime(this.option.shortList[index].value);
+                    }
                     this.setCurrentDay();
                     this.updateCurrentTime(1);
                     this.updateCurrentTime(2);
@@ -969,6 +976,9 @@ import './iconfont/iconfont.css';
                     var showstr = ''
                     canconfirm = true;
                 } else {
+                    this.multipleDates=this.multipleDates.map((e)=>{
+                        return dayjs(e).format(this.option.format)
+                    })
                     this.selectedMultiple = this.multipleDates;
                     if ((isFirst && this.option.confirmFirst) || !isFirst) {
                         this.trigger("confirm", {startTime: this.selectedMultiple,dayjs:dayjs})
@@ -1284,7 +1294,14 @@ import './iconfont/iconfont.css';
             this._rendYearHtml(date, $cont);
             if (this.type == 'multiple') {
                 for (let i = 0; i < this.multipleDates.length; i++) {
-                    this.$container.find('span[data-date="' + this.multipleDates[i] + '"]').addClass('cur-date');
+                    let date=this.multipleDates[i];
+                    if(typeof  date=='object'){
+                        date=date.format('YYYY-MM-DD')
+                    }
+                    else{
+                        date=dayjs(date).format('YYYY-MM-DD')
+                    }
+                    this.$container.find('span[data-date="' + date + '"]').addClass('cur-date');
                 }
             }
         },

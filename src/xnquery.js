@@ -67,8 +67,8 @@
                         }
                         // 如果对象中包含了数组或者其他对象，则使用递归进行拷贝
                         if (deep && copy && (typeof copy == 'object' || (copyIsArray = Array.isArray(copy)))) {
-                            // 处理数组
-                            if (copyIsArray) {
+                            if (Array.isArray(copy)) {
+                                // 处理数组
                                 copyIsArray = false;
                                 // 如果目标对象不存在该数组，则创建一个空数组；
                                 clone = src && Array.isArray(src) ? src : [];
