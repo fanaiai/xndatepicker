@@ -7,6 +7,7 @@
 //! update date:2021/01/28 V1.1.0
 //! update date:2021/02/01 V1.2.0
 //! update date:2021/02/03 V1.2.1 修复bug
+//! update date:2021/02/04 V1.2.2 修复bug
 // https://github.com/fanaiai/xndatepicker
 import './xnquery';
 import './xntimepicker.js';
@@ -362,7 +363,7 @@ import './iconfont/iconfont.css';
             top = top + targetHeight + 10;
 
             var trangletop = -6;
-            var trangleleft = left + 20;
+            var trangleleft = 20;
             var borderWidth = "1px 0 0 1px"
 
             if (top + domheight > wheight) {
