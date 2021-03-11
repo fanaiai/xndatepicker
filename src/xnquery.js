@@ -377,18 +377,21 @@
                 }
             }
         },
-        fadeOut(time){
+        fadeOut(time,callback){
             this.el.forEach((e) => {
                 this.animate({opacity:0},time,e,()=>{
                     e.style.display = 'none'
+                    if(typeof callback=='function'){
+                        callback()
+                    }
                 })
             })
         },
-        fadeIn(time) {
+        fadeIn(time,callback) {
             this.el.forEach((e) => {
                 e.style.display = 'block'
                 // e.style.opacity = 1;
-                this.animate({opacity:1},time,e)
+                this.animate({opacity:1},time,e,callback)
             })
         },
         animate(css, time,ele,callback) {
@@ -414,9 +417,11 @@
 
                 }
                 if(initTime>=totalTimes){
-                    if(typeof callback=='function'){
-                    callback()}
                     window.clearInterval(interval);
+                    if(typeof callback=='function'){
+                    callback()
+                    }
+
                 }
                 initTime++;
             },20)

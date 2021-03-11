@@ -1,6 +1,6 @@
 //! xndatepicker.js
 //! 仙女座日期选择器
-//! version : 1.1.0
+//! version : 1.2.3
 //! authors : 范媛媛
 //! create date:2021/01/01
 //! update date:2021/01/05 V1.0.0
@@ -8,6 +8,7 @@
 //! update date:2021/02/01 V1.2.0
 //! update date:2021/02/03 V1.2.1 修复bug
 //! update date:2021/02/04 V1.2.2 修复bug
+//! update date:2021/03/11 V1.2.3 修复bug
 // https://github.com/fanaiai/xndatepicker
 import './xnquery';
 import './xntimepicker.js';
@@ -229,14 +230,18 @@ import './iconfont/iconfont.css';
     XNDatepicker.prototype = {
         init() {
             this.setCurrentTime({startTime: this.option.startTime, endTime: this.option.endTime})
+            this.rendPicker();
+            this.initCallback();
+            this.confirm(false, true);
+        },
+        rendPicker(){
+            this.setCurrentTime({startTime: this.selectedDate[0], endTime: this.selectedDate[1]})
             this.rendDatePicker();
             this.setPosition();
             this.addEvent();
-            this.initCallback();
             this.initTimePicker();
             this.rendHoverStyle();
             this.setDate();
-            this.confirm(false, true);
         },
         resetCurrentTime(startTime, endTime) {//显示日历的时候，重新设置当前的日期
             if (this.type == 'multiple') {
@@ -323,14 +328,23 @@ import './iconfont/iconfont.css';
         },
         changeShowStatus(hide) {
             if (this.show || hide) {
-                this.show = true;
-                this.$container.fadeOut(100);
+                if(this.$container){
+                this.$container.fadeOut(100,()=>{
+                    if(this.$container){
+                    this.$container.remove();
+                    this.$container=null
+                    }
+                });}
+                this.show=false;
             } else {
+                if(!this.$container){
+                this.rendPicker();}
                 this.$container.css({display: 'block', opacity: '0'})
                 this.resetCurrentTime();
                 this.$container.fadeIn(200);
+                this.show=true;
             }
-            this.show = !this.show;
+            // this.show = !this.show;
         },
         addPosEvent: function () {
             var that = this;
@@ -342,7 +356,7 @@ import './iconfont/iconfont.css';
             })
         },
         setPosition: function () {
-            if (!this.$container.get(0)) {
+            if (!this.$container || !this.$container.get(0)) {
                 return;
             }
             var wwidth = document.documentElement.clientWidth;
@@ -618,6 +632,9 @@ import './iconfont/iconfont.css';
         addEvent() {
             var mouseMoveFunc = (e) => {
                 var $t = $(e.target);
+                if(!this.$container){
+                    return;
+                }
                 if ($t.parents('.xndatepicker').get(0) == this.$container.get(0)) {
                     if ($t.hasClass("day-item") || $t.hasClass("month-item") || $t.hasClass("year-item") || $t.hasClass("week-item")) {
                         this.rendHoverStyle($t);
@@ -1229,7 +1246,7 @@ import './iconfont/iconfont.css';
             div.innerHTML=html;
             document.body.appendChild(div)
             this.$container=$("#"+this.id)
-            this.changeShowStatus(true)
+            // this.changeShowStatus(true)
             this.setCurrentDay();
             this.geneShortList();
             if (this.type.indexOf('range') < 0 && this.type.indexOf('time') < 0 && this.type != 'multiple' && this.option.autoConfirm) {

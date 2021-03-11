@@ -11,12 +11,12 @@ module.exports = {
         }
     },
     // devtool:'eval-source-map',//追踪错误源码
-    devtool:'source-map',//追踪错误源码
+    devtool:'source-map',//不追踪错误源码
     devServer: {
         contentBase: './dist',
     },
     plugins: [
-        // new CleanWebpackPlugin({cleanStaleWebpackAssets:false}),
+        new CleanWebpackPlugin({cleanStaleWebpackAssets:true}),
         new HtmlWebpackPlugin({
             template: './index.html',
             // template: './test.html',
