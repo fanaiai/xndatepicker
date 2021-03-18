@@ -65,8 +65,9 @@
                         if (target === copy) {
                             continue;
                         }
+                        let copyIsArray = Array.isArray(copy)
                         // 如果对象中包含了数组或者其他对象，则使用递归进行拷贝
-                        if (deep && copy && (typeof copy == 'object' || (copyIsArray = Array.isArray(copy)))) {
+                        if (deep && copy && (typeof copy == 'object' || (copyIsArray))) {
                             // 处理数组
                             if (copyIsArray) {
                                 copyIsArray = false;

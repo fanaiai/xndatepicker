@@ -1,11 +1,12 @@
 //! xndatepicker.js
 //! 仙女座日期选择器
-//! version : 1.1.0
+//! version : 1.2.1
 //! authors : 范媛媛
 //! create date:2021/01/01
 //! update date:2021/01/05 V1.0.0
 //! update date:2021/01/28 V1.1.0
 //! update date:2021/02/01 V1.2.0
+//! update date:2021/03/18 V1.2.1
 // https://github.com/fanaiai/xndatepicker
 import './xnquery';
 import './xntimepicker.js';
@@ -16,12 +17,16 @@ import isoWeeksInYear from 'dayjs/plugin/isoWeeksInYear'
 import WeekOfYear from 'dayjs/plugin/WeekOfYear'
 import isLeapYear from 'dayjs/plugin/isLeapYear'
 import advancedFormat from 'dayjs/plugin/advancedFormat'
+// import customParseFormat from 'dayjs/plugin/customParseFormat'
+import 'dayjs/locale/zh-cn'
 dayjs.extend(isSameOrBefore)
 dayjs.extend(isoWeeksInYear)
 dayjs.extend(isSameOrAfter)
 dayjs.extend(isLeapYear)
 dayjs.extend(WeekOfYear)
 dayjs.extend(advancedFormat)
+// dayjs.extend(customParseFormat)
+// dayjs.locale('zh-cn') // use locale globally
 import './xndatepicker.css';
 import './iconfont/iconfont.css';
 (function (window, $) {
@@ -197,6 +202,9 @@ import './iconfont/iconfont.css';
         this.option = $.extend(true,{}, option, options);
         this.type = this.option.type;
         this.format = this.type.indexOf('year') > -1 ? 'YYYY' : (this.type.indexOf('month') > -1 ? 'YYYY-MM' : (this.type.indexOf('time') > -1 ? 'YYYY-MM-DD' : 'YYYY-MM-DD'));
+        if (!options.format) {
+            this.option.format = format[this.type]
+        }
         this.option.startTime && (this.option.startTime = dayjs(this.option.startTime));
         this.option.endTime && (this.option.endTime = dayjs(this.option.endTime));
 
@@ -213,9 +221,7 @@ import './iconfont/iconfont.css';
         if (!options.shortList) {
             this.option.shortList = shortList[this.type]
         }
-        if (!options.format) {
-            this.option.format = format[this.type]
-        }
+
         this.id = this.getRandomString();
         this.show = false;
         this.eventList = {};
