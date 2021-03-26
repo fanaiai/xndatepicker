@@ -164,6 +164,7 @@
         autoConfirm:true,
         showShortKeys:true,
         autoFillDate:true,//自动变更element里面的值
+        theme:'blue',
         disableDate:function(date,dayjs,calcType){//还未对初始时间做处理
             if(dayjs(date).format('YYYY')=='2019')//当前是2019年时不可选
                 return true;
@@ -187,6 +188,7 @@
         maxDate:'',
         separator:' 到 ',
         showType:'modal',
+        theme:'orange',
         linkPanels:false,//面板联动
         showClear:true,//是否显示清除按钮
         autoConfirm:true,

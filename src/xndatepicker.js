@@ -185,7 +185,7 @@ import './iconfont/iconfont.css';
         showShortKeys: true,//是否显示快捷选项
         autoFillDate: true,//自动变更element里面的值，如果自动变更，则按照插件样式显示
         firstDayOfWeek: 7,//周起始日 1-7
-        theme: 'orange',//主题,blue,orange
+        theme: 'default',//主题,blue,orange
         multipleDates: [],//当为多选日期类型时的初始值
         startTime: '',//初始开始时间
         endTime: '',//初始结束时间
