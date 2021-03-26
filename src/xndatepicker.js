@@ -1,6 +1,6 @@
 //! xndatepicker.js
 //! 仙女座日期选择器
-//! version : 1.2.3
+//! version : 1.2.5
 //! authors : 范媛媛
 //! create date:2021/01/01
 //! update date:2021/01/05 V1.0.0
@@ -9,6 +9,7 @@
 //! update date:2021/02/03 V1.2.1 修复bug
 //! update date:2021/02/04 V1.2.2 修复bug
 //! update date:2021/03/11 V1.2.3 修复bug
+//! update date:2021/03/26 V1.2.5 增加主题
 // https://github.com/fanaiai/xndatepicker
 import './xnquery';
 import './xntimepicker.js';
@@ -184,7 +185,7 @@ import './iconfont/iconfont.css';
         showShortKeys: true,//是否显示快捷选项
         autoFillDate: true,//自动变更element里面的值，如果自动变更，则按照插件样式显示
         firstDayOfWeek: 7,//周起始日 1-7
-        theme: 'default',//主题
+        theme: 'orange',//主题,blue,orange
         multipleDates: [],//当为多选日期类型时的初始值
         startTime: '',//初始开始时间
         endTime: '',//初始结束时间
@@ -1205,7 +1206,7 @@ import './iconfont/iconfont.css';
         },
         rendDatePicker() {
             var div=document.createElement("div")
-            div.classList.add("xndatepicker",this.type)
+            div.classList.add("xndatepicker",this.type,this.option.theme)
             div.id=this.id;
             var html = `
         <div class="xn-top">
