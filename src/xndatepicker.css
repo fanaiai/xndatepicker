@@ -505,6 +505,7 @@ table {
 .xndatepicker.blue, .xndatepicker.blue .xntimepicker {
     background: #002651;
     color: #fff;
+    border-color: #11345b;
 }
 
 .xndatepicker.blue .xntriangle {
@@ -516,7 +517,7 @@ table {
     border-bottom: 1px solid #11345b;
 }
 
-.xndatepicker.blue .date-main, .xndatepicker.blue .year-picker, .xndatepicker.blue .xn-bottom, .xndatepicker.blue .xn-bottom > a, .xndatepicker.blue .xn-bottom > a.confirm-date {
+.xndatepicker.blue .date-main, .xndatepicker.blue .year-picker, .xndatepicker.blue .xn-bottom, .xndatepicker.blue .xn-bottom > a, .xndatepicker.blue .xn-bottom > a.confirm-date,.xndatepicker.blue .xntriangle,.xndatepicker.blue .date-item {
     border-color: #11345b;
 }
 
@@ -552,6 +553,7 @@ table {
 .xndatepicker.orange, .xndatepicker.orange .xntimepicker {
     background: #D32F2F;
     color: #fff;
+    border-color:#F44336;
 }
 
 .xndatepicker.orange .xntriangle {
@@ -563,7 +565,7 @@ table {
     border-bottom: 1px solid #F44336;
 }
 
-.xndatepicker.orange .date-main, .xndatepicker.orange .year-picker, .xndatepicker.orange .xn-bottom, .xndatepicker.orange .xn-bottom > a, .xndatepicker.orange .xn-bottom > a.confirm-date,.xndatepicker.orange .timepicker {
+.xndatepicker.orange .date-main, .xndatepicker.orange .year-picker, .xndatepicker.orange .xn-bottom, .xndatepicker.orange .xn-bottom > a, .xndatepicker.orange .xn-bottom > a.confirm-date,.xndatepicker.orange .xntriangle,.xndatepicker.orange .date-item {
     border-color: #F44336;
 }
 
