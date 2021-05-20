@@ -1468,3 +1468,7 @@ import './iconfont/iconfont.css';
     }
     window.XNDatepicker = XNDatepicker;
 })(window,XNQuery)
+
+export default {
+    "XNDatepicker":window.XNDatepicker
+}
