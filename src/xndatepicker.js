@@ -1457,9 +1457,9 @@ import './iconfont/iconfont.css';
             this.$container.find('.' + type + '-item[data-date="' + date + '"]').addClass('is-today');
         },
         destroy: function () {
-            this.$container.remove();
             this.removeMoveEvent();
             this.removeClickEvent();
+            this.$container && (this.$container.remove());
 
         },
         format(date,format){
