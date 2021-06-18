@@ -1,6 +1,6 @@
 //! xndatepicker.js
 //! 仙女座日期选择器
-//! version : 1.2.5
+//! version : 1.2.6
 //! authors : 范媛媛
 //! create date:2021/01/01
 //! update date:2021/01/05 V1.0.0
@@ -10,6 +10,7 @@
 //! update date:2021/02/04 V1.2.2 修复bug
 //! update date:2021/03/11 V1.2.3 修复bug
 //! update date:2021/03/26 V1.2.5 增加主题
+//! update date:2021/06/18 V1.2.6 修改bug，起始日期和结束日期一样不能确定
 // https://github.com/fanaiai/xndatepicker
 import './xnquery';
 import './xntimepicker.js';
@@ -542,7 +543,7 @@ import './iconfont/iconfont.css';
                 }
                 date[i] = dayjs(day + time, 'YYYY-MM-DD HH:mm:ss');
                 this.$container.find(".time" + (i + 1) + ">input").val(day);
-                if (this.$container.find(".circle-date")[0] == ele) {
+                if (this.$container.find(".circle-date").get(0) == ele) {
                     var j = 1;
                     date[j] = dayjs(day + time, 'YYYY-MM-DD HH:mm:ss');
                     this.$container.find(".time" + (j + 1) + ">input").val(day);
