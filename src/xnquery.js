@@ -348,7 +348,8 @@
         },
         remove() {
             this.el.forEach((e) => {
-                e.parentNode.removeChild(e)
+                if(e.parentNode){
+                e.parentNode.removeChild(e)}
             })
 
         },
