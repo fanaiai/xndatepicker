@@ -463,3 +463,4 @@
     XNQuery.extend = XNQuery.prototype.extend;
     window.XNQuery = XNQuery;
 })(window)
+export default window.XNQuery;

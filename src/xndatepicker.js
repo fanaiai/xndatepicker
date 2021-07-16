@@ -14,13 +14,21 @@
 // https://github.com/fanaiai/xndatepicker
 import './xnquery';
 import './xntimepicker.js';
-import dayjs from 'dayjs';
-import isSameOrBefore from 'dayjs/plugin/isSameOrBefore';
-import isSameOrAfter from 'dayjs/plugin/isSameOrAfter'
-import isoWeeksInYear from 'dayjs/plugin/isoWeeksInYear'
-import WeekOfYear from 'dayjs/plugin/WeekOfYear'
-import isLeapYear from 'dayjs/plugin/isLeapYear'
-import advancedFormat from 'dayjs/plugin/advancedFormat'
+// import dayjs from 'dayjs';
+// import isSameOrBefore from 'dayjs/plugin/isSameOrBefore';
+// import isSameOrAfter from 'dayjs/plugin/isSameOrAfter'
+// import isoWeeksInYear from 'dayjs/plugin/isoWeeksInYear'
+// import WeekOfYear from 'dayjs/plugin/WeekOfYear'
+// import isLeapYear from 'dayjs/plugin/isLeapYear'
+// import advancedFormat from 'dayjs/plugin/advancedFormat'
+
+import dayjs from './dayjs/esm/index.js';
+import isSameOrBefore from './dayjs/esm/plugin/isSameOrBefore';
+import isSameOrAfter from './dayjs/esm/plugin/isSameOrAfter'
+import isoWeeksInYear from './dayjs/esm/plugin/isoWeeksInYear'
+import WeekOfYear from './dayjs/esm/plugin/WeekOfYear'
+import isLeapYear from './dayjs/esm/plugin/isLeapYear'
+import advancedFormat from './dayjs/esm/plugin/advancedFormat'
 dayjs.extend(isSameOrBefore)
 dayjs.extend(isoWeeksInYear)
 dayjs.extend(isSameOrAfter)
@@ -1470,6 +1478,4 @@ import './iconfont/iconfont.css';
     window.XNDatepicker = XNDatepicker;
 })(window,XNQuery)
 
-export default {
-    "XNDatepicker":window.XNDatepicker
-}
+export default window.XNDatepicker

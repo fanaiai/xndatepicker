@@ -4,7 +4,7 @@
 //! create date:2021/01/01
 //! update date:2021/01/05
 import './xnquery.js';
-import dayjs from 'dayjs';
+import dayjs from './dayjs/esm/index.js';
 (function (window, $) {
     var option = {
 
@@ -236,3 +236,4 @@ import dayjs from 'dayjs';
     }
     window.XNTimepicker = XNTimepicker;
 })(window, XNQuery)
+export default window.XNTimepicker
