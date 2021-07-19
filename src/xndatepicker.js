@@ -29,6 +29,7 @@ import isoWeeksInYear from './dayjs/esm/plugin/isoWeeksInYear'
 import WeekOfYear from './dayjs/esm/plugin/WeekOfYear'
 import isLeapYear from './dayjs/esm/plugin/isLeapYear'
 import advancedFormat from './dayjs/esm/plugin/advancedFormat'
+
 dayjs.extend(isSameOrBefore)
 dayjs.extend(isoWeeksInYear)
 dayjs.extend(isSameOrAfter)
@@ -37,6 +38,7 @@ dayjs.extend(WeekOfYear)
 dayjs.extend(advancedFormat)
 import './xndatepicker.css';
 import './iconfont/iconfont.css';
+
 (function (window, $) {
     var format = {
         'week': 'YYYY-MM-DD',
@@ -56,13 +58,15 @@ import './iconfont/iconfont.css';
         'multiple': [],
         'week': [
             {"name": "最近一周", "value": {startTime: dayjs().startOf('week'), endTime: dayjs().endOf('week')}},
-            {"name": "本月第一周",
+            {
+                "name": "本月第一周",
                 "value": {
                     startTime: dayjs().startOf('month').startOf('week'),
                     endTime: dayjs().startOf('month').endOf('week')
                 }
             },
-            {"name": "本年第一周",
+            {
+                "name": "本年第一周",
                 "value": {
                     startTime: dayjs().startOf('year').startOf('week'),
                     endTime: dayjs().startOf('year').endOf('week')
@@ -136,15 +140,27 @@ import './iconfont/iconfont.css';
         ],
         'weeknumrange': [
             {"name": "当前周", "value": {startTime: dayjs().startOf('week'), endTime: dayjs().startOf('week')}},
-            {"name": "最近两周", "value": {startTime: dayjs().subtract(2, 'weeks').startOf('week'), endTime: dayjs().startOf('week')}},
-            {"name": "最近三周", "value": {startTime: dayjs().subtract(3, 'weeks').startOf('week'), endTime: dayjs().startOf('week')}},
-            {"name": "最近五周", "value": {startTime: dayjs().subtract(5, 'weeks').startOf('week'), endTime: dayjs().startOf('week')}},
-            {"name": "最近十周", "value": {startTime: dayjs().subtract(10, 'weeks').startOf('week'), endTime: dayjs().startOf('week')}},
+            {
+                "name": "最近两周",
+                "value": {startTime: dayjs().subtract(2, 'weeks').startOf('week'), endTime: dayjs().startOf('week')}
+            },
+            {
+                "name": "最近三周",
+                "value": {startTime: dayjs().subtract(3, 'weeks').startOf('week'), endTime: dayjs().startOf('week')}
+            },
+            {
+                "name": "最近五周",
+                "value": {startTime: dayjs().subtract(5, 'weeks').startOf('week'), endTime: dayjs().startOf('week')}
+            },
+            {
+                "name": "最近十周",
+                "value": {startTime: dayjs().subtract(10, 'weeks').startOf('week'), endTime: dayjs().startOf('week')}
+            },
         ]
     }
     var option = {
         showWeek: true,//是否显示周几
-        placeholder: '请选择',
+        placeholder: '请选择',//{start:'',end:''}
         shortList: [],
         locale: {
             month: [
@@ -178,11 +194,11 @@ import './iconfont/iconfont.css';
             week: ['日', '一', '二', '三', '四', '五', '六'],
             clear: '清空',
             confirm: '确定',
-            yearHeadSuffix: function(year){
-                return year+'年'
+            yearHeadSuffix: function (year) {
+                return year + '年'
             },
-            weekNum:function(weeknum){
-                return '第'+weeknum+'周'
+            weekNum: function (weeknum) {
+                return '第' + weeknum + '周'
             }
         },//显示信息
         confirmFirst: true,//第一次就搜索
@@ -200,22 +216,36 @@ import './iconfont/iconfont.css';
         endTime: '',//初始结束时间
         minDate: '',//最小时间
         maxDate: '',//最大时间
-        disableDate: function (date,dayjs) {
+        disableDate: function (date, dayjs) {
             return false;//date为当前日期,如果当前日期为不可选日期，返回true
         }//不可选择日期
     }
 
     function XNDatepicker(targetDom, options, onConfirm) {
         this.$targetDom = $(targetDom);
-        this.option = $.extend(true,{}, option, options);
+        this.option = $.extend(true, {}, option, options);
         this.type = this.option.type;
         this.format = this.type.indexOf('year') > -1 ? 'YYYY' : (this.type.indexOf('month') > -1 ? 'YYYY-MM' : (this.type.indexOf('time') > -1 ? 'YYYY-MM-DD' : 'YYYY-MM-DD'));
+        if (typeof this.option.placeholder == 'string') {
+            this.placeholder = {
+                start: this.option.placeholder,
+                end: this.option.placeholder
+            }
+        }
+        if (typeof this.option.placeholder == 'object') {
+            this.placeholder = {
+                start: this.option.placeholder.start,
+                end: this.option.placeholder.end
+            }
+        }
         this.option.startTime && (this.option.startTime = dayjs(this.option.startTime));
         this.option.endTime && (this.option.endTime = dayjs(this.option.endTime));
 
         this.option.minDate && (this.option.minDate = dayjs(this.option.minDate));
         this.option.maxDate && (this.option.maxDate = dayjs(this.option.maxDate));
-        this.disableDate = this.option.disableDate||function(date,dayjs,calcType){return false};
+        this.disableDate = this.option.disableDate || function (date, dayjs, calcType) {
+            return false
+        };
         this.onConfirm = onConfirm;
         this.selectedDate = {};//已确认的时间
         this.date1 = this.option.startTime ? (this.option.startTime.clone()) : dayjs();//当前选择的起始时间
@@ -244,7 +274,7 @@ import './iconfont/iconfont.css';
             this.initCallback();
             this.confirm(false, true);
         },
-        rendPicker(){
+        rendPicker() {
             this.setCurrentTime({startTime: this.selectedDate[0], endTime: this.selectedDate[1]})
             this.rendDatePicker();
             this.setPosition();
@@ -338,21 +368,23 @@ import './iconfont/iconfont.css';
         },
         changeShowStatus(hide) {
             if (this.show || hide) {
-                if(this.$container){
-                this.$container.fadeOut(100,()=>{
-                    if(this.$container){
-                    this.$container.remove();
-                    this.$container=null
-                    }
-                });}
-                this.show=false;
+                if (this.$container) {
+                    this.$container.fadeOut(100, () => {
+                        if (this.$container) {
+                            this.$container.remove();
+                            this.$container = null
+                        }
+                    });
+                }
+                this.show = false;
             } else {
-                if(!this.$container){
-                this.rendPicker();}
+                if (!this.$container) {
+                    this.rendPicker();
+                }
                 this.$container.css({display: 'block', opacity: '0'})
                 this.resetCurrentTime();
                 this.$container.fadeIn(200);
-                this.show=true;
+                this.show = true;
             }
             // this.show = !this.show;
         },
@@ -427,7 +459,7 @@ import './iconfont/iconfont.css';
             if (this.type.indexOf('month') > -1 || this.type.indexOf('year') > -1 || this.type.indexOf('week') > -1) {
                 format = 'YYYY'
             }
-            if (this.type=='week') {
+            if (this.type == 'week') {
                 if ($t) {
                     var date = $t.attr('data-date');
                     var date1 = dayjs(date).subtract((parseInt(this.option.firstDayOfWeek)) % 7, 'days').startOf('week').add((parseInt(this.option.firstDayOfWeek)) % 7, 'days').format('YYYY-MM-DD')
@@ -578,7 +610,7 @@ import './iconfont/iconfont.css';
             var datenum = otherdatenum == 1 ? 2 : 1;
 
             if (otherdatenum < datenum) {
-                if (this.type.indexOf('date') > -1 || this.type=='week') {
+                if (this.type.indexOf('date') > -1 || this.type == 'week') {
                     if ((dayjs(this['tempdate' + otherdatenum].format('YYYY-MM')).isSameOrAfter(this['tempdate' + datenum].format('YYYY-MM'))) || this.option.linkPanels) {
                         this['tempdate' + datenum] = this['tempdate' + otherdatenum].clone().add(1, 'months');
                         this.geneDateList(this["tempdate" + datenum], this.$container.find(".dater" + datenum));
@@ -608,7 +640,7 @@ import './iconfont/iconfont.css';
                     this.rendYears(datenum)
                 }
             } else {
-                if ((this.type.indexOf('date') > -1 || this.type=='week')) {
+                if ((this.type.indexOf('date') > -1 || this.type == 'week')) {
                     if ((dayjs(this['tempdate' + otherdatenum].format('YYYY-MM')).isSameOrBefore(this['tempdate' + datenum].format('YYYY-MM'))) || this.option.linkPanels) {
                         this['tempdate' + datenum] = this['tempdate' + otherdatenum].clone().subtract(1, 'months');
                         this.geneDateList(this["tempdate" + datenum], this.$container.find(".dater" + datenum));
@@ -642,7 +674,7 @@ import './iconfont/iconfont.css';
         addEvent() {
             var mouseMoveFunc = (e) => {
                 var $t = $(e.target);
-                if(!this.$container){
+                if (!this.$container) {
                     return;
                 }
                 if ($t.parents('.xndatepicker').get(0) == this.$container.get(0)) {
@@ -712,13 +744,13 @@ import './iconfont/iconfont.css';
                     this.rendOtherDateList(datenum);
                 }
 
-                if ((this.type.indexOf('date') > -1 && $t.hasClass("active-day")) || ($t.hasClass("day-item") && this.type=='week')) {
+                if ((this.type.indexOf('date') > -1 && $t.hasClass("active-day")) || ($t.hasClass("day-item") && this.type == 'week')) {
 
-                        this["date" + datenum] = this["tempdate" + datenum].date($t.html()).clone();
+                    this["date" + datenum] = this["tempdate" + datenum].date($t.html()).clone();
 
                     this.setCurClass($t)
                     this.setDate();
-                    if ((this.type.indexOf('date') > -1 || this.type=='week') && $t.hasClass('day-item')) {
+                    if ((this.type.indexOf('date') > -1 || this.type == 'week') && $t.hasClass('day-item')) {
                         this.autoConfirm($t);
                     }
                 }
@@ -754,12 +786,11 @@ import './iconfont/iconfont.css';
                         this.setCurClass($t)
                         this.setDate();
                         this.autoConfirm($t);
-                    } else if(this.type.indexOf('weeknum') > -1){
+                    } else if (this.type.indexOf('weeknum') > -1) {
                         this["tempdate" + datenum] = this["tempdate" + datenum].year($t.html())
                         this.rendWeekNum(datenum)
                         this.rendOtherDateList(datenum);
-                    }
-                    else {
+                    } else {
                         this["tempdate" + datenum] = this["tempdate" + datenum].year($t.html())
                         this.rendMonth(datenum)
                         this.rendOtherDateList(datenum);
@@ -789,11 +820,10 @@ import './iconfont/iconfont.css';
                 }
                 if ($t.get(0).nodeName == 'LI' && $t.parents('.shortcut').get(0)) {
                     var index = $t.parent().find("LI").index($t.get(0));
-                    if(this.type=='multiple'){
-                        var startTime=Array.isArray(this.option.shortList[index].value.startTime)?this.option.shortList[index].value.startTime:[this.option.shortList[index].value.startTime]
+                    if (this.type == 'multiple') {
+                        var startTime = Array.isArray(this.option.shortList[index].value.startTime) ? this.option.shortList[index].value.startTime : [this.option.shortList[index].value.startTime]
                         this.multipleDates = startTime;
-                    }
-                    else{
+                    } else {
                         this.setCurrentTime(this.option.shortList[index].value);
                     }
                     this.setCurrentDay();
@@ -809,14 +839,14 @@ import './iconfont/iconfont.css';
             if (!this.option.autoConfirm) {
                 return;
             }
-            if ((this.type.indexOf('range') < 0 && this.type.indexOf('time') < 0) || this.type=='week') {
+            if ((this.type.indexOf('range') < 0 && this.type.indexOf('time') < 0) || this.type == 'week') {
                 this.confirm();
             } else if (this.type.indexOf('range') > -1 && this.date2 && this.date1 && this.type.indexOf('time') < 0) {
                 this.confirm();
             }
         },
         setCurClass($t) {
-            if (this.type=='week') {
+            if (this.type == 'week') {
                 var date = $t.attr('data-date');
                 var date1 = dayjs(date).clone().subtract((parseInt(this.option.firstDayOfWeek)) % 7, 'days').startOf('week').add((parseInt(this.option.firstDayOfWeek)) % 7, 'days').format('YYYY-MM-DD')
                 // var date1 = dayjs(date).clone().startOf('week').format('YYYY-MM-DD')
@@ -848,7 +878,7 @@ import './iconfont/iconfont.css';
                 $t.addClass("cur-date");
             }
         },
-        correctDate(date1){
+        correctDate(date1) {
             //修正当前时间与最大最小值
             if (date1.startTime && (this.option.maxDate && dayjs(date1.startTime).isAfter(this.option.maxDate))) {
                 date1.startTime = dayjs(this.option.maxDate).clone()
@@ -868,7 +898,7 @@ import './iconfont/iconfont.css';
             var date1 = $.extend(true, {}, date2);
             date1.startTime = date2.startTime ? date2.startTime.clone() : dayjs();
             date1.endTime = date2.endTime ? date2.endTime.clone() : dayjs();
-            date1=this.correctDate(date1);
+            date1 = this.correctDate(date1);
 
             var date = $.extend(true, {}, date1);
             date1.startTime && (date.startTime = date1.startTime.clone());
@@ -949,8 +979,7 @@ import './iconfont/iconfont.css';
             } else if (this.type.indexOf('weeknum') > -1) {
                 this.rendWeekNum(1)
                 this.rendWeekNum(2)
-            }
-            else {
+            } else {
                 this.geneDateList(this.tempdate1, this.$container.find(".dater1"));
                 this.geneDateList(this.tempdate2, this.$container.find(".dater2"));
             }
@@ -999,17 +1028,17 @@ import './iconfont/iconfont.css';
             if (this.type == 'multiple') {
                 if (clear) {
                     if ((isFirst && this.option.confirmFirst) || !isFirst) {
-                        this.trigger("confirm", {startTime: this.selectedMultiple,dayjs:dayjs})
+                        this.trigger("confirm", {startTime: this.selectedMultiple, dayjs: dayjs})
                     }
                     var showstr = ''
                     canconfirm = true;
                 } else {
-                    this.multipleDates=this.multipleDates.map((e)=>{
+                    this.multipleDates = this.multipleDates.map((e) => {
                         return dayjs(e).format(this.option.format)
                     })
                     this.selectedMultiple = this.multipleDates;
                     if ((isFirst && this.option.confirmFirst) || !isFirst) {
-                        this.trigger("confirm", {startTime: this.selectedMultiple,dayjs:dayjs})
+                        this.trigger("confirm", {startTime: this.selectedMultiple, dayjs: dayjs})
                     }
                     var showstr = this.multipleDates.join(',')
                     canconfirm = true;
@@ -1017,21 +1046,21 @@ import './iconfont/iconfont.css';
             } else {
                 var startTime, endTime;
                 if (isFirst) {
-                    var date1=this.correctDate(this.option);
-                    startTime = date1.startTime ? dayjs(date1.startTime): '';
+                    var date1 = this.correctDate(this.option);
+                    startTime = date1.startTime ? dayjs(date1.startTime) : '';
                     endTime = date1.endTime ? dayjs(date1.endTime) : '';
-                    if ((this.type.indexOf('range') > -1) || this.type=='week') {
+                    if ((this.type.indexOf('range') > -1) || this.type == 'week') {
                         if (this.option.confirmFirst) {
-                            this.trigger("confirm", {startTime: startTime, endTime: endTime,dayjs:dayjs})
+                            this.trigger("confirm", {startTime: startTime, endTime: endTime, dayjs: dayjs})
                         }
-                        var showstr = (startTime?startTime.format(this.option.format):this.option.placeholder) + this.option.separator + (endTime?endTime.format(this.option.format):this.option.placeholder) ;
+                        var showstr = (startTime ? startTime.format(this.option.format) : this.placeholder.start) + this.option.separator + (endTime ? endTime.format(this.option.format) : this.placeholder.end);
                     } else if (this.type.indexOf('range') < 0) {
                         if (this.option.confirmFirst) {
-                            this.trigger("confirm", {startTime: startTime,dayjs:dayjs})
+                            this.trigger("confirm", {startTime: startTime, dayjs: dayjs})
                         }
-                        var showstr = (startTime?startTime.format(this.option.format):this.option.placeholder);
+                        var showstr = (startTime ? startTime.format(this.option.format) : this.placeholder.start);
                     }
-                    canconfirm=true;
+                    canconfirm = true;
                 } else {
                     this.date1 && (this.selectedDate[0] = this.date1.clone());
                     this.date2 && (this.selectedDate[1] = this.date2.clone());
@@ -1042,9 +1071,13 @@ import './iconfont/iconfont.css';
                         var showstr = ''
                         canconfirm = true;
                     }
-                    if ((this.type.indexOf('range') > -1 && this.date2) || this.type=='week') {
+                    if ((this.type.indexOf('range') > -1 && this.date2) || this.type == 'week') {
                         if ((isFirst && this.option.confirmFirst) || !isFirst) {
-                            this.trigger("confirm", {startTime: this.selectedDate[0], endTime: this.selectedDate[1],dayjs:dayjs})
+                            this.trigger("confirm", {
+                                startTime: this.selectedDate[0],
+                                endTime: this.selectedDate[1],
+                                dayjs: dayjs
+                            })
                         }
                         try {
                             var showstr = (this.selectedDate[0].format(this.option.format) + this.option.separator + this.selectedDate[1].format(this.option.format))
@@ -1054,7 +1087,7 @@ import './iconfont/iconfont.css';
                         canconfirm = true;
                     } else if (this.type.indexOf('range') < 0 && this.date1) {
                         if ((isFirst && this.option.confirmFirst) || !isFirst) {
-                            this.trigger("confirm", {startTime: this.selectedDate[0],dayjs:dayjs})
+                            this.trigger("confirm", {startTime: this.selectedDate[0], dayjs: dayjs})
                         }
                         try {
                             var showstr = this.selectedDate[0].format(this.option.format);
@@ -1078,7 +1111,7 @@ import './iconfont/iconfont.css';
                 this.$targetDom.get(0).innerHTML = showstr;
             }
             this.$targetDom.addClass('iconfont-xndatepicker icon-xndatepickerrili xndatepicker-input')
-            this.$targetDom.attr('data-placeholder', this.option.placeholder)
+            this.$targetDom.attr('data-placeholder', this.placeholder.start)
         },
         rendWeekNum(datenum) {
             if (!this.$container.find('.dater' + datenum).get(0)) {
@@ -1107,18 +1140,17 @@ import './iconfont/iconfont.css';
             var curYear = dayjs(this['tempdate' + datenum]).format('YYYY');
             this.$container.find(".dater" + datenum + " .month-info").get(0).innerHTML = curYear;
             var html = '';
-            var weeknums=dayjs((curYear + '/01/01')).isoWeeksInYear();
+            var weeknums = dayjs((curYear + '/01/01')).isoWeeksInYear();
             for (let i = 0; i < weeknums; i++) {
-                let date=dayjs(curYear+'01/01').week(i+1).startOf('week');
-                if(date.format('YYYY')!=curYear){
-                    date=dayjs(curYear+'01/01').format('YYYY-MM-DD')
+                let date = dayjs(curYear + '01/01').week(i + 1).startOf('week');
+                if (date.format('YYYY') != curYear) {
+                    date = dayjs(curYear + '01/01').format('YYYY-MM-DD')
+                } else {
+                    date = date.format('YYYY-MM-DD')
                 }
-                else{
-                    date=date.format('YYYY-MM-DD')
-                }
-                let disable = (!(((this.option.minDate && dayjs(this.option.minDate).startOf('week').isSameOrBefore(date)) || !this.option.minDate) && ((this.option.maxDate && dayjs(this.option.maxDate).endOf('week').isSameOrAfter(dayjs(date).endOf('week'))) || !this.option.maxDate))) || this.disableDate(date,dayjs,'weeknum')
+                let disable = (!(((this.option.minDate && dayjs(this.option.minDate).startOf('week').isSameOrBefore(date)) || !this.option.minDate) && ((this.option.maxDate && dayjs(this.option.maxDate).endOf('week').isSameOrAfter(dayjs(date).endOf('week'))) || !this.option.maxDate))) || this.disableDate(date, dayjs, 'weeknum')
                 // let disable=
-                html += `<span class="week-item ${disable ? 'disable-week' : 'active-day'}" data-date="${date}">` + this.option.locale.weekNum(i+1) + "</span>";
+                html += `<span class="week-item ${disable ? 'disable-week' : 'active-day'}" data-date="${date}">` + this.option.locale.weekNum(i + 1) + "</span>";
             }
             return html;
         },
@@ -1150,7 +1182,7 @@ import './iconfont/iconfont.css';
             this.$container.find(".dater" + datenum + " .month-info").get(0).innerHTML = curYear;
             var html = ''
             for (let i = 0; i < 12; i++) {
-                let disable = (!(((this.option.minDate && dayjs(this.option.minDate).startOf('month').isSameOrBefore((curYear + '/' + (i + 1) + '/01'))) || !this.option.minDate) && ((this.option.maxDate && dayjs(this.option.maxDate).startOf('month').isSameOrAfter((curYear + '/' + (i + 1) + '/01'))) || !this.option.maxDate))) || this.disableDate(dayjs(curYear + '/' + (i + 1), 'YYYY/MM'),dayjs,'month')
+                let disable = (!(((this.option.minDate && dayjs(this.option.minDate).startOf('month').isSameOrBefore((curYear + '/' + (i + 1) + '/01'))) || !this.option.minDate) && ((this.option.maxDate && dayjs(this.option.maxDate).startOf('month').isSameOrAfter((curYear + '/' + (i + 1) + '/01'))) || !this.option.maxDate))) || this.disableDate(dayjs(curYear + '/' + (i + 1), 'YYYY/MM'), dayjs, 'month')
                 html += `<span class="month-item ${disable ? 'disable-month' : 'active-day'}" data-date="${dayjs(curYear + '/' + (i + 1), 'YYYY/MM').format('YYYY-MM')}">` + this.option.locale.month[i] + "</span>";
             }
             return html;
@@ -1184,7 +1216,7 @@ import './iconfont/iconfont.css';
             this.$container.find(".dater" + datenum + " .year-info").html(curYear + '-' + (parseInt(curYear) + 11));
             var html = ''
             for (let i = 0; i < 12; i++) {
-                let disable = (!(((this.option.minDate && dayjs(this.option.minDate).startOf('year').isSameOrBefore(((parseInt(curYear) + i) + '/01/01'))) || !this.option.minDate) && ((this.option.maxDate && dayjs(this.option.maxDate).startOf('year').isSameOrAfter(((parseInt(curYear) + i) + '/01/01'))) || !this.option.maxDate))) || this.disableDate(dayjs((parseInt(curYear) + i) + '/01/01'),dayjs,'year')
+                let disable = (!(((this.option.minDate && dayjs(this.option.minDate).startOf('year').isSameOrBefore(((parseInt(curYear) + i) + '/01/01'))) || !this.option.minDate) && ((this.option.maxDate && dayjs(this.option.maxDate).startOf('year').isSameOrAfter(((parseInt(curYear) + i) + '/01/01'))) || !this.option.maxDate))) || this.disableDate(dayjs((parseInt(curYear) + i) + '/01/01'), dayjs, 'year')
                 html += `<span class="year-item ${disable ? 'disable-year' : 'active-day'}" data-date="${(parseInt(curYear) + i)}">` + (parseInt(curYear) + i) + "</span>";
             }
             return html;
@@ -1214,9 +1246,9 @@ import './iconfont/iconfont.css';
             return html;
         },
         rendDatePicker() {
-            var div=document.createElement("div")
-            div.classList.add("xndatepicker",this.type,this.option.theme)
-            div.id=this.id;
+            var div = document.createElement("div")
+            div.classList.add("xndatepicker", this.type, this.option.theme)
+            div.id = this.id;
             var html = `
         <div class="xn-top">
             <div class="shortcut">
@@ -1253,9 +1285,9 @@ import './iconfont/iconfont.css';
             <a class="xn-btn confirm-date">${this.option.locale.confirm}</a>
         </div>
         <div class="xntriangle"></div>`
-            div.innerHTML=html;
+            div.innerHTML = html;
             document.body.appendChild(div)
-            this.$container=$("#"+this.id)
+            this.$container = $("#" + this.id)
             // this.changeShowStatus(true)
             this.setCurrentDay();
             this.geneShortList();
@@ -1307,7 +1339,7 @@ import './iconfont/iconfont.css';
                 ldates.push({day: l_days - i});
             }
             for (let i = 0; i < m_days; i++) {
-                let disable = this.checkDisable(dayjs(ynow + '/' + mnow + '/' + (i + 1), 'YYYY/MM/DD'), 0, this.type, 'date') || this.disableDate(dayjs(ynow + '/' + mnow + '/' + (i + 1), 'YYYY/MM/DD'),dayjs,'date')
+                let disable = this.checkDisable(dayjs(ynow + '/' + mnow + '/' + (i + 1), 'YYYY/MM/DD'), 0, this.type, 'date') || this.disableDate(dayjs(ynow + '/' + mnow + '/' + (i + 1), 'YYYY/MM/DD'), dayjs, 'date')
                 ldates.push({
                     iscur: true,
                     disable: disable,
@@ -1322,12 +1354,11 @@ import './iconfont/iconfont.css';
             this._rendYearHtml(date, $cont);
             if (this.type == 'multiple') {
                 for (let i = 0; i < this.multipleDates.length; i++) {
-                    let date=this.multipleDates[i];
-                    if(typeof  date=='object'){
-                        date=date.format('YYYY-MM-DD')
-                    }
-                    else{
-                        date=dayjs(date).format('YYYY-MM-DD')
+                    let date = this.multipleDates[i];
+                    if (typeof date == 'object') {
+                        date = date.format('YYYY-MM-DD')
+                    } else {
+                        date = dayjs(date).format('YYYY-MM-DD')
                     }
                     this.$container.find('span[data-date="' + date + '"]').addClass('cur-date');
                 }
@@ -1409,8 +1440,8 @@ import './iconfont/iconfont.css';
         trigger(type, data) {
             if (this.eventList[type]) {
                 for (let i = 0; i < this.eventList[type].func.length; i++) {
-                    if(typeof this.eventList[type].func[i]=='function')
-                    this.eventList[type].func[i](data);
+                    if (typeof this.eventList[type].func[i] == 'function')
+                        this.eventList[type].func[i](data);
                 }
             }
         },
@@ -1471,11 +1502,11 @@ import './iconfont/iconfont.css';
             this.$container && (this.$container.remove());
 
         },
-        format(date,format){
+        format(date, format) {
             return dayjs(date).format(format);
         }
     }
     window.XNDatepicker = XNDatepicker;
-})(window,XNQuery)
+})(window, XNQuery)
 
 export default window.XNDatepicker
