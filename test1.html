@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="./src/xndatepickermobile.css">
+</head>
+<body>
+<div class="xndatepicker-mobile">
+    <div class="scroll-container">
+        <div class="year-container">
+            <ul>
+                <li> </li>
+                <li> </li>
+                <li>1998</li>
+                <li>1998</li>
+                <li>1998</li>
+                <li>1998</li>
+                <li>1998</li>
+                <li>1998</li>
+                <li>1998</li>
+                <li>1998</li>
+                <li>1998</li>
+                <li>1998</li>
+                <li>1998</li>
+                <li>1998</li>
+                <li>1998</li>
+                <li>1998</li>
+                <li>1998</li>
+                <li>1998</li>
+                <li>1998</li>
+                <li>1998</li>
+                <li>1998</li>
+                <li>1998</li>
+                <li> </li>
+                <li> </li>
+            </ul>
+            <div class="current-bg"></div>
+        </div>
+        <div class="month-container">
+            <ul>
+                <li> </li>
+                <li> </li>
+                <li>1月</li>
+                <li>2月</li>
+                <li>3月</li>
+                <li>4月</li>
+                <li>5月</li>
+                <li>6月</li>
+                <li>7月</li>
+                <li>8月</li>
+                <li>9月</li>
+                <li>10月</li>
+                <li>11月</li>
+                <li>12月</li>
+                <li> </li>
+                <li> </li>
+            </ul>
+            <div class="current-bg"></div>
+        </div>
+        <div class="date-container">
+            <ul>
+                <li> </li>
+                <li> </li>
+                <li>01</li>
+                <li>02</li>
+                <li>03</li>
+                <li>03</li>
+                <li>03</li>
+                <li>03</li>
+                <li>03</li>
+                <li>03</li>
+                <li>03</li>
+                <li>03</li>
+                <li>03</li>
+                <li>03</li>
+                <li>03</li>
+                <li>03</li>
+                <li>03</li>
+                <li>03</li>
+                <li>03</li>
+                <li>03</li>
+                <li>03</li>
+                <li>03</li>
+                <li> </li>
+                <li> </li>
+            </ul>
+            <div class="current-bg"></div>
+        </div>
+    </div>
+</div>
+</body>
+<script src="./src/iscroll.js"></script>
+<script type="module">
+
+    import XNDatepickerMobile from "./src/xndatepickermobile.js";
+    //
+    var mobiledate = new XNDatepickerMobile(document.querySelector("#mobile-date"), {
+        // format:'YYYY-MM-DD',
+        type: 'date',//year/month/date/multiple/ week/datetime/datetimerange/ daterange/monthrange/yearrange
+        multipleDates: [],//当为多选日期类型时的初始值
+        startTime: '2021-01-24',
+        // endTime:'2036-04-04',
+        // minDate:'2019-04-04',
+        placeholder: {start: '起始周', end: '结束周'},
+        maxDate: '',
+        separator: ' 到 ',
+        showType: 'modal',
+        linkPanels: false,//面板联动
+        showClear: false,//是否显示清除按钮
+        autoConfirm: true,
+        showShortKeys: true,
+        autoFillDate: true,//自动变更element里面的值
+    }, function (data) {
+        console.log(data.startTime.format('YYYY-MM-DD'))
+    })
+</script>
+</html>

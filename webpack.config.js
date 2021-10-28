@@ -2,7 +2,7 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
-
+const CopyWebpackPlugin = require('copy-webpack-plugin')
 module.exports = {
     mode:'development',
     entry: {
@@ -10,8 +10,8 @@ module.exports = {
             import:'./src/xndatepicker.js',
         }
     },
-    // devtool:'eval-source-map',//追踪错误源码
-    devtool:'source-map',//不追踪错误源码
+    devtool:'eval-source-map',//追踪错误源码
+    // devtool:'source-map',//不追踪错误源码
     devServer: {
         contentBase: './dist',
     },
@@ -21,7 +21,18 @@ module.exports = {
             template: './index.html',
             // template: './test.html',
         }),
-        new UglifyJsPlugin()
+        new UglifyJsPlugin(),
+        // new CopyWebpackPlugin({//文件拷贝
+        //     patterns: [
+        //         {
+        //             from: 'src',
+        //             globOptions: {
+        //                 // ignore:['**/index.html'],//设置忽略,**代表from
+        //             },
+        //             to: 'public'
+        //         }
+        //     ]
+        // })
     ],
     output: {
         filename: '[name].min.js',

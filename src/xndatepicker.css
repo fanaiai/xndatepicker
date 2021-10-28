@@ -517,7 +517,7 @@ table {
     border-bottom: 1px solid #11345b;
 }
 
-.xndatepicker.blue .date-main, .xndatepicker.blue .year-picker, .xndatepicker.blue .xn-bottom, .xndatepicker.blue .xn-bottom > a, .xndatepicker.blue .xn-bottom > a.confirm-date,.xndatepicker.blue .xntriangle,.xndatepicker.blue .date-item {
+.xndatepicker.blue .date-main, .xndatepicker.blue .year-picker, .xndatepicker.blue .xn-bottom, .xndatepicker.blue .xn-bottom > a, .xndatepicker.blue .xn-bottom > a.confirm-date, .xndatepicker.blue .xntriangle, .xndatepicker.blue .date-item {
     border-color: #11345b;
 }
 
@@ -544,6 +544,7 @@ table {
     background: rgb(5 51 103);
     color: #7daeff;
 }
+
 .xndatepicker.blue .cur-date, .xndatepicker.blue .hover.cur-date, .xndatepicker.blue .dater > span.cur-date.hover {
     background: #2264d1;
     color: #fff;
@@ -553,7 +554,7 @@ table {
 .xndatepicker.orange, .xndatepicker.orange .xntimepicker {
     background: #D32F2F;
     color: #fff;
-    border-color:#F44336;
+    border-color: #F44336;
 }
 
 .xndatepicker.orange .xntriangle {
@@ -565,7 +566,7 @@ table {
     border-bottom: 1px solid #F44336;
 }
 
-.xndatepicker.orange .date-main, .xndatepicker.orange .year-picker, .xndatepicker.orange .xn-bottom, .xndatepicker.orange .xn-bottom > a, .xndatepicker.orange .xn-bottom > a.confirm-date,.xndatepicker.orange .xntriangle,.xndatepicker.orange .date-item {
+.xndatepicker.orange .date-main, .xndatepicker.orange .year-picker, .xndatepicker.orange .xn-bottom, .xndatepicker.orange .xn-bottom > a, .xndatepicker.orange .xn-bottom > a.confirm-date, .xndatepicker.orange .xntriangle, .xndatepicker.orange .date-item {
     border-color: #F44336;
 }
 
@@ -589,28 +590,62 @@ table {
 .xndatepicker.orange .month-item.hover,
 .xndatepicker.orange .year-item.hover,
 .xndatepicker.orange .week-item.hover {
-    background:#ff5300;
+    background: #ff5300;
     color: #FFCDD2;
 }
+
 .xndatepicker.orange .cur-date, .xndatepicker.orange .hover.cur-date, .xndatepicker.orange .dater > span.cur-date.hover {
     background: #ff5300;
     color: #fff;
 }
-.xndatepicker.orange .dater > span.active-day:hover{
+
+.xndatepicker.orange .dater > span.active-day:hover {
     background: #ff5300;
 }
-.xndatepicker.orange .xn-bottom > a.confirm-date{
+
+.xndatepicker.orange .xn-bottom > a.confirm-date {
     background: #ff5300;
 }
-.xndatepicker.orange .next, .xndatepicker.orange .prev{
+
+.xndatepicker.orange .next, .xndatepicker.orange .prev {
     color: #f3d5d5;
 }
-.xndatepicker.orange .next > span:hover, .xndatepicker.orange .prev > span:hover{
+
+.xndatepicker.orange .next > span:hover, .xndatepicker.orange .prev > span:hover {
     color: #ffffff;
 }
-.xndatepicker.orange .year-info span:hover{
+
+.xndatepicker.orange .year-info span:hover {
     color: #ffdccb;
 }
-.xndatepicker.orange .year-list .year-item:hover,.xndatepicker.orange .month-list .month-item:hover,.xndatepicker.orange .weeknum-list .week-item:hover{
+
+.xndatepicker.orange .year-list .year-item:hover, .xndatepicker.orange .month-list .month-item:hover, .xndatepicker.orange .weeknum-list .week-item:hover {
     background: #ff5300;
+}
+
+.xndatepicker-animate {
+    animation: ani 0.1s;
+    transform-origin: bottom;
+    animation-fill-mode:forwards;
+}
+.xndatepicker-animate-out{
+    animation: ani-out 0.1s;
+    animation-fill-mode:forwards;
+}
+
+@keyframes ani {
+    0% {
+        transform: scaleY(0);
+    }
+    100% {
+        transform: scaleY(1);
+    }
+}
+@keyframes ani-out {
+    0% {
+        transform: scaleY(1);
+    }
+    100% {
+        transform: scaleY(0);
+    }
 }

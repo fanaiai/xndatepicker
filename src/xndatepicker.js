@@ -29,7 +29,7 @@ import isoWeeksInYear from './dayjs/esm/plugin/isoWeeksInYear'
 import WeekOfYear from './dayjs/esm/plugin/WeekOfYear'
 import isLeapYear from './dayjs/esm/plugin/isLeapYear'
 import advancedFormat from './dayjs/esm/plugin/advancedFormat'
-
+import  './xndatepickermobile.js'
 dayjs.extend(isSameOrBefore)
 dayjs.extend(isoWeeksInYear)
 dayjs.extend(isSameOrAfter)
@@ -369,21 +369,31 @@ import './iconfont/iconfont.css';
         changeShowStatus(hide) {
             if (this.show || hide) {
                 if (this.$container) {
-                    this.$container.fadeOut(100, () => {
+                    this.$container.removeClass("xndatepicker-animate")
+                    this.$container.addClass("xndatepicker-animate-out")
+                    setTimeout(()=>{
                         if (this.$container) {
                             this.$container.remove();
                             this.$container = null
                         }
-                    });
+                    },300)
+                    // this.$container.fadeOut(100, () => {
+                    //     if (this.$container) {
+                    //         this.$container.remove();
+                    //         this.$container = null
+                    //     }
+                    // });
                 }
                 this.show = false;
             } else {
                 if (!this.$container) {
                     this.rendPicker();
                 }
-                this.$container.css({display: 'block', opacity: '0'})
+                this.$container.css({display: 'block'})
+                // this.$container.css({display: 'block', opacity: '0'})
                 this.resetCurrentTime();
-                this.$container.fadeIn(200);
+                this.$container.addClass("xndatepicker-animate")
+                // this.$container.fadeIn(200);
                 this.show = true;
             }
             // this.show = !this.show;
@@ -421,11 +431,12 @@ import './iconfont/iconfont.css';
             var trangletop = -6;
             var trangleleft = 20;
             var borderWidth = "1px 0 0 1px"
-
+            this.$container.css("transform-origin","top")
             if (top + domheight > wheight) {
                 top = targetTop - domheight - 10;
                 trangletop = domheight - 7;
                 borderWidth = "0 1px 1px 0"
+                this.$container.css("transform-origin","bottom")
             }
             if (top < 0) {
                 top = 0;
@@ -1509,4 +1520,4 @@ import './iconfont/iconfont.css';
     window.XNDatepicker = XNDatepicker;
 })(window, XNQuery)
 
-export default window.XNDatepicker
+export default {XNDatepickerMobile,XNDatepicker:window.XNDatepicker}
