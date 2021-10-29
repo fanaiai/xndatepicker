@@ -248,6 +248,7 @@ class XNDatepickerMobile {
             }
             if($t.hasClass('confirm-btn')){
                 this.fillInput(this.startTime.full.format(this.format))
+                this.hide();
             }
             if ($t.get(0).nodeName == 'LI' && $t.parents('.shortcut-list').get(0)) {
                 var index = $t.parent().find("LI").index($t.get(0));

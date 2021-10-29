@@ -7,7 +7,8 @@
     background: rgba(0,0,0,.4);
     z-index: 99;
     opacity: 0;
-    display: none;
+    pointer-events: none;
+    /*display: none;*/
 }
 
 .xndatepicker-mobile {
@@ -19,6 +20,7 @@
     background: #fff;
     left: 0;
     transform: translateY(100%);
+    pointer-events: auto;
 }
 .scroll-container{
     display: flex;
@@ -90,30 +92,30 @@
 }
 
 .xndatepicker-animate-mobile {
-    animation: fadein 1.1s;
+    animation: fadein .1s;
     transform-origin: bottom;
     animation-fill-mode:forwards;
     display: block;
 }
 .xndatepicker-animate-mobile-out{
-    animation: fadeout 1.1s;
+    animation: fadeout .1s;
     animation-fill-mode:forwards;
 }
 
 .xndatepicker-animate-mobile>div{
-    animation: ani 1.1s;
+    animation: ani1 .1s;
     transform-origin: bottom;
     animation-fill-mode:forwards;
 }
 
 .xndatepicker-animate-mobile-out>div{
-    animation: ani-out 1.1s;
+    animation: ani-out1 .1s;
     transform-origin: bottom;
     animation-fill-mode:forwards;
 }
 
 
-@keyframes ani {
+@keyframes ani1 {
     0% {
         transform: translateY(100%);
     }
@@ -121,7 +123,7 @@
         transform: translateY(0);
     }
 }
-@keyframes ani-out {
+@keyframes ani-out1 {
     0% {
         transform: translateY(0);
     }
