@@ -1,13 +1,24 @@
-
+.xndatepicker-mobile-outer{
+    height: 100vh;
+    width: 100%;
+    position: fixed;
+    top:0;
+    left: 0;
+    background: rgba(0,0,0,.4);
+    z-index: 99;
+    opacity: 0;
+    display: none;
+}
 
 .xndatepicker-mobile {
-    position: fixed;
+    position: absolute;
     bottom:0;
     user-select: none;
     z-index: 999;
     width:100%;
     background: #fff;
     left: 0;
+    transform: translateY(100%);
 }
 .scroll-container{
     display: flex;
@@ -56,29 +67,81 @@
     line-height: 2;
     border-bottom:1rem solid #ccc;
 }
-.xndatepicker-animate {
-    animation: ani 0.1s;
+
+.shortcut-list{
+    font-size: 12rem;
+}
+.shortcut-list ul{
+    display: inline-flex;
+    width:auto;
+    /*width:2000px;*/
+    /*flex-wrap: wrap;*/
+}
+.shortcut-list li{
+    padding:0 8rem;
+    border:1rem solid #eee;
+    line-height: 1.7;
+    margin:4rem 2px 0 2rem;
+    white-space: nowrap;
+}
+.shortcut-list li.on{
+    border-color: #4a9bfe;
+    color: #4a9bfe;
+}
+
+.xndatepicker-animate-mobile {
+    animation: fadein 1.1s;
     transform-origin: bottom;
     animation-fill-mode:forwards;
+    display: block;
 }
-.xndatepicker-animate-out{
-    animation: ani-out 0.1s;
+.xndatepicker-animate-mobile-out{
+    animation: fadeout 1.1s;
     animation-fill-mode:forwards;
 }
 
+.xndatepicker-animate-mobile>div{
+    animation: ani 1.1s;
+    transform-origin: bottom;
+    animation-fill-mode:forwards;
+}
+
+.xndatepicker-animate-mobile-out>div{
+    animation: ani-out 1.1s;
+    transform-origin: bottom;
+    animation-fill-mode:forwards;
+}
+
+
 @keyframes ani {
     0% {
-        transform: scaleY(0);
+        transform: translateY(100%);
     }
     100% {
-        transform: scaleY(1);
+        transform: translateY(0);
     }
 }
 @keyframes ani-out {
     0% {
-        transform: scaleY(1);
+        transform: translateY(0);
     }
     100% {
-        transform: scaleY(0);
+        transform: translateY(100%);
+    }
+}
+@keyframes fadein {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+@keyframes fadeout {
+    0% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
     }
 }

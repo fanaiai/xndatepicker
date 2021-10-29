@@ -14,6 +14,8 @@ module.exports = {
     // devtool:'source-map',//不追踪错误源码
     devServer: {
         contentBase: './dist',
+        host:'10.1.100.207',
+        // port:8000,
     },
     plugins: [
         new CleanWebpackPlugin({cleanStaleWebpackAssets:true}),

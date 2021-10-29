@@ -1113,6 +1113,9 @@ import './iconfont/iconfont.css';
                 return;
             }
             this.changeShowStatus(true)
+            this.fillInput(showstr);
+        },
+        fillInput(showstr){
             if (!this.option.autoFillDate) {
                 return;
             }
