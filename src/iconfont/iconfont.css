@@ -1,18 +1,20 @@
-@font-face {font-family: "iconfont-xndatepicker";
-  src: url('./iconfont.eot?t=1611909728102'); /* IE9 */
-  src: url('./iconfont.eot?t=1611909728102#iefix') format('embedded-opentype'), /* IE6-IE8 */
-  url('data:application/x-font-woff2;charset=utf-8;base64,d09GMgABAAAAAAPcAAsAAAAACVQAAAONAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAHEIGVgCDFAqFBIQvATYCJAMQCwoABCAFhgkHPRsqCMiuMG7hiUCz7aTAhZZoMp15N1CehsTD0/74zp2ZDzCZuxV9k5DkUNbVoUJ5W2ISMt//raV/AoQToiMZYN7s/lnANzd3wZILqpKKLQrFQjW+BLKvsgTPX2326jwMo3zFE3sfa/Uy6TIK0zCEycWQQoA3Lgi01QslQJCS5KT5/7933FpCnWdZIiH+376NsWwOX9vTAo73pk4UYSBRx1NNJbyWQe51fvE2gUajWpGdw5OLkKQIFwXirK5KkNQxKkxuqBdqiZ1F3FWjPl3zD7hTvD++WsnqSWqy8K7dx4cU6P0AH65kfw5lru5nh76PjDmgEMdI5wGxVXhOrEb3sjgLQK0ipA/xuVJV7CksjFxmpB5p1Z8XtUJlMyhrkcwHCY/EhxBRqiuQPPibCqhHC97jt5A9jL9BksYqUtofyCYd2YdZT96TxPRqSI00pKY2XT6kx1CtBk2PHlB79X6U+pQUV9s0/dYXkGYPoSME21rQIau82qVmXzwmy4R4C4C5Bbvd3OV+4f6QXpznKQ8iHx82L+8VMHVDbXl88fxunoIP49l5QXehcyLZ7t2tY1PcUJJ193p62tOOpOeT6RDPoKMzYfo6skoairPIgwGcC4RC7rhjuiMRSxTnFNQ9vAWNouSINJM0kxkCZiBs4KPGnE6rkosuf2RH+/RrX9Z9u/i77yl8a2w32xejk6Enru6ffu+m4bt0Qta/N75t+rYv5vaI4MH3+cZ/asRFgErxJwfVpV8OoPr8zqf/xWfUvbocdzLzfz0leL3t724RqJSwLkO9xGzxv0A8s6Z40tBUiiNLRH5m8VIDb2+mRo349vOh0/c93D2gIQQlHyV1ZlDWI0golGFUo8lBqAWFoUazjvc36fJEFmWKGa9ACMoflLTGEmUz2RChUHahGr3ZBXktONkt1GhP7IlNJvKa2ZmjJFChe4dUl12HxRaRUvrbDhxF8H5Pl03k86hGLImrxUfky7EurKM/DfoCXGwEHeSnXROOqiEhGGXctemwdB9alks97hooC58mhNfu9zPqRT7ZtSHFDhySCEhB7TlE6WQuB8t6CymD7DYHHMoqpcd9UybEzUOqCIuEuxWapVzOnGE6hosK8gmsJYwonargLZ8bFqUKEQSGYjiXDfUw7MiKwi7Ko6cZkEzw0VYEPe38ciM2V+m7MLX9fQ1Ao/DCEnlWZGVWKZd1S48vjtFgXGYAAAAAAA==') format('woff2'),
-  url('./iconfont.woff?t=1611909728102') format('woff'),
-  url('./iconfont.ttf?t=1611909728102') format('truetype'), /* chrome, firefox, opera, Safari, Android, iOS 4.2+ */
-  url('./iconfont.svg?t=1611909728102#iconfont-xndatepicker') format('svg'); /* iOS 4.1- */
+@font-face {
+  font-family: "iconfont-xndatepicker"; /* Project id 2213760 */
+  src: url('iconfont.woff2?t=1635732727513') format('woff2'),
+       url('iconfont.woff?t=1635732727513') format('woff'),
+       url('iconfont.ttf?t=1635732727513') format('truetype');
 }
 
 .iconfont-xndatepicker {
   font-family: "iconfont-xndatepicker" !important;
-  /*font-size: 16px;*/
+  font-size: 16px;
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-xndatepickershanchu:before {
+  content: "\e609";
 }
 
 .icon-xndatepickerrili:before {

@@ -28,6 +28,7 @@
     justify-content: space-around;
     height: 140rem;
     overflow: hidden;
+    padding:10rem 0;
 }
 .scroll-container ul{
     position:relative;
@@ -89,6 +90,21 @@
 .shortcut-list li.on{
     border-color: #4a9bfe;
     color: #4a9bfe;
+}
+.clear-btn{
+    position: absolute;
+    right: 10px;
+    top: 0;
+    display: none;
+}
+.xndatepicker-mobile-input{
+    min-width: 60px;
+}
+.xndatepicker-mobile-input:hover .clear-btn{
+    display: block;
+}
+.xndatepicker-mobile-input:hover .xndatepicker-input:before{
+    display: none;
 }
 
 .xndatepicker-animate-mobile {
