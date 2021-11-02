@@ -17,18 +17,18 @@ dayjs.extend(WeekOfYear)
 dayjs.extend(advancedFormat)
 let $ = XNQuery;
 const format = {
-    'week': {format:'YYYY-MM-DD',scrolllist:['YYYY','M','D']},
-    'date': {format:'YYYY-MM-DD',scrolllist:['YYYY','M','D']},
-    'daterange': 'YYYY-MM-DD',
-    'datetime': {format:'YYYY-MM-DD HH:mm:ss',scrolllist:['YYYY','M','D','H','m','s']},
-    'datetimerange': 'YYYY-MM-DD HH:mm:ss',
-    'month': {format:'YYYY-MM',scrolllist:['YYYY','M']},
-    'monthrange': 'YYYY-MM',
-    'year': {format:'YYYY',scrolllist:['YYYY']},
-    'yearrange': 'YYYY',
-    'multiple': 'YYYY-MM-DD',
-    'weeknum': 'YYYY第w周',
-    'weeknumrange': 'YYYY第w周'
+    'week': {format:'YYYY-MM-DD',scrolllist:['year','month','date']},
+    'date': {format:'YYYY-MM-DD',scrolllist:['year','month','date']},
+    'daterange': {format:'YYYY-MM-DD',scrolllist:['year','month','date']},
+    'datetime': {format:'YYYY-MM-DD HH:mm:ss',scrolllist:['year','month','date','hour','minute','second']},
+    'datetimerange': {format:'YYYY-MM-DD HH:mm:ss',scrolllist:['year','month','date','hour','minute','second']},
+    'month': {format:'YYYY-MM',scrolllist:['year','month']},
+    'monthrange': {format:'YYYY-MM',scrolllist:['year','month']},
+    'year': {format:'YYYY',scrolllist:['year']},
+    'yearrange': {format:'YYYY',scrolllist:['year']},
+    'multiple': {format:'YYYY-MM-DD',scrolllist:['year','month','date']},
+    'weeknum': {format:'YYYY第w周',scrolllist:['year','week']},
+    'weeknumrange':{format:'YYYY第w周',scrolllist:['year','week']},
 }
 const shortList = {
     'multiple': [],
@@ -190,7 +190,7 @@ const defaultoption = {
     multipleDates: [],//当为多选日期类型时的初始值
     startTime: '',//初始开始时间
     endTime: '',//初始结束时间
-    minDate: '1700/01/01',//最小时间
+    minDate: '1900/01/01',//最小时间
     maxDate: '',//最大时间
     disableDate: function (date, dayjs) {
         return false;//date为当前日期,如果当前日期为不可选日期，返回true
@@ -229,12 +229,13 @@ class XNDatepickerMobile {
     initDate(){
         let minDate = dayjs(option.minDate)
         let maxDate = dayjs(option.maxDate || dayjs())
-        let startTime = dayjs(option.startTime || dayjs())
+        let startTime = dayjs(option.startTime)
         this.format=option.format||(format[option.type].format)
         this.scrolllist=format[option.type].scrolllist;
         this.formatDate(maxDate,'maxDate')
         this.formatDate(minDate,'minDate')
         this.formatDate(startTime,'startTime')
+        // console.log(startTime.format('YYYY-MM-DD'),startTime.hour());
     }
 
     formatDate(date,type){
@@ -243,7 +244,10 @@ class XNDatepickerMobile {
         }
         for(let i=0;i<this.scrolllist.length;i++){
             let f=this.scrolllist[i];
-            this[type][f]=Number(date.format(f))
+            this[type][f]=date[f]()
+            if(type=='month'){
+                this[type][f]+=1
+            }
         }
     }
 
@@ -343,15 +347,23 @@ class XNDatepickerMobile {
         this[type + 'scroll'].on('scrollEnd', e => {
             let cur = this[type + 'Container'].querySelectorAll('li')[this[type + 'scroll'].currentPage.pageY + 2].getAttribute('data-num')
             this.startTime[type] = cur;
-            if((type=='YYYY' || type=='M') && this.scrolllist.includes('D')){
-                this.startTime.D=1;
-                this.rendD();
+            if((type=='year' || type=='month') && this.scrolllist.includes('date')){
+                this.renddate(false,'date');
+            }
+            if((type=='year') && this.scrolllist.includes('week')){
+                this.rendweek(false,'week');
             }
             this.refreshCurrentShow();
         })
     }
     refreshCurrentShow(){
-        this.startTime.full=dayjs(this.startTime.YYYY+'/'+this.startTime.M+'/'+this.startTime.D);
+        // this.startTime.full=dayjs(this.startTime['year']+'/'+this.startTime.M+'/'+this.startTime.D);
+        let time=dayjs();
+        for(let i=0;i<this.scrolllist.length;i++){
+            let f=this.scrolllist[i];
+            time=time[f](this.startTime[f])
+        }
+        this.startTime.full=time;
         this.currentContainer.innerHTML=this.startTime.full.format(this.format)
     }
 
@@ -412,35 +424,44 @@ class XNDatepickerMobile {
     rendScrollList(){
         for(let i=0;i<this.scrolllist.length;i++){
             let f=this.scrolllist[i];
-            this['rend'+f](true);
-            // this.rendYear(true);
+            this['rend'+f](true,f);
         }
 
     }
-    rendYYYY(isinit) {
-        this._rendList('YYYY', this.minDate.YYYY, this.maxDate.YYYY, this.startTime.YYYY, '年',isinit)
-        // this.rendMonth(isinit);
+    rendyear(isinit,type) {
+        this._rendList(type, this.minDate[type], this.maxDate[type], this.startTime[type], '年',isinit)
     }
 
-    rendM(isinit) {
-        this._rendList('M', 1, 12, this.startTime.M, '月',isinit)
-        // this.rendDay(isinit);
+    rendweek(isinit,type){
+        let num = dayjs(this.startTime['year']).isoWeeksInYear()
+        if(!isinit){
+            if(this.startTime[type]>num){
+                this.startTime[type]=num;
+            }
+        }
+        (this._rendList(type, 1, num, this.startTime[type], '周',isinit))
     }
-    rendH(isinit) {
-        this._rendList('H', 0, 23, this.startTime.M, '时',isinit)
-        // this.rendDay(isinit);
+
+    rendmonth(isinit,type) {
+        this._rendList(type, 1, 12, this.startTime[type], '月',isinit)
     }
-    rendm(isinit) {
-        this._rendList('m', 0, 59, this.startTime.m, '分',isinit)
-        // this.rendDay(isinit);
+    rendhour(isinit,type) {
+        this._rendList(type, 0, 23, this.startTime[type], '时',isinit)
     }
-    rends(isinit) {
-        this._rendList('s', 0, 59, this.startTime.s, '秒',isinit)
-        // this.rendDay(isinit);
+    rendminute(isinit,type) {
+        this._rendList(type, 0, 59, this.startTime[type], '分',isinit)
     }
-    rendD(isinit) {
-        let num = this._getDaysNum(dayjs(this.startTime.YYYY+'/'+this.startTime.M))
-        this._rendList('D', 1, num, this.startTime.D, '日',isinit)
+    rendsecond(isinit,type) {
+        this._rendList(type, 0, 59, this.startTime[type], '秒',isinit)
+    }
+    renddate(isinit,type) {
+        let num = this._getDaysNum(dayjs(this.startTime['year']+'/'+this.startTime['month']))
+        if(!isinit){
+            if(this.startTime[type]>num){
+            this.startTime[type]=num;
+            }
+        }
+         (this._rendList(type, 1, num, this.startTime[type], '日',isinit))
     }
 
     _rendList(type, min, max, current, suffix,isinit) {
@@ -451,7 +472,6 @@ class XNDatepickerMobile {
         list += '<li></li><li></li>';
         this[type + 'Container'].innerHTML = list;
         let y = current - min;
-        console.log(current , min,y);
         this._rendScroll(type, y,isinit)
     }
 
