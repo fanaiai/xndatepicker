@@ -7,7 +7,7 @@
     background: rgba(0,0,0,.4);
     z-index: 99;
     opacity: 0;
-    pointer-events: none;
+    /*pointer-events: none;*/
     /*display: none;*/
 }
 
@@ -119,13 +119,13 @@
 }
 
 .xndatepicker-animate-mobile>div{
-    animation: ani1 .1s;
+    animation: ani1 .2s ease;
     transform-origin: bottom;
     animation-fill-mode:forwards;
 }
 
 .xndatepicker-animate-mobile-out>div{
-    animation: ani-out1 .1s;
+    animation: ani-out1 .1s ease;
     transform-origin: bottom;
     animation-fill-mode:forwards;
 }
