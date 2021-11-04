@@ -37,6 +37,9 @@
             margin-top:20px;
             font-size: 16px;
         }
+        .dateinputer-mobile{
+            line-height: 32px;
+        }
     </style>
 <!--    <link rel="stylesheet" href="./src/xndatepickermobile.css">-->
 </head>
@@ -44,7 +47,7 @@
 <body>
 <div class="flex-div">
     <span>date 周次选择器-手机端</span>
-    <div id='mobile-date' class="dateinputer">
+    <div id='mobile-date' class="dateinputer-mobile">
 
     </div>
 </div>
@@ -122,12 +125,12 @@
 
     var mobiledate=new XNDatepickerMobile(document.querySelector("#mobile-date"),{
         // format:'YYYY-MM-DD',
-        type:'date',//year/month/date/multiple/ week/datetime/datetimerange/ daterange/monthrange/yearrange
+        type:'daterange',//year/month/date/multiple/ week/datetime/datetimerange/ daterange/monthrange/yearrange
         multipleDates:[],//当为多选日期类型时的初始值
         startTime:'2021-11-24 11',
         // endTime:'2036-04-04',
         minDate:'2019-04-04',
-        placeholder:{start:'起始周',end:'结束周'},
+        placeholder:{startTime:'起始周',endTime:'结束周'},
         maxDate:'',
         separator:' 到 ',
         showType:'modal',

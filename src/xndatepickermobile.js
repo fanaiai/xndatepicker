@@ -17,18 +17,18 @@ dayjs.extend(WeekOfYear)
 dayjs.extend(advancedFormat)
 let $ = XNQuery;
 const format = {
-    'week': {format:'YYYY-MM-DD',scrolllist:['year','month','date']},
-    'date': {format:'YYYY-MM-DD',scrolllist:['year','month','date']},
-    'daterange': {format:'YYYY-MM-DD',scrolllist:['year','month','date']},
-    'datetime': {format:'YYYY-MM-DD HH:mm:ss',scrolllist:['year','month','date','hour','minute','second']},
-    'datetimerange': {format:'YYYY-MM-DD HH:mm:ss',scrolllist:['year','month','date','hour','minute','second']},
-    'month': {format:'YYYY-MM',scrolllist:['year','month']},
-    'monthrange': {format:'YYYY-MM',scrolllist:['year','month']},
-    'year': {format:'YYYY',scrolllist:['year']},
-    'yearrange': {format:'YYYY',scrolllist:['year']},
-    'multiple': {format:'YYYY-MM-DD',scrolllist:['year','month','date']},
-    'weeknum': {format:'YYYY第w周',scrolllist:['year','week']},
-    'weeknumrange':{format:'YYYY第w周',scrolllist:['year','week']},
+    'week': {format: 'YYYY-MM-DD', scrolllist: ['year', 'month', 'date']},
+    'date': {format: 'YYYY-MM-DD', scrolllist: ['year', 'month', 'date']},
+    'daterange': {format: 'YYYY-MM-DD', scrolllist: ['year', 'month', 'date']},
+    'datetime': {format: 'YYYY-MM-DD HH:mm:ss', scrolllist: ['year', 'month', 'date', 'hour', 'minute', 'second']},
+    'datetimerange': {format: 'YYYY-MM-DD HH:mm:ss', scrolllist: ['year', 'month', 'date', 'hour', 'minute', 'second']},
+    'month': {format: 'YYYY-MM', scrolllist: ['year', 'month']},
+    'monthrange': {format: 'YYYY-MM', scrolllist: ['year', 'month']},
+    'year': {format: 'YYYY', scrolllist: ['year']},
+    'yearrange': {format: 'YYYY', scrolllist: ['year']},
+    'multiple': {format: 'YYYY-MM-DD', scrolllist: ['year', 'month', 'date']},
+    'weeknum': {format: 'YYYY第w周', scrolllist: ['year', 'week']},
+    'weeknumrange': {format: 'YYYY第w周', scrolllist: ['year', 'week']},
 }
 const shortList = {
     'multiple': [],
@@ -199,55 +199,82 @@ const defaultoption = {
 const scrollOption = {
     mouseWheel: true,
     scrollbars: false,
-    snap: 'li'
+    snap: 'li',
+    tap: true,
 };
 let option = {};
 
 class XNDatepickerMobile {
     constructor(targetDom, options, onConfirm) {
-        this.$t = $(targetDom);
-        this.$t.addClass('xndatepicker-mobile-input')
-        let t=document.createElement('div');
-        this.$targetDom=$(t)
-        this.$t.append(t)
-        let i=document.createElement('i');
-        i.classList.add('icon-xndatepickershanchu')
-        i.classList.add('iconfont-xndatepicker')
-        i.classList.add('clear-btn')
-        this.$t.append(i)
         option = $.extend(true, {}, defaultoption, options);
-        this.type=option.type;
+        this.type = option.type;
+        this.initTargetDom(targetDom)
         if (!options.shortList) {
             option.shortList = shortList[this.type]
         }
         this.id = this.getRandomString();
         this.initDate();
-        this.eventList={};
+        this.eventList = {};
         this.init();
     }
 
-    initDate(){
-        let minDate = dayjs(option.minDate)
-        let maxDate = dayjs(option.maxDate||dayjs())
-        let startTime = dayjs(option.startTime)
-        this.format=option.format||(format[option.type].format)
-        this.scrolllist=format[option.type].scrolllist;
-        this.formatDate(maxDate,'maxDate')
-        this.formatDate(minDate,'minDate')
-        this.formatDate(startTime,'startTime')
-        this.confirmStartTime=$.extend(true,{},this.startTime);
-        // console.log(startTime.format('YYYY-MM-DD'),startTime.hour());
+    initTargetDom(targetDom) {
+        this.$t = $(targetDom);
+        this.targetDom=targetDom;
+        this.$t.addClass('xndatepicker-mobile-input')
+        let num = ['startTime'];
+        if (this.type.indexOf('range') > -1) {
+            num.push('endTime')
+        }
+        for (let i = 0; i < num.length; i++) {
+            let classname=num[i]
+            let dateinput = document.createElement('div');
+            dateinput.classList.add(classname)
+            this.$t.append(dateinput)
+            if(i==0 && num.length==2){
+                let span=document.createElement('span')
+                span.innerHTML=option.separator;
+                this.$t.append(span)
+            }
+            dateinput.innerHTML=`
+            <div class="input" data-type="${classname}" data-placeholder="${option.placeholder[classname]}"></div><i class="icon-xndatepickershanchu iconfont-xndatepicker clear-btn"></i>`
+            // let t = document.createElement('div');
+            // // this.$targetDom = $(t)
+            // dateinput.appendChild(t)
+            // let i = document.createElement('i');
+            // // i.classList.add('icon-xndatepickershanchu')
+            // // i.classList.add('iconfont-xndatepicker')
+            // // i.classList.add('clear-btn')
+            // dateinput.appendChild(i)
+        }
     }
 
-    formatDate(date,type){
+    initDate() {
+        let minDate = dayjs(option.minDate || dayjs())
+        let maxDate = dayjs(option.maxDate || dayjs())
+        let startTime = dayjs(option.startTime)
+        let endTime = dayjs(option.endTime)
+        this.format = option.format || (format[option.type].format)
+        this.scrolllist = format[option.type].scrolllist;
+        this.formatDate(maxDate, 'maxDate')
+        this.formatDate(minDate, 'minDate')
+        this.formatDate(startTime, 'startTime')
+        this.formatDate(endTime, 'endTime')
+        this.confirm={
+            startTime:$.extend(true, {}, this.startTime),
+            endTime:$.extend(true, {}, this.endTime),
+        }
+    }
+
+    formatDate(date, type) {
         this[type] = {
             full: date,
         }
-        for(let i=0;i<this.scrolllist.length;i++){
-            let f=this.scrolllist[i];
-            this[type][f]=date[f]()
-            if(f=='month'){
-                this[type][f]+=1
+        for (let i = 0; i < this.scrolllist.length; i++) {
+            let f = this.scrolllist[i];
+            this[type][f] = date[f]()
+            if (f == 'month') {
+                this[type][f] += 1
             }
         }
     }
@@ -257,26 +284,28 @@ class XNDatepickerMobile {
 
         this.addTargetEvent();
     }
-    addTargetEvent(){
-        this.$t.get(0).addEventListener('click',e=>{
-            let $t=$(e.target);
-            if($t.hasClass('clear-btn')){
+
+    addTargetEvent() {
+        this.targetDom.addEventListener('click', e => {
+            let $t = $(e.target);
+            if ($t.hasClass('clear-btn')) {
                 this.clear();
-            }
-            else{
+            } else if($t.hasClass('input')) {
+                this.currentType=$t.attr('data-type')
                 this.show();
             }
         })
     }
-    addEvent(){
 
-        this.scrollContainer.addEventListener('click',e=>{
-            let $t=$(e.target);
-            if($t.hasClass('cancel-btn') || e.target==e.currentTarget){
+    addEvent() {
+
+        this.scrollContainer.addEventListener('click', e => {
+            let $t = $(e.target);
+            if ($t.hasClass('cancel-btn') || e.target == e.currentTarget) {
                 this.hide();
             }
-            if($t.hasClass('confirm-btn')){
-                this.fillInput(this.startTime.full.format(this.format))
+            if ($t.hasClass('confirm-btn')) {
+                this.fillInput(this.startTime.full.format(this.format),'startTime')
                 this.hide();
             }
             if ($t.get(0).nodeName == 'LI' && $t.parents('.shortcut-list').get(0)) {
@@ -293,48 +322,54 @@ class XNDatepickerMobile {
             }
         })
     }
-    setCurrentTime(date){
-        this.formatDate(date.startTime,'startTime')
+
+    setCurrentTime(date) {
+        this.formatDate(date.startTime, 'startTime')
         this.rendScrollList()
         // this.rendM(true);
         this.refreshCurrentShow();
     }
-    show(){
-        this.startTime=$.extend(true,{},this.confirmStartTime);
+
+    show() {
+        this[this.currentType] = $.extend(true, {}, this.confirm[this.currentType]);
         this.rendPicker();
         this.addEvent();
         this.scrollContainer.classList.remove('xndatepicker-animate-mobile-out')
         this.scrollContainer.classList.add('xndatepicker-animate-mobile')
         this.refreshCurrentShow();
     }
-    hide(){
+
+    hide() {
         this.scrollContainer.classList.remove('xndatepicker-animate-mobile')
         this.scrollContainer.classList.add('xndatepicker-animate-mobile-out')
-        setTimeout(()=>{
-            document.querySelectorAll("#"+this.id).forEach((e)=>{
+        setTimeout(() => {
+            document.querySelectorAll("#" + this.id).forEach((e) => {
                 e.remove();
             });
-        },100)
+        }, 100)
     }
-    clear(){
-        this.startTime.full=''
+
+    clear() {
+        this.startTime.full = ''
         this.fillInput('')
     }
 
-    fillInput(showstr){
+    fillInput(showstr) {
         if (!option.autoFillDate) {
             return;
         }
-        if (this.$targetDom.get(0).nodeName == 'INPUT') {
-            this.$targetDom.get(0).value = showstr;
-        } else {
-            this.$targetDom.get(0).innerHTML = showstr;
-        }
-        this.$targetDom.addClass('iconfont-xndatepicker icon-xndatepickerrili xndatepicker-input')
-        this.$targetDom.attr('data-placeholder', option.placeholder.start)
-        this.confirmStartTime=$.extend(true,{},this.startTime);
+        // if (this.targetDom.get(0).nodeName == 'INPUT') {
+        //     this.targetDom.get(0).value = showstr;
+        // } else {
+        //     this.targetDom.get(0).innerHTML = showstr;
+        // }
+        this.targetDom.querySelector('.'+this.currentType+' .input').innerHTML = showstr;
+        // this.targetDom.classList.add('iconfont-xndatepicker icon-xndatepickerrili xndatepicker-input')
+        // this.targetDom.attr('data-placeholder', option.placeholder.start)
+        this.confirm[this.currentType] = $.extend(true, {}, this[this.currentType]);
         this.trigger("confirm", {startTime: this.startTime, endTime: this.endTime, dayjs: dayjs})
     }
+
     trigger(type, data) {
         if (this.eventList[type]) {
             for (let i = 0; i < this.eventList[type].func.length; i++) {
@@ -343,6 +378,7 @@ class XNDatepickerMobile {
             }
         }
     }
+
     on(type, func) {
         if (!this.eventList[type]) {
             this.eventList[type] = {
@@ -352,19 +388,18 @@ class XNDatepickerMobile {
             this.eventList[type].func.push(func)
         }
     }
-    _rendScroll(type, Y,isinit) {
-        if(this[type + 'scroll']){
-            return;
+
+    _rendScroll(type, Y, isinit) {
+        if (this[type + 'scroll']) {
             this[type + 'scroll'].destroy();
             this[type + 'scroll'] = null;
         }
         this[type + 'scroll'] = new IScroll('.' + type + '-container', scrollOption);
-        this[type + 'scroll'].goToPage(0, Y || 0, isinit?0:500)
+        this[type + 'scroll'].goToPage(0, Y || 0, isinit ? 0 : 500)
         this[type + 'scroll'].on('scrollEnd', e => {
-            setTimeout(()=>{
-                let cur = this[type + 'Container'].querySelectorAll('li')[this[type + 'scroll'].currentPage.pageY+2].getAttribute('data-num')
+            setTimeout(() => {
+                let cur = this[type + 'Container'].querySelectorAll('li')[this[type + 'scroll'].currentPage.pageY + 2].getAttribute('data-num')
                 this.startTime[type] = cur;
-                console.log(this[type + 'scroll'].currentPage,cur);
                 this.rendScrollList(type);
                 // if((type=='year' || type=='month') && this.scrolllist.includes('date')){
                 //     this.renddate(false,'date');
@@ -373,34 +408,35 @@ class XNDatepickerMobile {
                 //     this.rendweek(false,'week');
                 // }
                 this.refreshCurrentShow();
-            },100)
+            }, 100)
 
         })
     }
-    refreshCurrentShow(){
+
+    refreshCurrentShow() {
         // this.startTime.full=dayjs(this.startTime['year']+'/'+this.startTime.M+'/'+this.startTime.D);
-        let time=dayjs();
-        for(let i=0;i<this.scrolllist.length;i++){
-            let f=this.scrolllist[i];
-            if(f=='month'){
-                time=time[f](this.startTime[f]-1)
-            }
-            else{
-                time=time[f](this.startTime[f])
+        let time = dayjs();
+        for (let i = 0; i < this.scrolllist.length; i++) {
+            let f = this.scrolllist[i];
+            if (f == 'month') {
+                time = time[f](this.startTime[f] - 1)
+            } else {
+                time = time[f](this.startTime[f])
             }
         }
-        this.startTime.full=time;
-        this.currentContainer.innerHTML=this.startTime.full.format(this.format)
+        this.startTime.full = time;
+        this.currentContainer.innerHTML = this.startTime.full.format(this.format)
     }
 
     rendPicker() {
         this.initDateModal()
     }
-    initScrollContainer(){
-        let html=''
-        for(let i= 0;i<this.scrolllist.length;i++){
-            let f=this.scrolllist[i];
-            html+=`<div class="${f}-container">
+
+    initScrollContainer() {
+        let html = ''
+        for (let i = 0; i < this.scrolllist.length; i++) {
+            let f = this.scrolllist[i];
+            html += `<div class="${f}-container">
             <ul>
             </ul>
             <div class="current-bg"></div>
@@ -408,8 +444,9 @@ class XNDatepickerMobile {
         }
         return html;
     }
+
     initDateModal() {
-        let scrollContHtml=this.initScrollContainer();
+        let scrollContHtml = this.initScrollContainer();
         let dom = `<div class="xndatepicker-mobile-outer" id="${this.id}"><div class="xndatepicker-mobile">
     <div class="xndatepicker-head">
       <a class="cancel-btn">取消</a>
@@ -425,101 +462,109 @@ class XNDatepickerMobile {
 </div></div>`
         $(document.body).append(dom)
         this.scrollContainer = document.querySelector('#' + this.id);
-        for(let i= 0;i<this.scrolllist.length;i++){
-            let f=this.scrolllist[i];
-            this[f+'Container']= this.scrollContainer.querySelector('.'+f+'-container ul')
+        for (let i = 0; i < this.scrolllist.length; i++) {
+            let f = this.scrolllist[i];
+            this[f + 'Container'] = this.scrollContainer.querySelector('.' + f + '-container ul')
         }
-        this.currentContainer=this.scrollContainer.querySelector('.current-time')
+        this.currentContainer = this.scrollContainer.querySelector('.current-time')
         this.geneShortList();
         this.rendScrollList();
     }
+
     geneShortList() {
         var ul = '<ul>'
         for (let i = 0; i < option.shortList.length; i++) {
             ul += '<li>' + option.shortList[i].name + '</li>'
         }
         ul += '</ul>'
-        this.shortcutcontainer=this.scrollContainer.querySelector('.shortcut-list');
-        this.scrollContainer.querySelector('.shortcut-list').innerHTML=ul;
+        this.shortcutcontainer = this.scrollContainer.querySelector('.shortcut-list');
+        this.scrollContainer.querySelector('.shortcut-list').innerHTML = ul;
         this['shortcut' + 'scroll'] = new IScroll('.' + 'shortcut-list', {
-            scrollX:true,scrollY:false,mouseWheel: true,
+            scrollX: true, scrollY: false, mouseWheel: true,
             scrollbars: false,
             snap: 'li'
         });
     }
-    rendScrollList(type){
-        for(let i=0;i<this.scrolllist.length;i++){
-            let f=this.scrolllist[i];
-            if(f!=type){
-            this['rend'+f](true,f);}
+
+    rendScrollList(type) {
+        for (let i = 0; i < this.scrolllist.length; i++) {
+            let f = this.scrolllist[i];
+            if (f != type) {
+                this['rend' + f](true, f);
+            }
         }
 
     }
-    rendyear(isinit,type) {
-        this._rendList(type, this.minDate[type], this.maxDate[type], this.startTime[type], '年',isinit)
+
+    rendyear(isinit, type) {
+        this._rendList(type, this.minDate[type], this.maxDate[type], this.startTime[type], '年', isinit)
     }
 
-    rendweek(isinit,type){
+    rendweek(isinit, type) {
         let num = dayjs(this.startTime['year']).isoWeeksInYear()
-        if(!isinit){
-            if(this.startTime[type]>num){
-                this.startTime[type]=num;
+        if (!isinit) {
+            if (this.startTime[type] > num) {
+                this.startTime[type] = num;
             }
         }
-        (this._rendList(type, 1, num, this.startTime[type], '周',isinit))
+        (this._rendList(type, 1, num, this.startTime[type], '周', isinit))
     }
 
-    rendmonth(isinit,type) {
-        let min=1,max=12;
-        console.log(this.minDate['year'] , this.startTime['year']);
-        if(this.minDate['year']==this.startTime['year']){
-            min=this.minDate[type]
+    rendmonth(isinit, type) {
+        let min = 1, max = 12;
+        console.log(this.minDate['year'], this.startTime['year']);
+        if (this.minDate['year'] == this.startTime['year']) {
+            min = this.minDate[type]
             console.log(min);
-            if(this.startTime[type]<min){
-                this.startTime[type]=min
+            if (this.startTime[type] < min) {
+                this.startTime[type] = min
             }
         }
-        if(this.maxDate['year']==this.startTime['year']){
-            max=this.maxDate[type]
-            if(this.startTime[type]>max){
-                this.startTime[type]=max
+        if (this.maxDate['year'] == this.startTime['year']) {
+            max = this.maxDate[type]
+            if (this.startTime[type] > max) {
+                this.startTime[type] = max
             }
         }
-        this._rendList(type, min, max, this.startTime[type], '月',isinit)
-    }
-    rendhour(isinit,type) {
-        this._rendList(type, 0, 23, this.startTime[type], '时',isinit)
-    }
-    rendminute(isinit,type) {
-        this._rendList(type, 0, 59, this.startTime[type], '分',isinit)
-    }
-    rendsecond(isinit,type) {
-        this._rendList(type, 0, 59, this.startTime[type], '秒',isinit)
-    }
-    renddate(isinit,type) {
-        let num = this._getDaysNum(dayjs(this.startTime['year']+'/'+this.startTime['month']))
-        if(!isinit){
-            if(this.startTime[type]<min){
-                this.startTime[type]=min
-            }
-        }
-        let min=1,max=num;
-        if(this.minDate['year']==this.startTime['year'] && this.minDate['month']==this.startTime['month']){
-            min=this.minDate[type]
-            if(this.startTime[type]>max){
-                this.startTime[type]=max
-            }
-        }
-        if(this.maxDate['year']==this.startTime['year'] && this.maxDate['month']==this.startTime['month']){
-            max=this.maxDate[type]
-            if(this.startTime[type]>max){
-                this.startTime[type]=max
-            }
-        }
-         (this._rendList(type, min, max, this.startTime[type], '日',isinit))
+        this._rendList(type, min, max, this.startTime[type], '月', isinit)
     }
 
-    _rendList(type, min, max, current, suffix,isinit) {
+    rendhour(isinit, type) {
+        this._rendList(type, 0, 23, this.startTime[type], '时', isinit)
+    }
+
+    rendminute(isinit, type) {
+        this._rendList(type, 0, 59, this.startTime[type], '分', isinit)
+    }
+
+    rendsecond(isinit, type) {
+        this._rendList(type, 0, 59, this.startTime[type], '秒', isinit)
+    }
+
+    renddate(isinit, type) {
+        let num = this._getDaysNum(dayjs(this.startTime['year'] + '/' + this.startTime['month']))
+        if (!isinit) {
+            if (this.startTime[type] < min) {
+                this.startTime[type] = min
+            }
+        }
+        let min = 1, max = num;
+        if (this.minDate['year'] == this.startTime['year'] && this.minDate['month'] == this.startTime['month']) {
+            min = this.minDate[type]
+            if (this.startTime[type] > max) {
+                this.startTime[type] = max
+            }
+        }
+        if (this.maxDate['year'] == this.startTime['year'] && this.maxDate['month'] == this.startTime['month']) {
+            max = this.maxDate[type]
+            if (this.startTime[type] > max) {
+                this.startTime[type] = max
+            }
+        }
+        (this._rendList(type, min, max, this.startTime[type], '日', isinit))
+    }
+
+    _rendList(type, min, max, current, suffix, isinit) {
         let list = '<li></li><li></li>';
         for (let i = min; i <= max; i++) {
             list += `<li data-num="${i}">${i}${suffix}</li>`
@@ -527,7 +572,7 @@ class XNDatepickerMobile {
         list += '<li></li><li></li>';
         this[type + 'Container'].innerHTML = list;
         let y = current - min;
-        this._rendScroll(type, y,isinit)
+        this._rendScroll(type, y, isinit)
     }
 
     _getDaysNum(date) {

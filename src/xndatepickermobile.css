@@ -99,6 +99,21 @@
 }
 .xndatepicker-mobile-input{
     min-width: 60px;
+    display: flex;
+}
+.xndatepicker-mobile-input>div{
+    position: relative;
+    border:1px solid #ccc;
+}
+.xndatepicker-mobile-input>span{
+    padding:0 10px;
+}
+.xndatepicker-mobile-input .input{
+    min-width: 100px;
+    padding:0 10px;
+}
+.xndatepicker-mobile-input .input:empty:before{
+    content:attr(data-placeholder);
 }
 .xndatepicker-mobile-input:hover .clear-btn{
     display: block;
