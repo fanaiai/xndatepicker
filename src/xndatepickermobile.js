@@ -507,70 +507,69 @@ class XNDatepickerMobile {
     }
 
     rendyear(isinit, type) {
-        this._rendList(type, this.minDate[type], this.maxDate[type], this.startTime[type], '年', isinit)
+        this._rendList(type, this.minDate[type], this.maxDate[type], this[this.currentType][type], '年', isinit)
     }
 
     rendweek(isinit, type) {
-        let num = dayjs(this.startTime['year']).isoWeeksInYear()
+        let num = dayjs(this[this.currentType]['year']).isoWeeksInYear()
         if (!isinit) {
-            if (this.startTime[type] > num) {
-                this.startTime[type] = num;
+            if (this[this.currentType][type] > num) {
+                this[this.currentType][type] = num;
             }
         }
-        (this._rendList(type, 1, num, this.startTime[type], '周', isinit))
+        (this._rendList(type, 1, num, this[this.currentType][type], '周', isinit))
     }
 
     rendmonth(isinit, type) {
         let min = 1, max = 12;
-        if (this.minDate['year'] == this.startTime['year']) {
+        if (this.minDate['year'] == this[this.currentType]['year']) {
             min = this.minDate[type]
-            console.log(min);
-            if (this.startTime[type] < min) {
-                this.startTime[type] = min
+            if (this[this.currentType][type] < min) {
+                this[this.currentType][type] = min
             }
         }
-        if (this.maxDate['year'] == this.startTime['year']) {
+        if (this.maxDate['year'] == this[this.currentType]['year']) {
             max = this.maxDate[type]
-            if (this.startTime[type] > max) {
-                this.startTime[type] = max
+            if (this[this.currentType][type] > max) {
+                this[this.currentType][type] = max
             }
         }
-        this._rendList(type, min, max, this.startTime[type], '月', isinit)
+        this._rendList(type, min, max, this[this.currentType][type], '月', isinit)
     }
 
     rendhour(isinit, type) {
-        this._rendList(type, 0, 23, this.startTime[type], '时', isinit)
+        this._rendList(type, 0, 23, this[this.currentType][type], '时', isinit)
     }
 
     rendminute(isinit, type) {
-        this._rendList(type, 0, 59, this.startTime[type], '分', isinit)
+        this._rendList(type, 0, 59, this[this.currentType][type], '分', isinit)
     }
 
     rendsecond(isinit, type) {
-        this._rendList(type, 0, 59, this.startTime[type], '秒', isinit)
+        this._rendList(type, 0, 59, this[this.currentType][type], '秒', isinit)
     }
 
     renddate(isinit, type) {
-        let num = this._getDaysNum(dayjs(this.startTime['year'] + '/' + this.startTime['month']))
+        let num = this._getDaysNum(dayjs(this[this.currentType]['year'] + '/' + this[this.currentType]['month']))
         if (!isinit) {
-            if (this.startTime[type] < min) {
-                this.startTime[type] = min
+            if (this[this.currentType][type] < min) {
+                this[this.currentType][type] = min
             }
         }
         let min = 1, max = num;
-        if (this.minDate['year'] == this.startTime['year'] && this.minDate['month'] == this.startTime['month']) {
+        if (this.minDate['year'] == this[this.currentType]['year'] && this.minDate['month'] == this[this.currentType]['month']) {
             min = this.minDate[type]
-            if (this.startTime[type] > max) {
-                this.startTime[type] = max
+            if (this[this.currentType][type] > max) {
+                this[this.currentType][type] = max
             }
         }
-        if (this.maxDate['year'] == this.startTime['year'] && this.maxDate['month'] == this.startTime['month']) {
+        if (this.maxDate['year'] == this[this.currentType]['year'] && this.maxDate['month'] == this[this.currentType]['month']) {
             max = this.maxDate[type]
-            if (this.startTime[type] > max) {
-                this.startTime[type] = max
+            if (this[this.currentType][type] > max) {
+                this[this.currentType][type] = max
             }
         }
-        (this._rendList(type, min, max, this.startTime[type], '日', isinit))
+        (this._rendList(type, min, max, this[this.currentType][type], '日', isinit))
     }
 
     _rendList(type, min, max, current, suffix, isinit) {
