@@ -266,6 +266,7 @@ class XNDatepickerMobile {
         }
         this.confirm.startTime.full = this.clone(this.startTime.full);
         this.confirm.endTime.full = this.clone(this.endTime.full);
+        console.log(this.startTime,this.endTime);
     }
 
     clone(date) {
@@ -420,18 +421,16 @@ class XNDatepickerMobile {
         this[type + 'scroll'] = new IScroll('.' + type + '-container', scrollOption);
         this[type + 'scroll'].goToPage(0, Y || 0, isinit ? 0 : 500)
         this[type + 'scroll'].on('scrollEnd', e => {
-            setTimeout(() => {
-                let cur = this[type + 'Container'].querySelectorAll('li')[this[type + 'scroll'].currentPage.pageY + 2].getAttribute('data-num')
-                this[this.currentType][type] = cur;
-                this.rendScrollList(type);
-                // if((type=='year' || type=='month') && this.scrolllist.includes('date')){
-                //     this.renddate(false,'date');
-                // }
-                // if((type=='year') && this.scrolllist.includes('week')){
-                //     this.rendweek(false,'week');
-                // }
-                this.refreshCurrentShow();
-            }, 100)
+            let cur = this[type + 'Container'].querySelectorAll('li')[this[type + 'scroll'].currentPage.pageY + 2].getAttribute('data-num')
+            this[this.currentType][type] = cur;
+            this.rendScrollList(type);
+            // if((type=='year' || type=='month') && this.scrolllist.includes('date')){
+            //     this.renddate(false,'date');
+            // }
+            // if((type=='year') && this.scrolllist.includes('week')){
+            //     this.rendweek(false,'week');
+            // }
+            this.refreshCurrentShow();
 
         })
     }
@@ -446,6 +445,7 @@ class XNDatepickerMobile {
                 time = time[f](this[this.currentType][f])
             }
         }
+        console.log(this[this.currentType],time);
         this[this.currentType].full = time;
         this.currentContainer.innerHTML = this[this.currentType].full.format(this.format)
     }
