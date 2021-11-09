@@ -124,14 +124,15 @@
 <script type="module">
 
     var mobiledate=new XNDatepickerMobile(document.querySelector("#mobile-date"),{
-        // format:'YYYY-MM-DD',
-        type:'daterange',//year/month/date/multiple/ week/datetime/datetimerange/ daterange/monthrange/yearrange
+        // format:'YYYY-MM-DD HH:mm',
+        type:'datetimerange',//year/month/date/multiple/ week/datetime/datetimerange/ daterange/monthrange/yearrange
+        // scrolllist:['year', 'week'],
         multipleDates:[],//当为多选日期类型时的初始值
-        startTime:'2021-11-24 11',
-        // endTime:'2036-04-04',
+        // startTime:'2021-1-24 11',
+        endTime:'2036-04-04',
         minDate:'2019-04-04',
-        placeholder:{startTime:'起始周',endTime:'结束周'},
-        maxDate:'',
+        placeholder:{startTime:'请选择周',endTime:'结束周'},
+        maxDate:'2022-01-01',
         separator:' 到 ',
         showType:'modal',
         linkPanels:false,//面板联动
@@ -140,7 +141,7 @@
         showShortKeys:true,
         autoFillDate:true,//自动变更element里面的值
     },function(data){
-        console.log(data.startTime.format('YYYY-MM-DD'))
+        console.log(data)
     })
 
     var date=new XNDatepicker(document.querySelector("#weeknum"),{

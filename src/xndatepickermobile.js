@@ -206,6 +206,7 @@ let option = {};
 
 class XNDatepickerMobile {
     constructor(targetDom, options, onConfirm) {
+        this.onConfirm = onConfirm;
         option = $.extend(true, {}, defaultoption, options);
         this.type = option.type;
         this.initTargetDom(targetDom)
@@ -255,18 +256,31 @@ class XNDatepickerMobile {
         let startTime = option.startTime ? dayjs(option.startTime) : null
         let endTime = option.endTime ? dayjs(option.endTime) : null
         this.format = option.format || (format[option.type].format)
-        this.scrolllist = format[option.type].scrolllist;
+        this.scrolllist = option.scrolllist||format[option.type].scrolllist;
         this.formatDate(maxDate, 'maxDate')
         this.formatDate(minDate, 'minDate')
         this.formatDate(startTime, 'startTime')
         this.formatDate(endTime, 'endTime')
+        if(startTime && startTime.isBefore(this.minDate.full)){
+            this.cloneDate(this.minDate,this.startTime)
+        }
+        if(endTime && endTime.isAfter(this.maxDate.full)){
+            this.cloneDate(this.maxDate,this.endTime)
+        }
         this.confirm = {
             startTime: $.extend(true, {}, this.startTime),
             endTime: $.extend(true, {}, this.endTime),
         }
         this.confirm.startTime.full = this.clone(this.startTime.full);
         this.confirm.endTime.full = this.clone(this.endTime.full);
-        console.log(this.startTime,this.endTime);
+        this.initInput()
+        // console.log(this.startTime,this.endTime);
+    }
+    initInput(){
+        this.fillInput(this['startTime'].full?this['startTime'].full.format(this.format):'','startTime')
+        if(this.type.indexOf('range')>-1){
+            this.fillInput(this['endTime'].full?this['endTime'].full.format(this.format):'','endTime')
+        }
     }
 
     clone(date) {
@@ -296,8 +310,8 @@ class XNDatepickerMobile {
 
     init() {
         this.$setRem();
-
         this.addTargetEvent();
+        this.on('confirm', this.onConfirm);
     }
 
     addTargetEvent() {
@@ -347,6 +361,9 @@ class XNDatepickerMobile {
 
     show() {
         this.cloneDate(this.confirm[this.currentType], this[this.currentType])
+        if(!this[this.currentType].full){
+            this.formatDate(this.maxDate.full, this.currentType)
+        }
         this.rendPicker();
         this.addEvent();
         this.scrollContainer.classList.remove('xndatepicker-animate-mobile-out')
@@ -369,24 +386,24 @@ class XNDatepickerMobile {
         this.fillInput('')
     }
 
-    fillInput(showstr) {
+    fillInput(showstr,type) {
+        let currentType=type||this.currentType;
         if (!option.autoFillDate) {
             return;
         }
-        this.targetDom.querySelector('.' + this.currentType + ' .input').innerHTML = showstr;
-        this.cloneDate(this[this.currentType], this.confirm[this.currentType])
+        this.targetDom.querySelector('.' + currentType + ' .input').innerHTML = showstr;
+        this.cloneDate(this[currentType], this.confirm[currentType])
         if (this.type.indexOf('range') > -1) {
-            if (this.currentType == 'startTime' && this.confirm.endTime.full && this.confirm.endTime.full.isBefore(showstr)) {
+            if (currentType == 'startTime' && this.confirm.endTime.full && this.confirm.endTime.full.isBefore(showstr)) {
                 this.cloneDate(this.confirm.startTime, this.confirm.endTime)
                 this.targetDom.querySelector('.' + 'endTime' + ' .input').innerHTML = showstr;
             }
-            if (this.currentType == 'endTime' && this.confirm.startTime.full && this.confirm.startTime.full.isAfter(showstr)) {
-                console.log(2);
+            if (currentType == 'endTime' && this.confirm.startTime.full && this.confirm.startTime.full.isAfter(showstr)) {
                 this.cloneDate(this.confirm.endTime, this.confirm.startTime)
                 this.targetDom.querySelector('.' + 'startTime' + ' .input').innerHTML = showstr;
             }
         }
-        this.trigger("confirm", {startTime: this.confirm.startTime, endTime: this.confirm.endTime, dayjs: dayjs})
+        !type && (this.trigger("confirm", {startTime: this.confirm.startTime, endTime: this.confirm.endTime, dayjs: dayjs}))
     }
 
     cloneDate(from, target) {
@@ -445,7 +462,6 @@ class XNDatepickerMobile {
                 time = time[f](this[this.currentType][f])
             }
         }
-        console.log(this[this.currentType],time);
         this[this.currentType].full = time;
         this.currentContainer.innerHTML = this[this.currentType].full.format(this.format)
     }
