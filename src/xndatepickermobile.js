@@ -358,7 +358,7 @@ class XNDatepickerMobile {
         this.formatDate(v.startTime, 'startTime')
         // this.setCurrentTime(v.startTime,'startTime');
         if(this.type.indexOf('range')>-1){
-            this.formatDate(v.startTime, 'endTime')
+            this.formatDate(v.endTime, 'endTime')
             // this.setCurrentTime(v.endTime,'endTime');
         }
         this.rendScrollList()
