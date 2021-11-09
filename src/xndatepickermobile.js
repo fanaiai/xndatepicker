@@ -339,7 +339,8 @@ class XNDatepickerMobile {
             }
             if ($t.get(0).nodeName == 'LI' && $t.parents('.shortcut-list').get(0)) {
                 var index = $t.parent().find("LI").index($t.get(0));
-                this.setCurrentTime(option.shortList[index].value);
+                this.chooseShortcut(option.shortList[index])
+
                 $(this.shortcutcontainer).find('.on').removeClass('on')
                 $t.addClass('on')
                 // if (this.type == 'multiple') {
@@ -350,6 +351,18 @@ class XNDatepickerMobile {
                 // }
             }
         })
+    }
+
+    chooseShortcut(shortcut){
+        let v=shortcut.value;
+        this.formatDate(v.startTime, 'startTime')
+        // this.setCurrentTime(v.startTime,'startTime');
+        if(this.type.indexOf('range')>-1){
+            this.formatDate(v.startTime, 'endTime')
+            // this.setCurrentTime(v.endTime,'endTime');
+        }
+        this.rendScrollList()
+        this.refreshCurrentShow();
     }
 
     setCurrentTime(date) {
