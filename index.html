@@ -5,6 +5,7 @@
     <title></title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vxe-table@next/lib/style.css">
+    <script src="https://unpkg.com/better-scroll@latest/dist/better-scroll.min.js"></script>
     <style>
         body{
             background: #eee;
@@ -125,8 +126,8 @@
 
     var mobiledate=new XNDatepickerMobile(document.querySelector("#mobile-date"),{
         // format:'YYYY-MM-DD HH:mm',
-        type:'datetimerange',//year/month/date/multiple/ week/datetime/datetimerange/ daterange/monthrange/yearrange
-        // scrolllist:['year', 'week'],
+        type:'datetimerange',//year/month/date/ datetime/datetimerange/ daterange/monthrange/yearrange
+        // scrolllist:['year','month','date','hour','minute'],
         multipleDates:[],//当为多选日期类型时的初始值
         // startTime:'2021-1-24 11',
         endTime:'2036-04-04',
@@ -135,13 +136,16 @@
         maxDate:'2022-01-01',
         separator:' 到 ',
         showType:'modal',
-        linkPanels:false,//面板联动
-        showClear:false,//是否显示清除按钮
+        // linkPanels:false,//面板联动
+        showClear:true,//是否显示清除按钮
         autoConfirm:true,
         showShortKeys:true,
         autoFillDate:true,//自动变更element里面的值
     },function(data){
         console.log(data)
+    })
+    mobiledate.on('scrollEnd',e=>{
+        console.log(e);
     })
 
     var date=new XNDatepicker(document.querySelector("#weeknum"),{

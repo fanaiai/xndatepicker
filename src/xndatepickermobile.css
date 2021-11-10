@@ -22,6 +22,12 @@
     transform: translateY(100%);
     pointer-events: auto;
 }
+.xndatepicker-mobile .cancel-btn,.xndatepicker-mobile .confirm-btn{
+    /*background: #2264d1;*/
+    /*color: #fff;*/
+    padding:0 10rem;
+    font-size: 12rem;
+}
 .scroll-container{
     display: flex;
     align-items: flex-start;
@@ -34,12 +40,13 @@
     position:relative;
     flex:1;
     text-align: center;
-    font-size:14rem;
+    font-size:12rem;
     list-style: none;
     padding:0;
     line-height: 2;
     margin:0;
     z-index: 2;
+
 }
 .scroll-container ul li{
     height: 28rem;
@@ -65,7 +72,7 @@
 .xndatepicker-head{
     font-size: 14rem;
     display: flex;
-    justify-content: space-around;
+    justify-content: space-between;
     align-items: center;
     line-height: 2;
     border-bottom:1rem solid #ccc;
@@ -92,10 +99,11 @@
     color: #4a9bfe;
 }
 .clear-btn{
-    position: absolute;
-    right: 10px;
-    top: 0;
-    display: none;
+    /*position: absolute;*/
+    /*right: 10px;*/
+    /*top: 0;*/
+    /*display: none;*/
+    padding:0 10px;
 }
 .xndatepicker-mobile-input{
     min-width: 60px;
@@ -104,6 +112,9 @@
 .xndatepicker-mobile-input>div{
     position: relative;
     border:1px solid #ccc;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 .xndatepicker-mobile-input>span{
     padding:0 10px;
