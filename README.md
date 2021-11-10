@@ -2,8 +2,10 @@
 # [样例地址](https://www.jq22.com/yanshi23561) (样例不是最新代码哦)
 
 
-# 2021/02/02 V1.3.0(未发布)
+# 2021/11/10 V2.0.0beta(已发布)
 + 移动端支持
++ 修改placeholder的属性名
+  placeholder:{startTime:'起始',endTime:'结束'}
 
 # 2021/07/19 V1.2.7(已发布)
 + 增加placeholder的object类型支持
