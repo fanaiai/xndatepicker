@@ -61,7 +61,13 @@
 ## 如果选择器不能满足您的使用需求，请提交issue，我将尽快对选择器进行更新。
 
 # 选择器样式示例：
-![avatar](https://raw.githubusercontent.com/fanaiai/xndatepicker/main/img/%E4%BC%81%E4%B8%9A%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_16098368986650.png)
+![avatar](https://api2.mubu.com/v3/document_image/0a6acd08-2ac0-4f40-9fbf-cb28a0a0708d-872666.jpg)
+![avatar](https://api2.mubu.com/v3/document_image/a8ef3371-473a-4309-ae12-8645002fdd57-872666.jpg)
+![avatar](https://api2.mubu.com/v3/document_image/bedefa13-a44d-44f9-b711-78bf52bf7ee6-872666.jpg)
+![avatar](https://api2.mubu.com/v3/document_image/c47884d4-8c54-40ed-a397-164051342d7e-872666.jpg)
+![avatar](https://api2.mubu.com/v3/document_image/81829a64-fc97-4217-a41b-c975de55131a-872666.jpg)
+![avatar](https://api2.mubu.com/v3/document_image/47f724f0-557d-4f18-946b-2b01f527c86f-872666.jpg)
+![avatar](https://api2.mubu.com/v3/document_image/a6334d4c-36d6-4fa4-90f8-8dee553e45f2-872666.jpg)
 # 使用步骤
 ### 下载代码
 ### 引用js
