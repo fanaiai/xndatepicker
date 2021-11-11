@@ -7,6 +7,7 @@
     background: rgba(0,0,0,.4);
     z-index: 99;
     opacity: 0;
+    color: var(--color);
     /*pointer-events: none;*/
     /*display: none;*/
 }
@@ -17,7 +18,7 @@
     user-select: none;
     z-index: 999;
     width:100%;
-    background: #fff;
+    background: var(--background-color);
     left: 0;
     transform: translateY(100%);
     pointer-events: auto;
@@ -27,6 +28,9 @@
     /*color: #fff;*/
     padding:0 10rem;
     font-size: 12rem;
+}
+.xndatepicker-mobile .confirm-btn{
+    color: var(--primary-color);
 }
 .scroll-container{
     display: flex;
@@ -50,6 +54,7 @@
 }
 .scroll-container ul li{
     height: 28rem;
+    line-height: 28rem;
 }
 .scroll-container>div{
     overflow: hidden;
@@ -58,24 +63,21 @@
     position: relative;
 }
 .current-bg{
-    height: 26rem;
+    height: 28rem;
     width: 100%;
     position: absolute;
     top: 56rem;
-    background: #efefef;
+    background: var(--range-background);
     pointer-events: none;
     left: 0;
-    border-style: solid;
-    border-color: #eee;
-    border-width: 1rem 0 1rem 0;
 }
 .xndatepicker-head{
     font-size: 14rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    line-height: 2;
-    border-bottom:1rem solid #ccc;
+    line-height: 2.3;
+    border-bottom:1rem solid var(--border-color);
 }
 
 .shortcut-list{
@@ -88,15 +90,16 @@
     /*flex-wrap: wrap;*/
 }
 .shortcut-list li{
-    padding:0 8rem;
-    border:1rem solid #eee;
+    padding: 0 8rem;
+    border: 1rem solid var(--border-color);
     line-height: 1.7;
-    margin:4rem 2px 0 2rem;
+    margin: 4rem 4px 0 4rem;
     white-space: nowrap;
+    border-radius: 5rem;
 }
 .shortcut-list li.on{
-    border-color: #4a9bfe;
-    color: #4a9bfe;
+    border-color: var(--primary-color);
+    color: var(--primary-color);
 }
 .clear-btn{
     /*position: absolute;*/

@@ -1,17 +1,7 @@
 //! xndatepicker.js
 //! 仙女座日期选择器
-//! version : 1.2.6
 //! authors : 范媛媛
 //! create date:2021/01/01
-//! update date:2021/01/05 V1.0.0
-//! update date:2021/01/28 V1.1.0
-//! update date:2021/02/01 V1.2.0
-//! update date:2021/02/03 V1.2.1 修复bug
-//! update date:2021/02/04 V1.2.2 修复bug
-//! update date:2021/03/11 V1.2.3 修复bug
-//! update date:2021/03/26 V1.2.5 增加主题
-//! update date:2021/06/18 V1.2.6 修改bug，起始日期和结束日期一样不能确定
-// https://github.com/fanaiai/xndatepicker
 import './xnquery';
 import './xntimepicker.js';
 // import dayjs from 'dayjs';
@@ -37,6 +27,7 @@ dayjs.extend(isSameOrAfter)
 dayjs.extend(isLeapYear)
 dayjs.extend(WeekOfYear)
 dayjs.extend(advancedFormat)
+import './theme.css';
 import './xndatepicker.css';
 import './iconfont/iconfont.css';
 
@@ -261,7 +252,6 @@ class XNDatepickerPc {
         if (!options.format) {
             this.option.format = format[this.type]
         }
-        console.log(this);
         this.id = this.getRandomString();
         this.show = false;
         this.eventList = {};
@@ -275,6 +265,13 @@ class XNDatepickerPc {
         this.rendPicker();
         this.initCallback();
         this.confirm(false, true);
+    }
+
+    resetData({startTime,endTime}){
+        let start=startTime?dayjs(startTime):null;
+        let end=endTime?dayjs(endTime):null;
+        this.setCurrentTime({startTime: start, endTime: end})
+        this.confirm(false);
     }
 
     rendPicker() {
@@ -308,16 +305,6 @@ class XNDatepickerPc {
         this.updateCurrentTime(1);
         this.updateCurrentTime(2);
         this.setPosition();
-    }
-
-    getCurrentTargetTime() {
-        var str = ''
-        if (this.$targetDom.get(0).nodeName == 'INPUT') {
-            str = this.$targetDom.get(0).value;
-        } else {
-            str = this.$targetDom.get(0).innerHTML;
-        }
-        // console.log(str)
     }
 
     updateCurrentTime(num) {
@@ -1538,11 +1525,6 @@ class XNDatepickerPc {
         });
     }
 
-    _getBaseType(target) {
-        const typeStr = Object.prototype.toString.apply(target);
-
-        return typeStr.slice(8, -1);
-    }
 
     watch(key, callback) {
         this._setData(key, callback)

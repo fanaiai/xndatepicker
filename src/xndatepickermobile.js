@@ -1,3 +1,4 @@
+import './theme.css';
 import './xndatepickermobile.css'
 import XNQuery from './xnquery.js';
 import IScroll from './iscroll.js'
@@ -506,7 +507,7 @@ class XNDatepickerMobile {
 
     initDateModal() {
         let scrollContHtml = this.initScrollContainer();
-        let dom = `<div class="xndatepicker-mobile-outer" id="${this.id}"><div class="xndatepicker-mobile">
+        let dom = `<div class="xndatepicker-mobile-outer ${option.theme||''}" id="${this.id}"><div class="xndatepicker-mobile">
     <div class="xndatepicker-head">
       <a class="cancel-btn">取消</a>
       <span class="current-time"></span>

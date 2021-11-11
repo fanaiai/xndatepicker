@@ -11,6 +11,7 @@
 //! update date:2021/03/11 V1.2.3 修复bug
 //! update date:2021/03/26 V1.2.5 增加主题
 //! update date:2021/06/18 V1.2.6 修改bug，起始日期和结束日期一样不能确定
+//! update date:2021/11/11 V2.0.0 增加手机端支持
 // https://github.com/fanaiai/xndatepicker
 import XNDatepickerMobile from './xndatepickermobile.js'
 import XNDatepickerPc from './xndatepickerpc.js'

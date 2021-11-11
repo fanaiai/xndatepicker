@@ -3,7 +3,12 @@
 
 
 # 2021/11/10 V2.0.0beta(已发布)
-+ 移动端支持
++ 移动端支持,支持的类型有：year / month / date / datetime / datetimerange / daterange / monthrange / yearrange / weeknum 
+
+  + 新增属性 ismobile:true
+  + 新增属性：scrolllist: ['year', 'month', 'date', 'hour', 'minute', 'second'],此属性用于设置显示哪些滚动条，不设置使用默认
+    
++ 修改theme样式的写法，新增theme.css文件，也可以自定义theme属性的值，并添加css变量
 + 修改placeholder的属性名
   placeholder:{startTime:'起始',endTime:'结束'}
 
