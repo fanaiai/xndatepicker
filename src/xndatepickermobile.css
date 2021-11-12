@@ -114,7 +114,6 @@
 }
 .xndatepicker-mobile-input>div{
     position: relative;
-    border:1px solid #ccc;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -123,7 +122,6 @@
     padding:0 10px;
 }
 .xndatepicker-mobile-input .input{
-    min-width: 100px;
     padding:0 10px;
 }
 .xndatepicker-mobile-input .input:empty:before{

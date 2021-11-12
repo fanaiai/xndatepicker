@@ -187,7 +187,7 @@ const defaultoption = {
     showShortKeys: true,//是否显示快捷选项
     autoFillDate: true,//自动变更element里面的值，如果自动变更，则按照插件样式显示
     firstDayOfWeek: 7,//周起始日 1-7
-    theme: 'default',//主题,blue,orange
+    // theme: 'default',//主题,blue,orange
     multipleDates: [],//当为多选日期类型时的初始值
     startTime: '',//初始开始时间
     endTime: '',//初始结束时间
@@ -210,11 +210,11 @@ let option = {};
 class XNDatepickerMobile {
     constructor(targetDom, options, onConfirm) {
         this.onConfirm = onConfirm;
-        option = $.extend(true, {}, defaultoption, options);
-        this.type = option.type;
+        this.option = $.extend(true, {}, defaultoption, options);
+        this.type = this.option.type;
         this.initTargetDom(targetDom)
         if (!options.shortList) {
-            option.shortList = shortList[this.type]
+            this.option.shortList = shortList[this.type]
         }
         this.id = this.getRandomString();
         this.initDate();
@@ -237,12 +237,12 @@ class XNDatepickerMobile {
             this.$t.append(dateinput)
             if (i == 0 && num.length == 2) {
                 let span = document.createElement('span')
-                span.innerHTML = option.separator;
+                span.innerHTML = this.option.separator;
                 this.$t.append(span)
             }
             let innerHtml = `
-            <div class="input" data-type="${classname}" data-placeholder="${option.placeholder[classname]}"></div>`
-            if(option.showClear){
+            <div class="input" data-type="${classname}" data-placeholder="${this.option.placeholder[classname]}"></div>`
+            if(this.option.showClear){
                 innerHtml+=`<i class="icon-xndatepickershanchu iconfont-xndatepicker clear-btn"></i>`
             }
             dateinput.innerHTML = innerHtml
@@ -258,12 +258,12 @@ class XNDatepickerMobile {
     }
 
     initDate() {
-        let minDate = dayjs(option.minDate || dayjs())
-        let maxDate = dayjs(option.maxDate || dayjs())
-        let startTime = option.startTime ? dayjs(option.startTime) : null
-        let endTime = option.endTime ? dayjs(option.endTime) : null
-        this.format = option.format || (format[option.type].format)
-        this.scrolllist = option.scrolllist || format[option.type].scrolllist;
+        let minDate = dayjs(this.option.minDate || dayjs())
+        let maxDate = dayjs(this.option.maxDate || dayjs())
+        let startTime = this.option.startTime ? dayjs(this.option.startTime) : null
+        let endTime = this.option.endTime ? dayjs(this.option.endTime) : null
+        this.format = this.option.format || (format[this.option.type].format)
+        this.scrolllist = this.option.scrolllist || format[this.option.type].scrolllist;
         this.formatDate(maxDate, 'maxDate')
         this.formatDate(minDate, 'minDate')
         this.formatDate(startTime, 'startTime')
@@ -323,7 +323,7 @@ class XNDatepickerMobile {
     }
 
     addTargetEvent() {
-        this.targetDom.addEventListener('click', e => {
+        let targetClick=(e)=>{
             let $t = $(e.target);
             if ($t.hasClass('clear-btn')) {
                 let type = 'endTime'
@@ -335,7 +335,11 @@ class XNDatepickerMobile {
                 this.currentType = $t.attr('data-type')
                 this.show();
             }
-        })
+        }
+        this.removeTargetClick=()=>{
+            this.targetDom.removeEventListener('click',targetClick)
+        }
+        this.targetDom.addEventListener('click',targetClick)
     }
 
     addEvent() {
@@ -351,15 +355,15 @@ class XNDatepickerMobile {
             }
             if ($t.get(0).nodeName == 'LI' && $t.parents('.shortcut-list').get(0)) {
                 var index = $t.parent().find("LI").index($t.get(0));
-                this.chooseShortcut(option.shortList[index])
+                this.chooseShortcut(this.option.shortList[index])
 
                 $(this.shortcutcontainer).find('.on').removeClass('on')
                 $t.addClass('on')
                 // if (this.type == 'multiple') {
-                //     var startTime = Array.isArray(this.option.shortList[index].value.startTime) ? this.option.shortList[index].value.startTime : [this.option.shortList[index].value.startTime]
+                //     var startTime = Array.isArray(this.this.option.shortList[index].value.startTime) ? this.this.option.shortList[index].value.startTime : [this.this.option.shortList[index].value.startTime]
                 //     this.multipleDates = startTime;
                 // } else {
-                //     this.setCurrentTime(this.option.shortList[index].value);
+                //     this.setCurrentTime(this.this.option.shortList[index].value);
                 // }
             }
         })
@@ -408,7 +412,7 @@ class XNDatepickerMobile {
 
     fillInput(showstr, type) {
         let currentType = type || this.currentType;
-        if (!option.autoFillDate) {
+        if (!this.option.autoFillDate) {
             return;
         }
         this.targetDom.querySelector('.' + currentType + ' .input').innerHTML = showstr;
@@ -466,11 +470,13 @@ class XNDatepickerMobile {
         this[type + 'scroll'].refresh();
         this[type + 'scroll'].goToPage(0, Y || 0, isinit ? 0 : 500)
         this[type + 'scroll'].on('scrollEnd', e => {
+            console.log(this[type + 'scroll'].currentPage);
             let cur = this[type + 'Container'].querySelectorAll('li')[this[type + 'scroll'].currentPage.pageY + 2].getAttribute('data-num')
             this[this.currentType][type] = cur;
             this.rendScrollList(type);
             this.refreshCurrentShow();
             this.trigger('scrollEnd', {scroll: this[type + 'scroll'], currentType: this.currentType})
+
         })
     }
 
@@ -506,8 +512,9 @@ class XNDatepickerMobile {
     }
 
     initDateModal() {
+        console.log(this.option.theme);
         let scrollContHtml = this.initScrollContainer();
-        let dom = `<div class="xndatepicker-mobile-outer ${option.theme||''}" id="${this.id}"><div class="xndatepicker-mobile">
+        let dom = `<div class="xndatepicker-mobile-outer ${this.option.theme||''}" id="${this.id}"><div class="xndatepicker-mobile">
     <div class="xndatepicker-head">
       <a class="cancel-btn">取消</a>
       <span class="current-time"></span>
@@ -532,12 +539,12 @@ class XNDatepickerMobile {
     }
 
     geneShortList() {
-        if(!option.showShortKeys){
+        if(!this.option.showShortKeys){
             return;
         }
         var ul = '<ul>'
-        for (let i = 0; i < option.shortList.length; i++) {
-            ul += '<li>' + option.shortList[i].name + '</li>'
+        for (let i = 0; i < this.option.shortList.length; i++) {
+            ul += '<li>' + this.option.shortList[i].name + '</li>'
         }
         ul += '</ul>'
         this.shortcutcontainer = this.scrollContainer.querySelector('.shortcut-list');
@@ -620,8 +627,8 @@ class XNDatepickerMobile {
         if (this[this.currentType].full) {
             if (this.minDate['year'] == this[this.currentType]['year'] && this.minDate['month'] == this[this.currentType]['month']) {
                 min = this.minDate[type]
-                if (this[this.currentType][type] > max) {
-                    this[this.currentType][type] = max
+                if (this[this.currentType][type] < min) {
+                    this[this.currentType][type] = min
                 }
             }
             if (this.maxDate['year'] == this[this.currentType]['year'] && this.maxDate['month'] == this[this.currentType]['month']) {
@@ -679,6 +686,12 @@ class XNDatepickerMobile {
             pwd += $chars.charAt(Math.floor(Math.random() * maxPos));
         }
         return pwd;
+    }
+    destroy() {
+        this.removeTargetClick();
+        // this.removeClickEvent();
+        this.scrollContainer && ($(this.scrollContainer).remove());
+
     }
 }
 
