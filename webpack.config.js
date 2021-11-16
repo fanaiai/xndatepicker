@@ -10,8 +10,8 @@ module.exports = {
             import:'./src/xndatepicker.js',
         }
     },
-    devtool:'eval-source-map',//追踪错误源码
-    // devtool:'source-map',//不追踪错误源码
+    // devtool:'eval-source-map',//追踪错误源码
+    // devtool:'eval',//不追踪错误源码
     devServer: {
         contentBase: './dist',
         host:'10.1.100.207',
@@ -92,10 +92,15 @@ module.exports = {
             },
             {//对字体图标的处理
                 test: /\.(ttf|woff2?)$/,
-                type: 'asset/resource',
+                type: 'asset',
                 generator: {
                     filename: 'iconfont/[name][ext]',
                     // path:'iconfont/'
+                },
+                parser: {
+                    dataUrlCondition: {
+                        maxSize: 4 * 1024 // 4kb
+                    }
                 }
             },
             // {
