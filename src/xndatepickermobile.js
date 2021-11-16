@@ -662,7 +662,7 @@ class XNDatepickerMobile {
         for (let i = min; i <= max; i++) {
             let name=i;
             if(suffix && typeof suffix =='function'){
-                name=suffix(i-1);
+                name=suffix(i);
             }
             if(suffix && Array.isArray(suffix)){
                 name=suffix[i-1];
