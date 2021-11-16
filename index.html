@@ -4,13 +4,12 @@
 <head>
     <title></title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vxe-table@next/lib/style.css">
 <!--    <script src="https://unpkg.com/better-scroll@latest/dist/better-scroll.min.js"></script>-->
     <style>
         body{
             background: #eee;
         }
-        .dateinputer{
+        .dateinputer>div{
             line-height:40px;
             height:40px;
             margin:10px 0;
@@ -37,6 +36,10 @@
             margin-left:30px;
             margin-top:20px;
             font-size: 16px;
+        }
+        .flex-div>span{
+            display: block;
+            margin-bottom: 10px;
         }
         .dateinputer-mobile{
             line-height: 32px;
@@ -68,25 +71,31 @@
     </div>
 </div>
 <div class="flex-div">
-    <span>date 日期区间选择器-手机端</span>
+    <span>daterange 日期区间选择器-手机端</span>
     <div id='mobile-daterange' class="dateinputer-mobile">
 
     </div>
 </div>
 <div class="flex-div">
-    <span>date 日期时间选择器-手机端</span>
+    <span>datetime 日期选择器-手机端</span>
     <div id='mobile-datetime' class="dateinputer-mobile">
 
     </div>
 </div>
 <div class="flex-div">
-    <span>date 年月选择器-手机端</span>
+    <span>datetime 仅时间选择器-手机端</span>
+    <div id='mobile-datetime1' class="dateinputer-mobile">
+
+    </div>
+</div>
+<div class="flex-div">
+    <span>month 年月选择器-手机端</span>
     <div id='mobile-month' class="dateinputer-mobile">
 
     </div>
 </div>
 <div class="flex-div">
-    <span>date 周次选择器-手机端</span>
+    <span>weeknum 周次选择器-手机端</span>
     <div id='mobile-weeknum' class="dateinputer-mobile">
 
     </div>
@@ -168,15 +177,16 @@
     var mobiledate=new XNDatepicker(document.querySelector("#mobile-date"),{
         // format:'YYYY-MM-DD HH:mm',
         isMobile:true,
+        format:'HH:mm:ss',
         type:'date',//year/month/date/ datetime/datetimerange/ daterange/monthrange/yearrange/weeknum
         // scrolllist:['hour','minute','second'],
         // multipleDates:[],//当为多选日期类型时的初始值
         // startTime:'2021-1-24 11',
         endTime:'2036-04-04',
         minDate:'2019-04-04',
-        placeholder:{startTime:'请选择周',endTime:'结束周'},
+        placeholder:{startTime:'请选择日期',endTime:'结束周'},
         maxDate:'2022-01-01',
-        separator:' 到 ',
+        separator:' 至 ',
         // showType:'modal',
         // linkPanels:false,//面板联动
         showClear:true,//是否显示清除按钮
@@ -189,6 +199,30 @@
     mobiledate.on('scrollEnd',e=>{
         console.log(e);
     })
+    mobiledate.resetDate('2020-03-24')
+
+    var mobiledatetime1=new XNDatepicker(document.querySelector("#mobile-datetime1"),{
+        // format:'YYYY-MM-DD HH:mm',
+        isMobile:true,
+        format:'HH:mm:ss',
+        type:'datetime',//year/month/date/ datetime/datetimerange/ daterange/monthrange/yearrange/weeknum
+        scrolllist:['hour','minute','second'],
+        // multipleDates:[],//当为多选日期类型时的初始值
+        // startTime:'2021-1-24 11',
+        endTime:'2036-04-04',
+        minDate:'2019-04-04',
+        placeholder:{startTime:'开始时间',endTime:'结束时间'},
+        maxDate:'2022-01-01',
+        separator:' 至 ',
+        // showType:'modal',
+        // linkPanels:false,//面板联动
+        showClear:true,//是否显示清除按钮
+        autoConfirm:true,
+        showShortKeys:true,
+        autoFillDate:true,//自动变更element里面的值
+    },function(data){
+        console.log(data)
+    })
 
     var mobiledaterange=new XNDatepicker(document.querySelector("#mobile-daterange"),{
         // format:'YYYY-MM-DD HH:mm',
@@ -200,7 +234,7 @@
         theme:'pink',
         endTime:'2036-04-04',
         minDate:'2019-04-04',
-        placeholder:{startTime:'请选择周',endTime:'结束周'},
+        placeholder:{startTime:'开始时间',endTime:'结束时间'},
         maxDate:'2022-01-01',
         separator:' 到 ',
         // showType:'modal',
@@ -224,7 +258,7 @@
         theme:'orange',
         endTime:'2036-04-04',
         minDate:'2019-04-04',
-        placeholder:{startTime:'请选择周',endTime:'结束周'},
+        placeholder:{startTime:'开始时间',endTime:'结束时间'},
         maxDate:'2022-01-01',
         separator:' 到 ',
         // showType:'modal',
@@ -236,9 +270,7 @@
     },function(data){
         console.log(data)
     })
-    mobiledate.on('scrollEnd',e=>{
-        console.log(e);
-    })
+
 
     var mobiledatetime=new XNDatepicker(document.querySelector("#mobile-datetime"),{
         // format:'YYYY-MM-DD HH:mm',
@@ -250,7 +282,7 @@
         theme:'green',
         endTime:'2036-04-04',
         minDate:'2019-04-04',
-        placeholder:{startTime:'请选择周',endTime:'结束周'},
+        placeholder:{startTime:'开始时间',endTime:'结束时间'},
         maxDate:'2022-01-01',
         separator:' 到 ',
         // showType:'modal',
@@ -356,7 +388,7 @@
     },function(data){
         console.log(data)
     })
-    date.resetData({startTime:'2020-02-24'})
+    date.resetDate('2020-03-24')
     document.querySelector("#destroy").click(function(){
         date.destroy();
     })

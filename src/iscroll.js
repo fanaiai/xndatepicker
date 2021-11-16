@@ -2168,3 +2168,5 @@ if ( typeof module != 'undefined' && module.exports ) {
 }
 
 })(window, document, Math);
+
+export default window.IScroll

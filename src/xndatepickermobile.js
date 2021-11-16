@@ -140,21 +140,7 @@ const defaultoption = {
     placeholder: '请选择',//{start:'',end:''}
     shortList: [],
     locale: {
-        month: [
-            '一月',
-            '二月',
-            '三月',
-            '四月',
-            '五月',
-            '六月',
-            '七月',
-            '八月',
-            '九月',
-            '十月',
-            '十一月',
-            '十二月',
-        ],
-        monthHead: [
+        month:[
             '1月',
             '2月',
             '3月',
@@ -168,14 +154,31 @@ const defaultoption = {
             '11月',
             '12月',
         ],
-        week: ['日', '一', '二', '三', '四', '五', '六'],
-        clear: '清空',
+        // month:[
+        //     'Jan',
+        //     'Feb',
+        //     'Mar',
+        //     'Apr',
+        //     'May',
+        //     'Jun',
+        //     'Jul',
+        //     'Aug',
+        //     'Sept',
+        //     'Oct',
+        //     'Nov',
+        //     'Dec',
+        // ],
+        cancel:'取消',
         confirm: '确定',
         yearHeadSuffix: function (year) {
             return year + '年'
         },
+        dateSuffix:'日',
+        hourSuffix:'时',
+        minuteSuffix:'分',
+        secondSuffix:'秒',
         weekNum: function (weeknum) {
-            return '第' + weeknum + '周'
+            return '第' + (weeknum+1) + '周'
         }
     },//显示信息
     confirmFirst: true,//第一次就搜索
@@ -246,26 +249,39 @@ class XNDatepickerMobile {
                 innerHtml+=`<i class="icon-xndatepickershanchu iconfont-xndatepicker clear-btn"></i>`
             }
             dateinput.innerHTML = innerHtml
-            // let t = document.createElement('div');
-            // // this.$targetDom = $(t)
-            // dateinput.appendChild(t)
-            // let i = document.createElement('i');
-            // // i.classList.add('icon-xndatepickershanchu')
-            // // i.classList.add('iconfont-xndatepicker')
-            // // i.classList.add('clear-btn')
-            // dateinput.appendChild(i)
         }
     }
 
     initDate() {
         let minDate = dayjs(this.option.minDate || dayjs())
         let maxDate = dayjs(this.option.maxDate || dayjs())
-        let startTime = this.option.startTime ? dayjs(this.option.startTime) : null
-        let endTime = this.option.endTime ? dayjs(this.option.endTime) : null
+        // let startTime = this.option.startTime ? dayjs(this.option.startTime) : null
+        // let endTime = this.option.endTime ? dayjs(this.option.endTime) : null
         this.format = this.option.format || (format[this.option.type].format)
         this.scrolllist = this.option.scrolllist || format[this.option.type].scrolllist;
         this.formatDate(maxDate, 'maxDate')
         this.formatDate(minDate, 'minDate')
+        // this.formatDate(startTime, 'startTime')
+        // this.formatDate(endTime, 'endTime')
+        // if (startTime && startTime.isBefore(this.minDate.full)) {
+        //     this.cloneDate(this.minDate, this.startTime)
+        // }
+        // if (endTime && endTime.isAfter(this.maxDate.full)) {
+        //     this.cloneDate(this.maxDate, this.endTime)
+        // }
+        // this.confirm = {
+        //     startTime: $.extend(true, {}, this.startTime),
+        //     endTime: $.extend(true, {}, this.endTime),
+        // }
+        // this.confirm.startTime.full = this.clone(this.startTime.full);
+        // this.confirm.endTime.full = this.clone(this.endTime.full);
+        this.formatInitialDate();
+        this.initInput()
+        // console.log(this.startTime,this.endTime);
+    }
+    formatInitialDate(istartTime=this.option.startTime,iendTime=this.option.endTime){
+        let startTime = istartTime ? dayjs(istartTime) : null
+        let endTime = iendTime ? dayjs(iendTime) : null
         this.formatDate(startTime, 'startTime')
         this.formatDate(endTime, 'endTime')
         if (startTime && startTime.isBefore(this.minDate.full)) {
@@ -280,8 +296,6 @@ class XNDatepickerMobile {
         }
         this.confirm.startTime.full = this.clone(this.startTime.full);
         this.confirm.endTime.full = this.clone(this.endTime.full);
-        this.initInput()
-        // console.log(this.startTime,this.endTime);
     }
 
     initInput() {
@@ -407,7 +421,7 @@ class XNDatepickerMobile {
     clear(type) {
         this[type].full = null;
         this.fillInput('', type);
-        this.trigger("confirm", {startTime: this.confirm.startTime, endTime: this.confirm.endTime, dayjs: dayjs})
+        this.trigger("confirm", {startTime: this.confirm.startTime.full, endTime: this.confirm.endTime.full, dayjs: dayjs})
     }
 
     fillInput(showstr, type) {
@@ -428,8 +442,8 @@ class XNDatepickerMobile {
             }
         }
         !type && (this.trigger("confirm", {
-            startTime: this.confirm.startTime,
-            endTime: this.confirm.endTime,
+            startTime: this.confirm.startTime.full,
+            endTime: this.confirm.endTime.full,
             dayjs: dayjs
         }))
     }
@@ -470,7 +484,9 @@ class XNDatepickerMobile {
         this[type + 'scroll'].refresh();
         this[type + 'scroll'].goToPage(0, Y || 0, isinit ? 0 : 500)
         this[type + 'scroll'].on('scrollEnd', e => {
-            console.log(this[type + 'scroll'].currentPage);
+            if(this[type + 'scroll'].currentPage.pageY>this[type + 'scroll'].pages[0].length-4){
+                return;
+            }
             let cur = this[type + 'Container'].querySelectorAll('li')[this[type + 'scroll'].currentPage.pageY + 2].getAttribute('data-num')
             this[this.currentType][type] = cur;
             this.rendScrollList(type);
@@ -516,9 +532,9 @@ class XNDatepickerMobile {
         let scrollContHtml = this.initScrollContainer();
         let dom = `<div class="xndatepicker-mobile-outer ${this.option.theme||''}" id="${this.id}"><div class="xndatepicker-mobile">
     <div class="xndatepicker-head">
-      <a class="cancel-btn">取消</a>
+      <a class="cancel-btn">${this.option.locale.cancel}</a>
       <span class="current-time"></span>
-      <a class="confirm-btn">确认</a>
+      <a class="confirm-btn">${this.option.locale.confirm}</a>
 </div>
     <div class="shortcut-list">
     
@@ -567,7 +583,7 @@ class XNDatepickerMobile {
     }
 
     rendyear(isinit, type) {
-        this._rendList(type, this.minDate[type], this.maxDate[type], this[this.currentType][type] || this.maxDate[type], '年', isinit)
+        this._rendList(type, this.minDate[type], this.maxDate[type], this[this.currentType][type] || this.maxDate[type], this.option.locale.yearHeadSuffix, isinit)
     }
 
     rendweek(isinit, type) {
@@ -577,7 +593,7 @@ class XNDatepickerMobile {
                 this[this.currentType][type] = num;
             }
         }
-        (this._rendList(type, 1, num, this[this.currentType][type], '周', isinit))
+        (this._rendList(type, 1, num, this[this.currentType][type], this.option.locale.weekNum, isinit))
     }
 
     rendmonth(isinit, type) {
@@ -601,19 +617,19 @@ class XNDatepickerMobile {
                 min = this.minDate[type]
             }
         }
-        this._rendList(type, min, max, this[this.currentType][type] || max, '月', isinit)
+        this._rendList(type, min, max, this[this.currentType][type] || max, this.option.locale.month, isinit)
     }
 
     rendhour(isinit, type) {
-        this._rendList(type, 0, 23, this[this.currentType][type] || 0, '时', isinit)
+        this._rendList(type, 0, 23, this[this.currentType][type] || 0, this.option.locale.hourSuffix, isinit)
     }
 
     rendminute(isinit, type) {
-        this._rendList(type, 0, 59, this[this.currentType][type] || 0, '分', isinit)
+        this._rendList(type, 0, 59, this[this.currentType][type] || 0, this.option.locale.minuteSuffix, isinit)
     }
 
     rendsecond(isinit, type) {
-        this._rendList(type, 0, 59, this[this.currentType][type] || 0, '秒', isinit)
+        this._rendList(type, 0, 59, this[this.currentType][type] || 0, this.option.locale.secondSuffix, isinit)
     }
 
     renddate(isinit, type) {
@@ -638,13 +654,23 @@ class XNDatepickerMobile {
                 }
             }
         }
-        (this._rendList(type, min, max, this[this.currentType][type] || this.maxDate[type], '日', isinit))
+        (this._rendList(type, min, max, this[this.currentType][type] || this.maxDate[type], this.option.locale.dateSuffix, isinit))
     }
 
     _rendList(type, min, max, current, suffix, isinit) {
         let list = '<li></li><li></li>';
         for (let i = min; i <= max; i++) {
-            list += `<li data-num="${i}">${i}${suffix}</li>`
+            let name=i;
+            if(suffix && typeof suffix =='function'){
+                name=suffix(i-1);
+            }
+            if(suffix && Array.isArray(suffix)){
+                name=suffix[i-1];
+            }
+            if(suffix && typeof suffix=='string'){
+                name=name+suffix;
+            }
+            list += `<li data-num="${i}">${name}</li>`
         }
         list += '<li></li><li></li>';
         this[type + 'Container'].innerHTML = list;
@@ -692,6 +718,11 @@ class XNDatepickerMobile {
         // this.removeClickEvent();
         this.scrollContainer && ($(this.scrollContainer).remove());
 
+    }
+    resetDate(startTime,endTime){
+        this.formatInitialDate(startTime,endTime);
+        this.initInput()
+        // this.confirm[this.currentType]
     }
 }
 

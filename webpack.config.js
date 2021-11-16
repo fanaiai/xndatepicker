@@ -39,7 +39,7 @@ module.exports = {
     output: {
         filename: '[name].min.js',
         path: path.resolve(__dirname, 'dist'),
-        publicPath: '/',
+        publicPath: './',
         environment: {//输出es5的语法，用于兼容ie
             // The environment supports arrow functions ('() => { ... }').
             arrowFunction: false,
@@ -90,15 +90,23 @@ module.exports = {
                 test: /\.css$/i,
                 use: ['style-loader', 'css-loader'],
             },
-            {
-                test: /\.(eot|svg|ttf|woff|woff2)$/,
-                use: {
-                    loader: 'file-loader',
-                    options: {
-                        outputPath: 'fonts/'
-                    }
+            {//对字体图标的处理
+                test: /\.(ttf|woff2?)$/,
+                type: 'asset/resource',
+                generator: {
+                    filename: 'iconfont/[name][ext]',
+                    // path:'iconfont/'
                 }
             },
+            // {
+            //     test: /\.(eot|svg|ttf|woff|woff2)$/,
+            //     use: {
+            //         loader: 'file-loader',
+            //         options: {
+            //             outputPath: 'fonts/'
+            //         }
+            //     }
+            // },
             {
                 test: /\.(png|svg|jpg|jpeg|gif)$/i,
                 type: 'asset/resource',

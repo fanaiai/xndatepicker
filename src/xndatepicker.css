@@ -1,5 +1,43 @@
-
-
+.xndatepicker-pc-input{
+    min-width: 60px;
+    display: flex;
+    align-items: center;
+}
+.xndatepicker-pc-input>div{
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    /*width: 100%;*/
+    /*overflow: hidden;*/
+}
+.xndatepicker-pc-input>span{
+    padding:0 10px;
+}
+.xndatepicker-pc-input .input{
+    padding: 0 10px;
+    /*width: 100%;*/
+    /*overflow: hidden;*/
+    /*text-overflow: ellipsis;*/
+}
+.xndatepicker-pc-input .input:empty:before{
+    content:attr(data-placeholder);
+}
+/*.xndatepicker-pc-input:hover .clear-btn{*/
+/*    display: block;*/
+/*}*/
+.xndatepicker-pc-input:hover>div:before{
+    display: none;
+}
+.xndatepicker-pc-input>div>i.clear-btn{
+    display: none;
+}
+.xndatepicker-pc-input>div:hover i.clear-btn{
+    display: block;
+}
+.xndatepicker-pc-input>div:hover i.date-icon{
+    display: none;
+}
 .xndatepicker {
     font-size: 14px;
     line-height: 26px;

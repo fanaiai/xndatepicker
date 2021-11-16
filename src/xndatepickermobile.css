@@ -101,12 +101,12 @@
     border-color: var(--primary-color);
     color: var(--primary-color);
 }
-.clear-btn{
+.xndatepicker-mobile-input .clear-btn{
     /*position: absolute;*/
     /*right: 10px;*/
     /*top: 0;*/
     /*display: none;*/
-    padding:0 10px;
+    /*padding:0 10px;*/
 }
 .xndatepicker-mobile-input{
     min-width: 60px;

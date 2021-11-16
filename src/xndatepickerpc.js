@@ -152,22 +152,22 @@ var shortList = {
 }
 var option = {
     showWeek: true,//是否显示周几
-    placeholder: '请选择',//{start:'',end:''}
+    placeholder: {startTime:'开始时间',endTime:'结束时间'},//{start:'',end:''}
     shortList: [],
     locale: {
-        month: [
-            '一月',
-            '二月',
-            '三月',
-            '四月',
-            '五月',
-            '六月',
-            '七月',
-            '八月',
-            '九月',
-            '十月',
-            '十一月',
-            '十二月',
+        month:[
+            '1月',
+            '2月',
+            '3月',
+            '4月',
+            '5月',
+            '6月',
+            '7月',
+            '8月',
+            '9月',
+            '10月',
+            '11月',
+            '12月',
         ],
         monthHead: [
             '1月',
@@ -215,10 +215,12 @@ var option = {
 
 class XNDatepickerPc {
     constructor(targetDom, options, onConfirm) {
-        this.$targetDom = $(targetDom);
+        // this.$targetDom = $(targetDom);
+
         this.option = $.extend(true, {}, option, options);
         this.type = this.option.type;
         this.format = this.type.indexOf('year') > -1 ? 'YYYY' : (this.type.indexOf('month') > -1 ? 'YYYY-MM' : (this.type.indexOf('time') > -1 ? 'YYYY-MM-DD' : 'YYYY-MM-DD'));
+
         if (typeof this.option.placeholder == 'string') {
             this.placeholder = {
                 startTime: this.option.placeholder,
@@ -231,6 +233,7 @@ class XNDatepickerPc {
                 endTime: this.option.placeholder.endTime
             }
         }
+        this.initTargetDom(targetDom)
         this.option.startTime && (this.option.startTime = dayjs(this.option.startTime));
         this.option.endTime && (this.option.endTime = dayjs(this.option.endTime));
 
@@ -267,9 +270,36 @@ class XNDatepickerPc {
         this.confirm(false, true);
     }
 
-    resetData({startTime,endTime}){
-        let start=startTime?dayjs(startTime):null;
-        let end=endTime?dayjs(endTime):null;
+    initTargetDom(targetDom) {
+        this.$t = $(targetDom);
+        this.targetDom = targetDom;
+        this.$t.addClass('xndatepicker-pc-input')
+        let num = ['startTime'];
+        if ((this.type.indexOf('range') > -1) || this.type == 'week') {
+            num.push('endTime')
+        }
+        for (let i = 0; i < num.length; i++) {
+            let classname = num[i]
+            let dateinput = document.createElement('div');
+            dateinput.classList.add(classname)
+            this.$t.append(dateinput)
+            if (i == 0 && num.length == 2) {
+                let span = document.createElement('span')
+                span.innerHTML = this.option.separator;
+                this.$t.append(span)
+            }
+            let innerHtml = `
+            <div class="input" data-type="${classname}" data-placeholder="${this.placeholder[classname]}"></div>`
+            if (this.option.showClear) {
+                innerHtml += `<i class="icon-xndatepickershanchu iconfont-xndatepicker clear-btn"></i><i class="icon-xndatepickerrili iconfont-xndatepicker date-icon"></i>`
+            }
+            dateinput.innerHTML = innerHtml
+        }
+    }
+
+    resetDate(startTime, endTime) {
+        let start = startTime ? dayjs(startTime) : null;
+        let end = endTime ? dayjs(endTime) : null;
         this.setCurrentTime({startTime: start, endTime: end})
         this.confirm(false);
     }
@@ -349,8 +379,16 @@ class XNDatepickerPc {
     }
 
     addTargetEvent() {
+        // var clickFunc = (e) => {
+        //     if (e.target == this.$targetDom.get(0)) {
+        //         this.changeShowStatus();
+        //     } else if (!$(e.target).parents('.xndatepicker').get(0) || ($(e.target).parents('.xndatepicker').get(0).id != this.id)) {
+        //
+        //         this.changeShowStatus(true);
+        //     }
+        // }
         var clickFunc = (e) => {
-            if (e.target == this.$targetDom.get(0)) {
+            if (e.target == this.targetDom) {
                 this.changeShowStatus();
             } else if (!$(e.target).parents('.xndatepicker').get(0) || ($(e.target).parents('.xndatepicker').get(0).id != this.id)) {
 
@@ -361,6 +399,20 @@ class XNDatepickerPc {
             document.removeEventListener('click', clickFunc, true)//捕获阶段
         }
         document.addEventListener('click', clickFunc, true)//捕获阶段
+        this.targetDom.addEventListener('click', e => {
+            let $t = $(e.target);
+            if ($t.hasClass('clear-btn')) {
+                let type = 'endTime'
+                if ($t.parent().hasClass('startTime')) {
+                    type = 'startTime'
+                }
+                this.cleardate(type);
+                // this.clear(type);
+            } else if ($t.hasClass('input')) {
+                this.changeShowStatus();
+            }
+        })
+
     }
 
     changeShowStatus(hide) {
@@ -412,15 +464,15 @@ class XNDatepickerPc {
         }
         var wwidth = document.documentElement.clientWidth;
         var wheight = document.documentElement.clientHeight;
-        var curcolordom = this.$targetDom.get(0)
+        var curcolordom = this.targetDom
 
         var targetTop = curcolordom.getBoundingClientRect().top;
         var top = targetTop;
         var targetLeft = curcolordom.getBoundingClientRect().left;
         var left = targetLeft;
 
-        var targetWidth = this.$targetDom.outerWidth();
-        var targetHeight = this.$targetDom.outerHeight();
+        var targetWidth = this.targetDom.offsetWidth;
+        var targetHeight = this.targetDom.offsetHeight;
 
         var domwidth = this.$container.outerWidth();
         var domheight = this.$container.outerHeight();
@@ -1031,13 +1083,22 @@ class XNDatepickerPc {
         this.rendHoverStyle();
     }
 
-    cleardate() {
-        this.date1 = '';
-        this.date2 = '';
-        this.selectedDate[0] = ''
-        this.selectedDate[1] = ''
-        this.selectedMultiple = [];
-        this.confirm(true);
+    cleardate(type) {
+        if (type == 'endTime') {
+            this.date2 = '';
+            this.selectedDate[1] = '';
+        } else if (type == 'startTime') {
+            this.date1 = '';
+            this.selectedDate[0] = '';
+            this.selectedMultiple = [];
+        } else {
+            this.date1 = '';
+            this.date2 = '';
+            this.selectedDate[0] = ''
+            this.selectedDate[1] = ''
+            this.selectedMultiple = [];
+        }
+        this.confirm();
     }
 
     currentdate() {
@@ -1048,12 +1109,14 @@ class XNDatepickerPc {
 
     confirm(clear, isFirst) {
         var canconfirm = false;
+        let showstrStart = ''
+        let showstrEnd = ''
         if (this.type == 'multiple') {
             if (clear) {
                 if ((isFirst && this.option.confirmFirst) || !isFirst) {
                     this.trigger("confirm", {startTime: this.selectedMultiple, dayjs: dayjs})
                 }
-                var showstr = ''
+                showstrStart = ''
                 canconfirm = true;
             } else {
                 this.multipleDates = this.multipleDates.map((e) => {
@@ -1063,7 +1126,7 @@ class XNDatepickerPc {
                 if ((isFirst && this.option.confirmFirst) || !isFirst) {
                     this.trigger("confirm", {startTime: this.selectedMultiple, dayjs: dayjs})
                 }
-                var showstr = this.multipleDates.join(',')
+                showstrStart = this.multipleDates.join(',')
                 canconfirm = true;
             }
         } else {
@@ -1076,12 +1139,13 @@ class XNDatepickerPc {
                     if (this.option.confirmFirst) {
                         this.trigger("confirm", {startTime: startTime, endTime: endTime, dayjs: dayjs})
                     }
-                    var showstr = (startTime ? startTime.format(this.option.format) : this.placeholder.startTime) + this.option.separator + (endTime ? endTime.format(this.option.format) : this.placeholder.endTime);
+                    showstrStart = (startTime ? startTime.format(this.option.format) : this.placeholder.startTime)
+                    showstrEnd = (endTime ? endTime.format(this.option.format) : this.placeholder.endTime);
                 } else if (this.type.indexOf('range') < 0) {
                     if (this.option.confirmFirst) {
                         this.trigger("confirm", {startTime: startTime, dayjs: dayjs})
                     }
-                    var showstr = (startTime ? startTime.format(this.option.format) : this.placeholder.startTime);
+                    showstrStart = (startTime ? startTime.format(this.option.format) : this.placeholder.startTime);
                 }
                 canconfirm = true;
             } else {
@@ -1091,10 +1155,10 @@ class XNDatepickerPc {
                     if ((isFirst && this.option.confirmFirst) || !isFirst) {
                         this.trigger("confirm", {startTime: this.selectedDate[0], endTime: this.selectedDate[1]})
                     }
-                    var showstr = ''
+                    showstrStart = ''
                     canconfirm = true;
                 }
-                if ((this.type.indexOf('range') > -1 && this.date2) || this.type == 'week') {
+                if ((this.type.indexOf('range') > -1) || this.type == 'week') {
                     if ((isFirst && this.option.confirmFirst) || !isFirst) {
                         this.trigger("confirm", {
                             startTime: this.selectedDate[0],
@@ -1103,19 +1167,21 @@ class XNDatepickerPc {
                         })
                     }
                     try {
-                        var showstr = (this.selectedDate[0].format(this.option.format) + this.option.separator + this.selectedDate[1].format(this.option.format))
+                        showstrStart = this.selectedDate[0] ? this.selectedDate[0].format(this.option.format) : '';
+                        showstrEnd = this.selectedDate[1] ? this.selectedDate[1].format(this.option.format) : ''
                     } catch (e) {
-                        var showstr = ''
+                        showstrStart = ''
+                        showstrEnd = ''
                     }
                     canconfirm = true;
-                } else if (this.type.indexOf('range') < 0 && this.date1) {
+                } else if (this.type.indexOf('range') < 0) {
                     if ((isFirst && this.option.confirmFirst) || !isFirst) {
                         this.trigger("confirm", {startTime: this.selectedDate[0], dayjs: dayjs})
                     }
                     try {
-                        var showstr = this.selectedDate[0].format(this.option.format);
+                        showstrStart = this.selectedDate[0].format(this.option.format);
                     } catch (e) {
-                        var showstr = ''
+                        showstrStart = ''
                     }
                     canconfirm = true;
                 }
@@ -1125,20 +1191,23 @@ class XNDatepickerPc {
             return;
         }
         this.changeShowStatus(true)
-        this.fillInput(showstr);
+        this.fillInput(showstrStart, showstrEnd);
     }
 
-    fillInput(showstr) {
+    fillInput(showstrStart, showstrEnd) {
         if (!this.option.autoFillDate) {
             return;
         }
-        if (this.$targetDom.get(0).nodeName == 'INPUT') {
-            this.$targetDom.get(0).value = showstr;
-        } else {
-            this.$targetDom.get(0).innerHTML = showstr;
-        }
-        this.$targetDom.addClass('iconfont-xndatepicker icon-xndatepickerrili xndatepicker-input')
-        this.$targetDom.attr('data-placeholder', this.placeholder.startTime)
+        console.log(showstrStart, showstrEnd);
+        this.targetDom.querySelector('.' + 'startTime' + ' .input').innerHTML = showstrStart;
+        this.targetDom.querySelector('.' + 'endTime' + ' .input') && (this.targetDom.querySelector('.' + 'endTime' + ' .input').innerHTML = showstrEnd);
+        // if (this.targetDom.nodeName == 'INPUT') {
+        //     this.targetDom.value = showstr;
+        // } else {
+        //     this.targetDom.innerHTML = showstr;
+        // }
+        // // this.$targetDom.addClass('iconfont-xndatepicker icon-xndatepickerrili xndatepicker-input')
+        // this.targetDom.setAttribute('data-placeholder', this.placeholder.startTime)
     }
 
     rendWeekNum(datenum) {
