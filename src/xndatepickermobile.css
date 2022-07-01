@@ -1,3 +1,9 @@
+:root{
+    /*--height:*/
+    --fontsize:.14rem;
+    --small-fontsize:.12rem;
+    --lineheight:.28rem;
+}
 .xndatepicker-mobile-outer{
     height: 100vh;
     width: 100%;
@@ -26,8 +32,8 @@
 .xndatepicker-mobile .cancel-btn,.xndatepicker-mobile .confirm-btn{
     /*background: #2264d1;*/
     /*color: #fff;*/
-    padding:0 10rem;
-    font-size: 12rem;
+    padding:0 .20rem;
+    font-size: var(--small-fontsize);
 }
 .xndatepicker-mobile .confirm-btn{
     color: var(--primary-color);
@@ -36,16 +42,16 @@
     display: flex;
     align-items: flex-start;
     justify-content: space-around;
-    height: 140rem;
+    height: calc(var(--lineheight) * 5);
     overflow: hidden;
-    padding:10rem 0;
+    padding: 0.2rem 0;
     box-sizing: content-box;
 }
 .scroll-container ul{
     position:relative;
     flex:1;
     text-align: center;
-    font-size:12rem;
+    font-size:var(--small-fontsize);
     list-style: none;
     padding:0;
     line-height: 2;
@@ -54,8 +60,8 @@
 
 }
 .scroll-container ul li{
-    height: 28rem;
-    line-height: 28rem;
+    height: var(--lineheight);
+    line-height:  var(--lineheight);
 }
 .scroll-container>div{
     overflow: hidden;
@@ -64,25 +70,25 @@
     position: relative;
 }
 .current-bg{
-    height: 28rem;
+    height:  var(--lineheight);
     width: 100%;
     position: absolute;
-    top: 56rem;
+    top: calc(var(--lineheight) * 2);
     background: var(--range-background);
     pointer-events: none;
     left: 0;
 }
 .xndatepicker-head{
-    font-size: 14rem;
+    font-size: var(--fontsize);
     display: flex;
     justify-content: space-between;
     align-items: center;
     line-height: 2.3;
-    border-bottom:1rem solid var(--border-color);
+    border-bottom:.01rem solid var(--border-color);
 }
 
 .shortcut-list{
-    font-size: 12rem;
+    font-size: var(--small-fontsize);
 }
 .shortcut-list ul{
     display: inline-flex;
@@ -91,12 +97,12 @@
     /*flex-wrap: wrap;*/
 }
 .shortcut-list li{
-    padding: 0 8rem;
-    border: 1rem solid var(--border-color);
+    padding: 0 .16rem;
+    border: 0.01rem solid var(--border-color);
     line-height: 1.7;
-    margin: 4rem 4px 0 4rem;
+    margin: .08rem 4px 0 .08rem;
     white-space: nowrap;
-    border-radius: 5rem;
+    border-radius: .1rem;
 }
 .shortcut-list li.on{
     border-color: var(--primary-color);
