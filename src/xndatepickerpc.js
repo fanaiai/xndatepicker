@@ -16,7 +16,7 @@ import dayjs from './dayjs/esm/index.js';
 import isSameOrBefore from './dayjs/esm/plugin/isSameOrBefore';
 import isSameOrAfter from './dayjs/esm/plugin/isSameOrAfter'
 import isoWeeksInYear from './dayjs/esm/plugin/isoWeeksInYear'
-import WeekOfYear from './dayjs/esm/plugin/WeekOfYear'
+import WeekOfYear from './dayjs/esm/plugin/weekOfYear'
 import isLeapYear from './dayjs/esm/plugin/isLeapYear'
 import advancedFormat from './dayjs/esm/plugin/advancedFormat'
 import './xndatepickermobile.js'
