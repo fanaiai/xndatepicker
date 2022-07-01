@@ -178,7 +178,7 @@ const defaultoption = {
         minuteSuffix:'分',
         secondSuffix:'秒',
         weekNum: function (weeknum) {
-            return '第' + (weeknum+1) + '周'
+            return '第' + (weeknum) + '周'
         }
     },//显示信息
     confirmFirst: true,//第一次就搜索
@@ -296,6 +296,7 @@ class XNDatepickerMobile {
         }
         this.confirm.startTime.full = this.clone(this.startTime.full);
         this.confirm.endTime.full = this.clone(this.endTime.full);
+
     }
 
     initInput() {
@@ -399,13 +400,15 @@ class XNDatepickerMobile {
     show() {
         this.cloneDate(this.confirm[this.currentType], this[this.currentType])
         if (!this[this.currentType].full) {
-            this.formatDate(this.maxDate.full, this.currentType)
+            // this.formatDate(this.maxDate.full, this.currentType) //当为空时，不能把时间设置为最大值
+            this.formatDate(dayjs(), this.currentType)
         }
         this.rendPicker();
         this.addEvent();
         this.scrollContainer.classList.remove('xndatepicker-animate-mobile-out')
         this.scrollContainer.classList.add('xndatepicker-animate-mobile')
         this.refreshCurrentShow();
+
     }
 
     hide() {
@@ -528,7 +531,6 @@ class XNDatepickerMobile {
     }
 
     initDateModal() {
-        console.log(this.option.theme);
         let scrollContHtml = this.initScrollContainer();
         let dom = `<div class="xndatepicker-mobile-outer ${this.option.theme||''}" id="${this.id}"><div class="xndatepicker-mobile">
     <div class="xndatepicker-head">
@@ -583,7 +585,7 @@ class XNDatepickerMobile {
     }
 
     rendyear(isinit, type) {
-        this._rendList(type, this.minDate[type], this.maxDate[type], this[this.currentType][type] || this.maxDate[type], this.option.locale.yearHeadSuffix, isinit)
+        this._rendList(type, this.minDate[type], this.maxDate[type], this[this.currentType][type] || this.maxDate, this.option.locale.yearHeadSuffix, isinit)
     }
 
     rendweek(isinit, type) {

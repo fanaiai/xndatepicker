@@ -39,6 +39,7 @@
     height: 140rem;
     overflow: hidden;
     padding:10rem 0;
+    box-sizing: content-box;
 }
 .scroll-container ul{
     position:relative;
